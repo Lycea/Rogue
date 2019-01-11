@@ -3,7 +3,7 @@ require("key_handle")
 require("renderer")
 require("map_objects.game_map")
 require("fov_functions")
-
+require("game_states")
 
 local game ={} 
 
@@ -33,7 +33,7 @@ max_rooms = 20
 fov_light_walls = true
 fov_radius= 10
 
-fov_recompute = true
+
 
 --color definitions
 colors ={
@@ -54,25 +54,29 @@ local scr_height = 0
 ------------------------ 
 -- dynamic data 
 
+--entities ...
 entities ={}
 
+--maps
 map ={}
 fov_map={}
+
+--fov state
+fov_recompute = true
+
+--game state
+game_state = GameStates.PLAYERS_TURN
+
+
+--others
+key_timer = 0--timer between movement
+
 ----------------------------------------------------------- 
 -- special data fields for debugging / testing only 
 ----------------------------------------------------------- 
- 
-
---------------------------------------------------------------------------------------------------- 
---base classes   
---------------------------------------------------------------------------------------------------- 
-
-------------------------
---key handler functions
--------------------------
 
 
-key_timer = 0
+
 
 
 
@@ -93,10 +97,12 @@ end
 function game.update(dt) 
   --handler for the keys
   print("-----")
+  
+  --check all the keys ...
   for key,v in pairs(key_list) do
     local action=handle_keys(key)
     --check the keys
-    if action["move"]then
+    if action["move"] and game_state==GameStates.PLAYERS_TURN then
       if love.timer.getTime()> key_timer+0.1 then
         local dirs=action["move"]
         local dest_x = player.x+dirs[1]
@@ -111,12 +117,23 @@ function game.update(dt)
             fov_recompute=true
           end
           
+          game_state = GameStates.ENEMY_TURN
         end
         
         key_timer=love.timer.getTime()
       end
     end
-    
+
+  end
+  
+  -- Enemy behaviour basic / Enemy turn
+  if game_state == GameStates.ENEMY_TURN then
+      for k,entity in pairs(entities) do
+        if entity.name ~= "Player"then
+          console.print("The "..entity.name.." thinks about its life.")
+        end
+      end
+      game_state = GameStates.PLAYERS_TURN
   end
 end 
  
