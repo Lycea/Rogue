@@ -11,6 +11,7 @@ require(BASE.."rectangle")
 GameMap = class_base:extend()
 
 
+local max_monster_per_room = 3
 
 function GameMap:new(width,height)
   self.width = width
@@ -86,8 +87,8 @@ function GameMap:make_map()
     local h = math.random(room_min_size,room_max_size)
     
     --random position
-    local x = math.random(0,map_width-w-1) 
-    local y = math.random(0,map_height-h-1) 
+    local x = math.random(1,map_width-w-1) 
+    local y = math.random(1,map_height-h-1) 
     
     local new_room = Rect(x,y,w,h)
     
@@ -121,6 +122,9 @@ function GameMap:make_map()
         end
         
       end
+      
+      self:place_entities(new_room,entities,max_monster_per_room)
+      
       table.insert(rooms,new_room)
       num_rooms = num_rooms+1
     else
@@ -173,4 +177,34 @@ function GameMap:draw()
       end
     end
     love.graphics.setColor(colors.default)
+end
+
+
+function GameMap:place_entities(room,entities,max_monster_per_room)
+  local number_of_monsters = math.random(0,max_monster_per_room)
+  
+  for i=0,number_of_monsters do
+    local x,y
+    x= math.random(room.x1+1,room.x2-1)
+    y= math.random(room.y1+1,room.y2-1)
+    
+    local free_space = true
+    for k,entity in pairs(entities)do
+      if entity.x == x and entity.y ==y then
+        free_space = false
+        break
+      end
+    end
+    --no mob on that grid field right now
+    if free_space == true then
+      local monster
+      if math.random(0,100)<80 then
+        monster = Entity(x,y,0,"dark_green","Goblin",true)
+      else
+        monster = Entity(x,y,0,"desatured_green","Orc",true)
+      end
+      
+      table.insert(entities,monster)
+    end
+  end
 end

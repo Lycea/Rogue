@@ -25,7 +25,11 @@ local function trace_line(ex,ey)
     y=math.floor(y+0.5)
     
     fov_map[y][x]=true
-    
+    --print(y,x)
+    if y== 0 or y==map_width or x==0 or x==map_width then
+      break
+    end
+      
     if act_map.tiles[y][x].block_sight == true then
       break
     end
@@ -58,6 +62,10 @@ end
 
 function compute_fov(map)
   act_map = map
+  lines_= 8*fov_radius
+  angle = 360/lines_
+  
+  
   init_fov_map()
   gen_lines()
   return fov_map

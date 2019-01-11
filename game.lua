@@ -26,7 +26,7 @@ map_height = 60
 
 room_max_size = 10
 room_min_size=6
-max_rooms = 30
+max_rooms = 20
 
 
 --fov settings
@@ -81,10 +81,7 @@ function game.load()
    
   scr_width,scr_height = love.graphics.getDimensions() 
   --init entities
-  player = Entity( math.floor(20),math.floor(20))
-  npc = Entity(math.floor(scr_width/2/32)-tile_size,math.floor(scr_height/2/32))
-  
-  table.insert(entities,npc)
+  player = Entity( math.floor(20),math.floor(20),0,"default","Player",true)
   table.insert(entities,player)
   
   --init map
@@ -102,11 +99,18 @@ function game.update(dt)
     if action["move"]then
       if love.timer.getTime()> key_timer+0.1 then
         local dirs=action["move"]
-
-        if not map:is_blocked(player.x+dirs[1],player.y+dirs[2])then
-          player:move(dirs[1],dirs[2])
+        local dest_x = player.x+dirs[1]
+        local dest_y = player.y+dirs[2]
+        
+        if not map:is_blocked(dest_x,dest_y)then
+          local target = get_blocking_entitis_at_location(dest_x,dest_y)
+          if target ~=nil then
+            console.print("Hit the "..(target.name or "Unknown").."in the shins,to his annoyance")
+          else
+            player:move(dirs[1],dirs[2])
+            fov_recompute=true
+          end
           
-          fov_recompute=true
         end
         
         key_timer=love.timer.getTime()
