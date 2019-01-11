@@ -4,6 +4,8 @@ require("renderer")
 require("map_objects.game_map")
 require("fov_functions")
 require("game_states")
+camera =require("camera")
+
 
 local game ={} 
 
@@ -91,6 +93,8 @@ function game.load()
   --init map
   map = GameMap(map_width,map_height)
   fov_map=compute_fov(map)
+  
+  camera:setPosition(player.x*tile_size -scr_width/2 +tile_size,player.y*tile_size -scr_height/2+tile_size) 
 end 
  
  
@@ -114,6 +118,7 @@ function game.update(dt)
             console.print("Hit the "..(target.name or "Unknown").."in the shins,to his annoyance")
           else
             player:move(dirs[1],dirs[2])
+            camera:move(dirs[1]*tile_size,dirs[2]*tile_size)
             fov_recompute=true
           end
           
