@@ -2,6 +2,8 @@ require("entity")
 require("key_handle")
 require("renderer")
 require("map_objects.game_map")
+require("fov_functions")
+
 
 local game ={} 
 
@@ -26,10 +28,19 @@ room_max_size = 10
 room_min_size=6
 max_rooms = 30
 
+
+--fov settings
+fov_light_walls = true
+fov_radius= 10
+
+fov_recompute = true
+
 --color definitions
 colors ={
   dark_wall = {0,0,100},
   dark_ground ={50,50,150},
+  light_wall = {130,110,50},
+  light_ground = {200,180,50},
   default ={255,255,255}
   }
  
@@ -44,6 +55,9 @@ local scr_height = 0
 -- dynamic data 
 
 entities ={}
+
+map ={}
+fov_map={}
 ----------------------------------------------------------- 
 -- special data fields for debugging / testing only 
 ----------------------------------------------------------- 
@@ -75,6 +89,7 @@ function game.load()
   
   --init map
   map = GameMap(map_width,map_height)
+  fov_map=compute_fov(map)
 end 
  
  
@@ -90,6 +105,8 @@ function game.update(dt)
 
         if not map:is_blocked(player.x+dirs[1],player.y+dirs[2])then
           player:move(dirs[1],dirs[2])
+          
+          fov_recompute=true
         end
         
         key_timer=love.timer.getTime()
@@ -104,6 +121,10 @@ end
 function game.draw() 
   --love.graphics.rectangle("fill",player.x,player.y,tile_size,tile_size)
   render_all(entities,map,scr_width,scr_height)
+  if fov_recompute==true then
+    compute_fov(map)
+    fov_recompute = false
+  end
 end 
  
  

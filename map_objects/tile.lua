@@ -7,6 +7,6 @@ function Tile:new(blocked,block_sight)
     block_sight = blocked
   end
   
-  
+  self.explored = false
   self.block_sight =block_sight
 end

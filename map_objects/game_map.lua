@@ -152,13 +152,22 @@ function GameMap:draw()
     for y=1,self.height,1 do
       for x=1,self.width,1 do
         local wall =self.tiles[y][x].block_sight
-        if wall == true then
-          love.graphics.setColor(colors.dark_wall)
-        else
-          love.graphics.setColor(colors.dark_ground)
+        if fov_map[y][x] == true then
+          if wall == true then
+            love.graphics.setColor(colors.light_wall)
+          else
+            love.graphics.setColor(colors.light_ground)
+          end
+          self.tiles[y][x].explored = true
+          love.graphics.rectangle("fill",x*tile_size,y*tile_size,tile_size,tile_size)
+        elseif self.tiles[y][x].explored then
+          if wall == true then
+            love.graphics.setColor(colors.dark_wall)
+          else
+            love.graphics.setColor(colors.dark_ground)
+          end
+          love.graphics.rectangle("fill",x*tile_size,y*tile_size,tile_size,tile_size)
         end
-        
-        love.graphics.rectangle("fill",x*tile_size,y*tile_size,tile_size,tile_size)
         --love.graphics.setColor(colors.default)
         --love.graphics.rectangle("line",x*tile_size-tile_size,y*tile_size-tile_size,tile_size,tile_size)
       end

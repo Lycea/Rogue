@@ -35,6 +35,7 @@ function love.draw()
   
   --print("test")
   console.draw()
+  
 end
 
 

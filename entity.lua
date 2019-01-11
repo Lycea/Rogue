@@ -13,6 +13,9 @@ function Entity:move(dx,dy)
 end
 
 function Entity:draw()
+  if fov_map[self.y][self.x]==true then
+    love.graphics.setColor(255,0,0)
     love.graphics.rectangle("fill",self.x*tile_size,self.y*tile_size,tile_size,tile_size)
-    --console.print(self.x.." "..self.y)
+    love.graphics.setColor(colors.default)
+  end
 end
