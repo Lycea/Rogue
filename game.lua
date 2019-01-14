@@ -1,9 +1,14 @@
 require("entity")
 require("key_handle")
 require("renderer")
+
 require("map_objects.game_map")
 require("fov_functions")
 require("game_states")
+
+require("components.fighter")
+require("components.ai")
+
 
 local game ={} 
 
@@ -85,7 +90,11 @@ function game.load()
    
   scr_width,scr_height = love.graphics.getDimensions() 
   --init entities
-  player = Entity( math.floor(20),math.floor(20),0,"default","Player",true)
+  
+  --fight stuff /stat stuff that makes a player a player
+  local stats_ = Fighter(30,2,5)
+  --final init
+  player = Entity( math.floor(20),math.floor(20),0,"default","Player",true,stats_)
   table.insert(entities,player)
   
   --init map
@@ -96,7 +105,6 @@ end
  
 function game.update(dt) 
   --handler for the keys
-  print("-----")
   
   --check all the keys ...
   for key,v in pairs(key_list) do
@@ -129,8 +137,9 @@ function game.update(dt)
   -- Enemy behaviour basic / Enemy turn
   if game_state == GameStates.ENEMY_TURN then
       for k,entity in pairs(entities) do
-        if entity.name ~= "Player"then
-          console.print("The "..entity.name.." thinks about its life.")
+        if entity.ai then
+          --console.print("The "..entity.name.." thinks about its life.")
+          entity.ai:take_turn(player)
         end
       end
       game_state = GameStates.PLAYERS_TURN
