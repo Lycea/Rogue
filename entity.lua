@@ -1,15 +1,35 @@
 Entity =class_base:extend()
 
 
+
 function get_blocking_entitis_at_location(destin_x,destin_y)
   for k,entity in pairs(entities) do
-    if entity.x == destin_x and entity.y == destin_y then
+    if entity.x == destin_x and entity.y == destin_y and entity.name ~= "Player" then
       return entity
     end
   end
   return nil
 end
 
+--import pather , import after helper,it may need it
+print(...)
+local BASE= ...
+local idx =string.find(BASE,"entity")
+BASE =BASE:sub(0,idx -1)
+
+require(BASE.."components.paths")
+
+
+local base_pathmaker = paths()
+paths:setBlocked(
+    function(x,y)
+      if map:is_blocked(x,y) == false and get_blocking_entitis_at_location(x,y)==nil then
+        return false
+      else
+        return true
+      end
+    end
+    )
 
 
 function Entity:new(x,y,tile,color,name,blocks,fighter,ai)
@@ -46,6 +66,11 @@ function Entity:move(dx,dy)
     self.y = self.y+dy
 end
 
+function Entity:move_to(dx,dy)
+    self.x = dx
+    self.y = dy
+end
+
 function Entity:move_towards4(target_x,target_y)
   local dx = target_x - self.x
   local dy = target_y - self.y
@@ -61,6 +86,19 @@ function Entity:move_towards4(target_x,target_y)
       self:move(dx,dy)
   end
 end
+
+
+function Entity:move_breadth(target)
+  local tmp_path =paths:gen_map_breadth(self,target)
+  if tmp_path then
+    self:move_to(tmp_path[1][1],tmp_path[1][2])
+  else
+    self:move_towards4(target.x,target.y)
+  end
+end
+
+
+
 
 
 
