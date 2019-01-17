@@ -120,6 +120,7 @@ function game.update(dt)
           local target = get_blocking_entitis_at_location(dest_x,dest_y)
           if target ~=nil then
             console.print("Hit the "..(target.name or "Unknown").."in the shins,to his annoyance")
+            player.fighter.attack(target)
           else
             player:move(dirs[1],dirs[2])
             fov_recompute=true
