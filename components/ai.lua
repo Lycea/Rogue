@@ -20,7 +20,7 @@ function BasicMonster:take_turn(target)
         --console.print(mob:angle_to(target))
         mob:move_breadth(target)
       elseif target.fighter.hp >0 then
-        mob.fighter.attack(target)
+        mob.fighter:attack(target)
         --console.print("The "..mob.name.."insults you!")
         console.print(mob:angle_to(target))
       end

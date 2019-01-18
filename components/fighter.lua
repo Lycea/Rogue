@@ -15,7 +15,7 @@ function Fighter:attack(target)
     local damage = self.power - target.fighter.defense
     
     if damage> 0 then
-      target.fighter.take_damage(damage)
+      target.fighter:take_damage(damage)
       print(self.owner.name.." attacks "..target.name.." for "..damage.." hitpoints.")
     else
     end
