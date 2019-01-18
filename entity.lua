@@ -50,10 +50,7 @@ function Entity:new(x,y,tile,color,name,blocks,fighter,ai)
     end
     
     if self.ai then
-      print(self)
-      
       self.ai.owner = self
-      print(self.ai.owner)
     end
     
 end
@@ -71,6 +68,7 @@ function Entity:move_to(dx,dy)
     self.y = dy
 end
 
+
 function Entity:move_towards4(target_x,target_y)
   local dx = target_x - self.x
   local dy = target_y - self.y
@@ -80,7 +78,7 @@ function Entity:move_towards4(target_x,target_y)
   dx =math.floor(dx/distance+0.5)
   dy =math.floor(dy/distance+0.5)
   
-  console.print(dx.." "..dy)
+  --console.print(dx.." "..dy)
   if  map:is_blocked(self.x+dx,self.y+dy)==false and
       get_blocking_entitis_at_location(self.x+dx,self.y+dy)==nil then
       self:move(dx,dy)

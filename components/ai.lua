@@ -9,8 +9,9 @@ function BasicMonster:new()
 end
 
 function BasicMonster:take_turn(target)
+    local results={}
     local mob = self.owner
-    print(self.owner)
+    --print(self.owner)
     
     --is visible to player
     if fov_map[mob.y][mob.x] == true then
@@ -20,9 +21,9 @@ function BasicMonster:take_turn(target)
         --console.print(mob:angle_to(target))
         mob:move_breadth(target)
       elseif target.fighter.hp >0 then
-        mob.fighter:attack(target)
+        results =mob.fighter:attack(target)
         --console.print("The "..mob.name.."insults you!")
-        console.print(mob:angle_to(target))
       end
     end
+    return results
 end

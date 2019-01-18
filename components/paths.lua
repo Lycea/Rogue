@@ -238,13 +238,13 @@ function paths:gen_map_breadth(start,goal)
     index = index+1
     steps = steps+1
   end
-  print(steps)
+  --print(steps)
   
   
   local path = {}
   
   if end_found == false then
-    print("no way found")
+    --print("no way found")
     return nil  
   end
   

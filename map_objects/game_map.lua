@@ -41,7 +41,7 @@ end
 
 function GameMap:create_h_tunnel(x1,x2,y)
   for x=math.min(x1,x2),math.max(x1,x2) do
-    print(x,y)
+    --print(x,y)
     self.tiles[y][x].blocked=false
     self.tiles[y][x].block_sight=false
   end
@@ -141,7 +141,7 @@ end
 --------------------------------
 
 function GameMap:is_blocked(x,y)
-    print(x,y)
+    --print(x,y)
     if self.tiles[y][x].blocked then
       return true
     end

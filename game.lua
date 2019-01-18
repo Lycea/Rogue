@@ -105,11 +105,12 @@ end
  
 function game.update(dt) 
   --handler for the keys
-  
+  local player_results ={}
   --check all the keys ...
   for key,v in pairs(key_list) do
-    local action=handle_keys(key)
-    --check the keys
+    local action=handle_keys(key)--get key callbacks
+    
+    --Players turn and keys used
     if action["move"] and game_state==GameStates.PLAYERS_TURN then
       if love.timer.getTime()> key_timer+0.1 then
         local dirs=action["move"]
@@ -119,8 +120,7 @@ function game.update(dt)
         if not map:is_blocked(dest_x,dest_y)then
           local target = get_blocking_entitis_at_location(dest_x,dest_y)
           if target ~=nil then
-            console.print("Hit the "..(target.name or "Unknown").."in the shins,to his annoyance")
-            player.fighter:attack(target)
+            player_results = player.fighter:attack(target)
           else
             player:move(dirs[1],dirs[2])
             fov_recompute=true
@@ -135,12 +135,31 @@ function game.update(dt)
 
   end
   
+  for k,result in pairs(player_results) do
+    if result.message then
+      console.print(result.message)
+    elseif result.dead_entity then
+      --console.print("You killed "..result.dead_entity.name)
+    end
+    
+  end
+    
+  
+  
+  
   -- Enemy behaviour basic / Enemy turn
   if game_state == GameStates.ENEMY_TURN then
       for k,entity in pairs(entities) do
         if entity.ai then
           --console.print("The "..entity.name.." thinks about its life.")
-          entity.ai:take_turn(player)
+          local turn_result =entity.ai:take_turn(player)
+          for k,result in pairs(turn_result) do
+            if result.message then
+              console.print(result.message)
+            elseif result.dead_entity then
+              
+            end
+          end
         end
       end
       game_state = GameStates.PLAYERS_TURN
