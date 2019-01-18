@@ -9,6 +9,8 @@ require("game_states")
 require("components.fighter")
 require("components.ai")
 
+require("death_functions")
+
 
 local game ={} 
 
@@ -135,11 +137,19 @@ function game.update(dt)
 
   end
   
+  --evaluate results from the player
   for k,result in pairs(player_results) do
     if result.message then
       console.print(result.message)
     elseif result.dead_entity then
+      msg = ""
       --console.print("You killed "..result.dead_entity.name)
+      if result.dead_entity.name == "Player"then
+        msg ,state = kill_player(result.dead_entity)
+      else
+        msg = kill_monster(result.dead_entity)
+      end
+      console.print(msg)
     end
     
   end
