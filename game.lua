@@ -29,7 +29,7 @@ tile_size = 10
 
 --map things
 map_width  = 80
-map_height = 60
+map_height = 50
 
 room_max_size = 10
 room_min_size=6
@@ -102,7 +102,7 @@ function game.load()
   --fight stuff /stat stuff that makes a player a player
   local stats_ = Fighter(30,2,5)
   --final init
-  player = Entity( math.floor(20),math.floor(20),0,"default","Player",true,stats_)
+  player = Entity( math.floor(20),math.floor(20),0,"default","Player",true,stats_,nil,RenderOrder.ACTOR)
   table.insert(entities,player)
   
   --init map

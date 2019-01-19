@@ -14,6 +14,8 @@ function kill_monster(entity)
   entity.fighter = nil
   entity.name = "remains of "..entity.name
   
+  entity.render_order = RenderOrder.CORPSE
+  
   return death_msg
 end
 

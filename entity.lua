@@ -32,7 +32,7 @@ paths:setBlocked(
     )
 
 
-function Entity:new(x,y,tile,color,name,blocks,fighter,ai)
+function Entity:new(x,y,tile,color,name,blocks,fighter,ai,render_order)
     self.x = x
     self.y = y
     
@@ -43,6 +43,8 @@ function Entity:new(x,y,tile,color,name,blocks,fighter,ai)
     self.blocks = blocks or false
     self.fighter =fighter 
     self.ai = ai
+    
+    self.render_order = render_order
     
     --set the parent to access it in the module
     if self.fighter then

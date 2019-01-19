@@ -203,12 +203,12 @@ function GameMap:place_entities(room,entities,max_monster_per_room)
         local stats_= Fighter(10,0,3)
         local behaviour_ =BasicMonster()
         
-        monster = Entity(x,y,0,"dark_green","Goblin",true,stats_,behaviour_)
+        monster = Entity(x,y,0,"dark_green","Goblin",true,stats_,behaviour_,RenderOrder.ACTOR)
       else
         local stats_= Fighter(16,1,4)
         local behaviour_ =BasicMonster()
         
-        monster = Entity(x,y,0,"desatured_green","Orc",true,stats_,behaviour_)
+        monster = Entity(x,y,0,"desatured_green","Orc",true,stats_,behaviour_,RenderOrder.ACTOR)
       end
       
       table.insert(entities,monster)
