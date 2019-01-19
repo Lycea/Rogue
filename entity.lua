@@ -4,7 +4,7 @@ Entity =class_base:extend()
 
 function get_blocking_entitis_at_location(destin_x,destin_y)
   for k,entity in pairs(entities) do
-    if entity.x == destin_x and entity.y == destin_y and entity.name ~= "Player" then
+    if entity.x == destin_x and entity.y == destin_y and entity.name ~= "Player"  and entity.blocks == true then
       return entity
     end
   end

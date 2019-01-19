@@ -1,14 +1,14 @@
 
 
 function kill_player()
-  player.color ={135, 0, 0}
+  player.color ="dark_red"
   return "You died!",GameStates.PLAYER_DEAD
 end
 
 
 function kill_monster(entity)
   local death_msg = entity.name.." is dead!"
-  entity.color ={135, 0, 0}
+  entity.color ="dark_red"
   entity.blocks = false
   entity.ai = nil
   entity.fighter = nil

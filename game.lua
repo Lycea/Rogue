@@ -44,11 +44,17 @@ fov_radius= 10
 
 --color definitions
 colors ={
+    --room colors
   dark_wall = {0,0,100},
   dark_ground ={50,50,150},
   light_wall = {130,110,50},
   light_ground = {200,180,50},
-  default ={255,255,255}
+  --sosme more
+  desaturated_green= {63, 127, 63},
+  darker_green= {0, 127, 0},
+  
+  default ={255,255,255},
+  dark_red ={191, 0, 0}
   }
  
 --screen params, needed for some placements (and camera ?) 
@@ -112,6 +118,7 @@ function game.update(dt)
   for key,v in pairs(key_list) do
     local action=handle_keys(key)--get key callbacks
     
+    
     --Players turn and keys used
     if action["move"] and game_state==GameStates.PLAYERS_TURN then
       if love.timer.getTime()> key_timer+0.1 then
@@ -141,13 +148,13 @@ function game.update(dt)
   for k,result in pairs(player_results) do
     if result.message then
       console.print(result.message)
-    elseif result.dead_entity then
+    elseif result.dead then
       msg = ""
       --console.print("You killed "..result.dead_entity.name)
-      if result.dead_entity.name == "Player"then
-        msg ,state = kill_player(result.dead_entity)
+      if result.dead.name == "Player"then
+        msg ,state = kill_player(result.dead)
       else
-        msg = kill_monster(result.dead_entity)
+        msg = kill_monster(result.dead)
       end
       console.print(msg)
     end
@@ -159,20 +166,39 @@ function game.update(dt)
   
   -- Enemy behaviour basic / Enemy turn
   if game_state == GameStates.ENEMY_TURN then
+      
       for k,entity in pairs(entities) do
+        --check if it is a entity with some behaviour
         if entity.ai then
           --console.print("The "..entity.name.." thinks about its life.")
           local turn_result =entity.ai:take_turn(player)
+          
           for k,result in pairs(turn_result) do
             if result.message then
               console.print(result.message)
-            elseif result.dead_entity then
+            elseif result.dead then
+              local msg =""
+              if result.dead.name == "Player"then
+                 msg,game_state =  kill_player() 
+              else
+                  msg = kill_monster(result.dead)
+              end
+              console.print(msg)
               
+              if game_state == GameStates.PLAYER_DEAD then
+                  break
+              end
             end
           end
         end
+        
+        if game_state == GameStates.PLAYER_DEAD then
+            break
+        end
+        
       end
-      game_state = GameStates.PLAYERS_TURN
+      
+      game_state = game_state ==GameStates.PLAYER_DEAD and game_state or  GameStates.PLAYERS_TURN
   end
 end 
  

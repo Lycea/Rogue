@@ -5,5 +5,6 @@ GameStates =class_base:extend()
 --state definitions
 GameStates.PLAYERS_TURN = 1
 GameStates.ENEMY_TURN =2
+GameStates.PLAYER_DEAD = 3
 
 
