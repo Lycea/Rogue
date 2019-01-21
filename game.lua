@@ -1,3 +1,5 @@
+require("helper.msg_renderer")
+
 require("entity")
 require("key_handle")
 require("renderer")
@@ -38,7 +40,7 @@ max_rooms = 20
 
 --fov settings
 fov_light_walls = true
-fov_radius= 10
+fov_radius= 20
 
 
 
@@ -54,6 +56,12 @@ colors ={
   darker_green= {0, 127, 0},
   
   dark_red ={191, 0, 0},
+  red ={255, 0, 0},
+  light_red ={255,114,114},
+  orange = {255,127,0},
+  
+  white ={255,255,255},
+  black ={0,0,0},
   default ={255,255,255},
   
   }
@@ -78,6 +86,13 @@ fov_map={}
 --fov state
 fov_recompute = true
 
+
+
+message_x = 40
+message_width = scr_width-message_x
+message_height = 6
+
+message_log = MessageLog(message_x,message_width,message_height)
 --game state
 game_state = GameStates.PLAYERS_TURN
 
@@ -98,6 +113,8 @@ key_timer = 0--timer between movement
 function game.load() 
    
   scr_width,scr_height = love.graphics.getDimensions() 
+  console.setPos(40*tile_size,(map_height+2)*tile_size)
+  console.setSize(40*tile_size,8*tile_size)
   --init entities
   
   --fight stuff /stat stuff that makes a player a player
@@ -150,14 +167,15 @@ function game.update(dt)
     if result.message then
       console.print(result.message)
     elseif result.dead then
-      msg = ""
+      local msg = ""
       --console.print("You killed "..result.dead_entity.name)
       if result.dead.name == "Player"then
         msg ,state = kill_player(result.dead)
       else
         msg = kill_monster(result.dead)
       end
-      console.print(msg)
+      --console.print(msg)
+      message_log:add_message(msg)
     end
     
   end
@@ -176,15 +194,18 @@ function game.update(dt)
           
           for k,result in pairs(turn_result) do
             if result.message then
-              console.print(result.message)
+              --console.print(result.message)
+              message_log:add_message(result.message)
             elseif result.dead then
               local msg =""
+              
               if result.dead.name == "Player"then
                  msg,game_state =  kill_player() 
               else
                   msg = kill_monster(result.dead)
               end
-              console.print(msg)
+              --console.print(msg)
+              message_log:add_message(msg)
               
               if game_state == GameStates.PLAYER_DEAD then
                   break

@@ -28,10 +28,10 @@ function Fighter:attack(target)
     if damage> 0 then
       
       results =target.fighter:take_damage(damage)
-      msg =self.owner.name.." attacks "..target.name.." for "..damage.." hitpoints."
+      msg =Message(self.owner.name.." attacks "..target.name.." for "..damage.." hitpoints.")
       table.insert(results,{message =msg})
     else
-      msg =self.owner.name.." tries to attack "..target.name.." but misses!"
+      msg =Message(self.owner.name.." tries to attack "..target.name.." but misses!")
       table.insert(results,{message =msg})
     end
     return results

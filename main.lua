@@ -1,3 +1,4 @@
+require("helper.aliases")
 class_base= require("helper.classic")
 console =require("helper.console")
 game =require("game")
