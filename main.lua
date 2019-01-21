@@ -30,13 +30,6 @@ end
 
 function love.draw()
   game.draw()
-  
-
-
-  
-  --print("test")
-  console.draw()
-  
 end
 
 

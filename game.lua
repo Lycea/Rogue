@@ -67,8 +67,8 @@ colors ={
   }
  
 --screen params, needed for some placements (and camera ?) 
-local scr_width  = 0 
-local scr_height = 0 
+scr_width  = 0 
+scr_height = 0 
 
  
 
@@ -89,10 +89,10 @@ fov_recompute = true
 
 
 message_x = 40
-message_width = scr_width-message_x
-message_height = 6
+message_width =12
+message_height = 5
 
-message_log = MessageLog(message_x,message_width,message_height)
+message_log ={}
 --game state
 game_state = GameStates.PLAYERS_TURN
 
@@ -116,6 +116,12 @@ function game.load()
   console.setPos(40*tile_size,(map_height+2)*tile_size)
   console.setSize(40*tile_size,8*tile_size)
   --init entities
+  
+  message_width = scr_width-message_x
+  message_height = 6
+
+  message_log = MessageLog(message_x,message_width,message_height)
+  
   
   --fight stuff /stat stuff that makes a player a player
   local stats_ = Fighter(30,2,5)
@@ -165,7 +171,8 @@ function game.update(dt)
   --evaluate results from the player
   for k,result in pairs(player_results) do
     if result.message then
-      console.print(result.message)
+      --console.print(result.message)
+      message_log:add_message(result.message)
     elseif result.dead then
       local msg = ""
       --console.print("You killed "..result.dead_entity.name)
