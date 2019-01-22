@@ -11,6 +11,19 @@ local function draw_entity(entity)
 end
 
 
+function get_name_under_mouse()
+    local names ={}
+    for i,entity in ipairs(entities) do
+        --print(entity.x,entity.y,floor(mouse_coords[1]/tile_size),floor(mouse_coords[2]/tile_size))
+       if entity.x == floor(mouse_coords[1]/tile_size) and entity.y == floor(mouse_coords[2]/tile_size) then
+          table.insert(names,entity.name:upper()) 
+       end
+    end
+    --print("------------------")
+    return table.concat(names,", ")
+end
+
+
 local function render_bar(name,x,y,width,value,max,bar_col,back_col,string_col,show_num)
   local bar_width = math.floor(value/max*width)
   local bar_start = x+love.graphics.getFont():getWidth(name) +10
@@ -42,6 +55,8 @@ function render_all(entities,game_map,screen_width,screen_height)--could be adju
     
     love.graphics.rectangle("line",0,0,(map_width+1)*10,(map_height+1)*10)
     --love.graphics.print("HP: "..player.fighter.hp.."/"..player.fighter.max_hp,10,screen_height -2*10)
+    
+    love.graphics.print(get_name_under_mouse(),0,0)
     
     --render_bar("hp: ",tile_size*3,(map_height+3)*tile_size,10*tile_size,player.fighter.hp,player.fighter.max_hp,colors.red,colors.dark_red)
     render_bar("hp: ",tile_size*3,(map_height+3)*tile_size,10*tile_size,player.fighter.hp,player.fighter.max_hp,colors.light_red,colors.dark_red)

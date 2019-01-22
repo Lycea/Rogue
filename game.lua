@@ -100,6 +100,9 @@ game_state = GameStates.PLAYERS_TURN
 --others
 key_timer = 0--timer between movement
 
+
+
+mouse_coords={0,0}
 ----------------------------------------------------------- 
 -- special data fields for debugging / testing only 
 ----------------------------------------------------------- 
@@ -262,8 +265,7 @@ function game.MouseHandle(x,y,btn)
 end 
  
 function game.MouseMoved(mx,my) 
-     
-  
+  mouse_coords={mx,my}
 end 
  
  
