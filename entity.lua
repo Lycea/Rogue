@@ -32,7 +32,7 @@ paths:setBlocked(
     )
 
 
-function Entity:new(x,y,tile,color,name,blocks,fighter,ai,render_order)
+function Entity:new(x,y,tile,color,name,blocks,fighter,ai,render_order,item,inventory)
     self.x = x
     self.y = y
     
@@ -46,6 +46,9 @@ function Entity:new(x,y,tile,color,name,blocks,fighter,ai,render_order)
     
     self.render_order = render_order
     
+    self.item = item or nil
+    self.inventory = inventory or nil
+    
     --set the parent to access it in the module
     if self.fighter then
       self.fighter.owner = self
@@ -54,6 +57,15 @@ function Entity:new(x,y,tile,color,name,blocks,fighter,ai,render_order)
     if self.ai then
       self.ai.owner = self
     end
+    
+    if self.item then
+        self.item.owner = self
+    end
+    
+    if self.inventory then
+       self.inventory.owner = self 
+    end
+    
     
 end
 

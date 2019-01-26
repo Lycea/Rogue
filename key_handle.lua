@@ -9,6 +9,7 @@
    right = "right",
    up="up",
    down="down",
+   g="pickup",
    mt={
      __index=function(table,key) 
       return  "default"
@@ -24,6 +25,7 @@ key_return_list={
   down={move={0,1}},
   left={move={-1,0}},
   right={move={1,0}},
+  pickup ={pickup = true},
   default={}
 }
 

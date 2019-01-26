@@ -14,6 +14,8 @@ require("components.ai")
 require("death_functions")
 
 
+require("components.inventory")
+
 local game ={} 
 
 
@@ -40,7 +42,7 @@ max_rooms = 20
 
 --fov settings
 fov_light_walls = true
-fov_radius= 20
+fov_radius= 10
 
 
 
@@ -128,8 +130,9 @@ function game.load()
   
   --fight stuff /stat stuff that makes a player a player
   local stats_ = Fighter(30,2,5)
+  local invi_ = Inventory(26)
   --final init
-  player = Entity( math.floor(20),math.floor(20),0,"default","Player",true,stats_,nil,RenderOrder.ACTOR)
+  player = Entity( math.floor(20),math.floor(20),0,"default","Player",true,stats_,nil,RenderOrder.ACTOR,nil,invi_)
   table.insert(entities,player)
   
   --init map
@@ -168,6 +171,20 @@ function game.update(dt)
         key_timer=love.timer.getTime()
       end
     end
+    
+    if action["pickup"] and game_state ==GameStates.PLAYERS_TURN then
+        
+      
+        for _,entity in pairs(entities) do
+           if entity.x == player.x and entity.y == player.y and entity.item then
+               local result =player.inventory:add_item(entity,_)
+               
+              table.insert(player_results,result)
+              
+           end
+        end
+    end
+    
 
   end
   
@@ -176,7 +193,8 @@ function game.update(dt)
     if result.message then
       --console.print(result.message)
       message_log:add_message(result.message)
-    elseif result.dead then
+    end
+    if result.dead then
       local msg = ""
       --console.print("You killed "..result.dead_entity.name)
       if result.dead.name == "Player"then
@@ -187,6 +205,12 @@ function game.update(dt)
       --console.print(msg)
       message_log:add_message(msg)
     end
+    
+    if result.item_added then
+        table.remove(entities,result.item_added)
+        game_state = GameStates.ENEMY_TURN
+    end
+    
     
   end
     

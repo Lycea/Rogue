@@ -12,6 +12,7 @@ GameMap = class_base:extend()
 
 
 local max_monster_per_room = 3
+local max_items_per_room = 1
 
 function GameMap:new(width,height)
   self.width = width
@@ -183,7 +184,7 @@ end
 
 function GameMap:place_entities(room,entities,max_monster_per_room)
   local number_of_monsters = math.random(0,max_monster_per_room)
-  
+  local number_of_items = floor(math.random(0,max_items_per_room))
   for i=0,number_of_monsters do
     local x,y
     x= math.random(room.x1+1,room.x2-1)
@@ -212,6 +213,28 @@ function GameMap:place_entities(room,entities,max_monster_per_room)
       end
       
       table.insert(entities,monster)
+    end
+  end
+  
+  
+  for i=0,number_of_items do
+    local x,y
+    x= math.random(room.x1+1,room.x2-1)
+    y= math.random(room.y1+1,room.y2-1)
+    
+    local free_space = true
+    for k,entity in pairs(entities)do
+      if entity.x == x and entity.y ==y then
+        free_space = false
+        break
+      end
+    end
+    --no mob on that grid field right now
+    if free_space == true then
+      
+        local item_comp=Item()
+        local item = Entity(x,y,0,"orange","health",false,nil,nil,RenderOrder.ITEM,item_comp)
+        table.insert(entities,item)
     end
   end
 end
