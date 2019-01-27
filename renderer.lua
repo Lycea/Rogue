@@ -1,3 +1,5 @@
+require("menue")
+
 RenderOrder = class_base:extend()
 RenderOrder.CORPSE = 1
 RenderOrder.ITEM = 2
@@ -61,6 +63,8 @@ function render_all(entities,game_map,screen_width,screen_height)--could be adju
     --render_bar("hp: ",tile_size*3,(map_height+3)*tile_size,10*tile_size,player.fighter.hp,player.fighter.max_hp,colors.red,colors.dark_red)
     render_bar("hp: ",tile_size*3,(map_height+3)*tile_size,10*tile_size,player.fighter.hp,player.fighter.max_hp,colors.light_red,colors.dark_red)
     message_log:draw()
+    menue("This is a test header,it tests heading",{"blah","test","noch was","meh"},0,0,scr_width)
+    
 
 end
 
