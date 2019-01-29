@@ -97,6 +97,7 @@ message_height = 5
 message_log ={}
 --game state
 game_state = GameStates.PLAYERS_TURN
+previous_game_state = game_state
 
 
 --others
@@ -105,6 +106,9 @@ key_timer = 0--timer between movement
 
 
 mouse_coords={0,0}
+
+
+exit_timer =0
 ----------------------------------------------------------- 
 -- special data fields for debugging / testing only 
 ----------------------------------------------------------- 
@@ -184,6 +188,29 @@ function game.update(dt)
            end
         end
     end
+    
+    if action["exit"]  then
+        if game_state == GameStates.SHOW_INVENTORY then
+            print("return to prev state")
+            game_state =previous_game_state
+            exit_timer =love.timer.getTime()
+        else
+            
+            if exit_timer +0.3 < love.timer.getTime() then
+                love.event.quit()
+            end
+        end
+        
+    end
+    
+    
+    if action["show_inventory"] then
+        if game_state ~= GameStates.SHOW_INVENTORY then
+            previous_game_state = game_state
+            game_state = GameStates.SHOW_INVENTORY
+        end
+    end
+    
     
 
   end

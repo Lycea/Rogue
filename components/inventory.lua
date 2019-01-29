@@ -19,7 +19,7 @@ function Inventory:add_item(item,id)
     if self.num_items >=self.capacity then
         results ={message =Message("No space left,cannot pick up item!!",colors.orange)}
     else
-        results ={message = Message("Picked up item",colors.white),item_added = id}
+        results ={message = Message("Picked up "..item.name:upper(),colors.white),item_added = id}
         table.insert(self.items,item)
         self.num_items = self.num_items+1
     end

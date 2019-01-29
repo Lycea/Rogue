@@ -4,6 +4,8 @@ console =require("helper.console")
 game =require("game")
 
 
+
+
 local maj,min,rev=love.getVersion()
 if maj >= 11 then
     require("helper.cindy").applyPatch()
