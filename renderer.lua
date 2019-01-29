@@ -66,7 +66,7 @@ function render_all(entities,game_map,screen_width,screen_height)--could be adju
     --menue("This is a test header,it tests heading",{"blah","test","noch was","meh"},0,0,scr_width)
     
     if game_state == GameStates.SHOW_INVENTORY then
-    invi_menue("Meh_inventory",player.inventory,tile_size*20)
+    invi_menue("Press key next to item to use or ESC to exit",player.inventory,tile_size*20)
     end
     
 

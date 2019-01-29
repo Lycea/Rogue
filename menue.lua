@@ -7,7 +7,7 @@ local function wrap_text(str,num)
   return ret
 end
 
-function menue(header,options,x,y,width)
+function menue(header,options,x,y,width,marker_id)
     gr.setColor(0,0,0,255)
     if #options>26 then return end
     gr.rectangle("fill",x,y,width,scr_height)
@@ -18,14 +18,20 @@ function menue(header,options,x,y,width)
     
     gr.setColor(255,255,255)
     
+    
     for i,txt in pairs(wrapped) do
         gr.print(txt,10,yoff+i*line_size)
         yoff = yoff+line_size
     end
     yoff = yoff + 10
     
+    
     for i,option in pairs(options) do
         gr.print(option,10,yoff+i*line_size)
+    end
+
+    if marker_id ~= nil then 
+        gr.rectangle("fill",0,yoff+marker_id*line_size,5,5)
     end
     
     
@@ -42,6 +48,6 @@ function invi_menue(header,inventory,width)
      table.insert(options,item.name)
      end
  end
- menue(header,options,0,0,width)
+ menue(header,options,0,0,width,inventory.active_item)
  
 end

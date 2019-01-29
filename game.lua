@@ -208,9 +208,17 @@ function game.update(dt)
         if game_state ~= GameStates.SHOW_INVENTORY then
             previous_game_state = game_state
             game_state = GameStates.SHOW_INVENTORY
+            player.inventory.active_item =1
         end
     end
     
+    if action["use_item"] then
+       table.insert(player_results,{message=Message("trying to use item... no result",colors.orange)})
+    end
+    
+    if action["inventory_idx_change"] then
+        player.inventory.active_item = (player.inventory.active_item+ action["inventory_idx_change"][2])%player.inventory.num_items+1
+    end
     
 
   end

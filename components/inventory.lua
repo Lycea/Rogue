@@ -11,6 +11,7 @@ function Inventory:new(slots)
     self.capacity =slots
     self.items = {}
     self.num_items = 0
+    self.active_item = 0
 end
 
 function Inventory:add_item(item,id)
