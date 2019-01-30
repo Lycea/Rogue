@@ -48,6 +48,6 @@ function invi_menue(header,inventory,width)
      table.insert(options,item.name)
      end
  end
- menue(header,options,0,0,width,inventory.active_item)
+ menue(header,options,0,0,width,inventory.active_item+1)
  
 end

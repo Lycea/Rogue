@@ -109,6 +109,7 @@ mouse_coords={0,0}
 
 
 exit_timer =0
+selector_timer = 0
 ----------------------------------------------------------- 
 -- special data fields for debugging / testing only 
 ----------------------------------------------------------- 
@@ -167,12 +168,14 @@ function game.update(dt)
           else
             player:move(dirs[1],dirs[2])
             fov_recompute=true
+           
           end
-          
+          key_timer=love.timer.getTime()
           game_state = GameStates.ENEMY_TURN
+           break
         end
         
-        key_timer=love.timer.getTime()
+        
       end
     end
     
@@ -217,7 +220,12 @@ function game.update(dt)
     end
     
     if action["inventory_idx_change"] then
-        player.inventory.active_item = (player.inventory.active_item+ action["inventory_idx_change"][2])%player.inventory.num_items+1
+        if selector_timer+0.3 < love.timer.getTime() then
+            selector_timer =love.timer.getTime()
+            local old_idx = player.inventory.active_item
+            player.inventory.active_item = (player.inventory.active_item+ action["inventory_idx_change"][2])%player.inventory.num_items
+            table.insert(player_results,{message=Message("Item index from "..old_idx.." to "..player.inventory.active_item,colors.orange)})
+        end
     end
     
 
