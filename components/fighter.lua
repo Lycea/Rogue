@@ -37,3 +37,11 @@ function Fighter:attack(target)
     return results
 end
 
+
+function Fighter:heal(amount)
+    self.hp = self.hp+amount
+    if self.hp> self.max_hp then
+        self.hp  = self.max_hp
+    end
+end
+

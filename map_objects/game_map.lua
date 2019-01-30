@@ -232,7 +232,7 @@ function GameMap:place_entities(room,entities,max_monster_per_room)
     --no mob on that grid field right now
     if free_space == true then
       
-        local item_comp=Item()
+        local item_comp=Item(item_function.heal,{amount=4})
         local item = Entity(x,y,0,"orange","health",false,nil,nil,RenderOrder.ITEM,item_comp)
         table.insert(entities,item)
     end

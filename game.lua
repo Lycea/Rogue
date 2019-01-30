@@ -4,6 +4,8 @@ require("entity")
 require("key_handle")
 require("renderer")
 
+
+
 require("map_objects.game_map")
 require("fov_functions")
 require("game_states")
@@ -15,6 +17,7 @@ require("death_functions")
 
 
 require("components.inventory")
+require("components.item_functions")
 
 local game ={} 
 
@@ -217,6 +220,7 @@ function game.update(dt)
     
     if action["use_item"] then
        table.insert(player_results,{message=Message("trying to use item... no result",colors.orange)})
+       table.insert(player_results,player.inventory:use(player.inventory.items[player.inventory.active_item+1],player.inventory.active_item+1,{}))
     end
     
     if action["inventory_idx_change"] then
