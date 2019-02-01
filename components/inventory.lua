@@ -13,7 +13,7 @@ function Inventory:new(slots)
     self.capacity =slots
     self.items = {}
     self.num_items = 0
-    self.active_item = 1
+    self.active_item = 0
 end
 
 
@@ -35,17 +35,32 @@ end
 
 function Inventory:use(item_entity,idx,args)
     local results ={}
+    print("active invi_idx",self.active_item)
+    print("using item ...",idx)
+    print("items in invi ",self.num_items)
     
-    local item = item_entity.item
+    
+    
+    if self.num_items == 0 then
+      table.insert(results,{message=Message("No item there to be used",colors.orange)})
+      print("nothing used...")
+      return results
+    end
+    if self.active_item+1 > self.num_items then
+      self.active_item = self.num_items -1
+    end
+    local item = self.items[self.active_item+1]
     
     if item.use_function == nil then
-        table.insert(results,{message=Message("The "..item_entity.name.." can not be used",colors.orange)})
+        table.insert(results,{message=Message("The "..item.name.." can not be used",colors.orange)})
     else
         args = merge_lists(args,item.function_args)
         local use_results =item.use_function(self.owner,args)
         for k,result in pairs(use_results) do
-           if results["consumed"] then
-              table.remove(self.items,idx) 
+           if result["consumed"] then
+             --print("removing item...")
+              table.remove(self.items,self.active_item+1) 
+              self.num_items = self.num_items-1
            end
         end
         table.insert(results,use_results)
