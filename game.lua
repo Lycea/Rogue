@@ -220,7 +220,8 @@ function game.update(dt)
     
     if action["use_item"] then
        --table.insert(player_results,{message=Message("trying to use item... no result",colors.orange)})
-       table.insert(player_results,player.inventory:use(player.inventory.items[player.inventory.active_item+1],player.inventory.active_item+1,{}))
+       local results_usage =player.inventory:use(player.inventory.items[player.inventory.active_item+1],player.inventory.active_item+1,{})
+       table.insert(player_results,results_usage)
     end
     
     if action["inventory_idx_change"] then
@@ -256,6 +257,11 @@ function game.update(dt)
     if result.item_added then
         table.remove(entities,result.item_added)
         game_state = GameStates.ENEMY_TURN
+    end
+    if result["consumed"] then
+      if result["consumed"] == true then
+        game_state = GameStates.ENEMY_TURN
+      end
     end
     
     

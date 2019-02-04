@@ -42,17 +42,17 @@ function Inventory:use(item_entity,idx,args)
     
     
     if self.num_items == 0 then
-      table.insert(results,{message=Message("No item there to be used",colors.orange)})
+      results={message=Message("No item there to be used",colors.orange)}
       print("nothing used...")
       return results
     end
     if self.active_item+1 > self.num_items then
       self.active_item = self.num_items -1
     end
-    local item = self.items[self.active_item+1]
+    local item = self.items[self.active_item+1].item
     
     if item.use_function == nil then
-        table.insert(results,{message=Message("The "..item.name.." can not be used",colors.orange)})
+      results={message=Message("The "..item.name.." can not be used",colors.orange)}
     else
         args = merge_lists(args,item.function_args)
         local use_results =item.use_function(self.owner,args)
@@ -63,7 +63,7 @@ function Inventory:use(item_entity,idx,args)
               self.num_items = self.num_items-1
            end
         end
-        table.insert(results,use_results)
+        results=use_results
     end
     
     return results
