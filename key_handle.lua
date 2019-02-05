@@ -13,6 +13,7 @@
    i="inventory",
    escape="exit",
    u ="use",
+   d ="drop",
    mt={
      __index=function(table,key) 
       return  "default"
@@ -63,6 +64,7 @@ key_list_invi={
     down={inventory_idx_change ={0,1}},
     use ={use_item = true},
     exit = {exit = true},
+    drop ={drop_item = true},
     mt={
      __index=function(table,key) 
       return  {}

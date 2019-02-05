@@ -36,6 +36,28 @@ local function merge_lists(a,b)
     return new
 end
 
+
+function Inventory:drop_item(item_entity,idx)
+    if self.num_items == 0 then
+      results={message=Message("No item there to be used",colors.orange)}
+      print("nothing used...")
+      return results
+    end
+    if self.active_item+1 > self.num_items then
+      self.active_item = self.num_items -1
+    end
+    local item = self.items[self.active_item+1]
+    
+    
+    item.x =self.owner.x
+    item.y =self.owner.y
+    
+    table.remove(self.items,self.active_item+1) 
+    
+    return {item_dropped=item ,message =Message("Dropping "..item.name,colors.red)}
+end
+
+
 function Inventory:use(item_entity,idx,args)
     local results ={}
     print("active invi_idx",self.active_item)

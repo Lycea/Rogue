@@ -233,6 +233,12 @@ function game.update(dt)
        
     end
     
+    if action["drop_item"]then
+        local results_drop =player.inventory:drop_item(player.inventory.items[player.inventory.active_item+1],player.inventory.active_item+1,{})
+       table.insert(player_results,results_drop)
+       break
+    end
+    
     if action["inventory_idx_change"] then
         if selector_timer+0.3 < love.timer.getTime() then
             selector_timer =love.timer.getTime()
@@ -272,6 +278,11 @@ function game.update(dt)
         game_state = GameStates.ENEMY_TURN
       end
     end
+    if result["item_dropped"] then
+        game_state = GameStates.ENEMY_TURN
+        table.insert(entities,result["item_dropped"])
+    end
+    
     
     
   end
