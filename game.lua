@@ -221,7 +221,11 @@ function game.update(dt)
     if action["use_item"] then
        --table.insert(player_results,{message=Message("trying to use item... no result",colors.orange)})
        local results_usage =player.inventory:use(player.inventory.items[player.inventory.active_item+1],player.inventory.active_item+1,{})
-       table.insert(player_results,results_usage)
+       table.insert(player_results,unpack(results_usage))
+       if results_usage.consumed == true then
+         break
+       end
+       
     end
     
     if action["inventory_idx_change"] then
@@ -272,6 +276,7 @@ function game.update(dt)
   
   -- Enemy behaviour basic / Enemy turn
   if game_state == GameStates.ENEMY_TURN then
+    message_log:add_message(Message("Enemy turn start",colors.white))
       
       for k,entity in pairs(entities) do
         --check if it is a entity with some behaviour

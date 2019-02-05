@@ -17,7 +17,7 @@ end
 
 
 function love.load(args)
-  require("mobdebug").start()
+  --require("mobdebug").start()
   --love.window.setMode(80*tile_size,50*tile_size)
   game.load()
   

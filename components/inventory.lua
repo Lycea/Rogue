@@ -21,6 +21,9 @@ function Inventory:remove_item(item)
     
 end
 
+
+
+
 local function merge_lists(a,b)
     local new ={}
     for k,v in pairs(a) do
@@ -63,7 +66,9 @@ function Inventory:use(item_entity,idx,args)
               self.num_items = self.num_items-1
            end
         end
-        results=use_results
+        for key,result in ipairs(use_results) do
+          table.insert(results,result)
+        end
     end
     
     return results
