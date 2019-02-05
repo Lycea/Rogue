@@ -12,7 +12,7 @@ function item_function.heal(args,kwargs)
         table.insert(results,{consumed =false,message =Message("HP max no need to heal")})
     else
         entity.fighter:heal(amount)
-        table.insert(results,{consumed = true,message=Message(entity.name.." healed by "..amount,colors.white)})
+        table.insert(results,{consumed = true,message=Message(entity.name.." healed by "..amount,colors.green)})
     end
     
     return results
