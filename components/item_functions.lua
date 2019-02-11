@@ -44,10 +44,40 @@ function item_function.cast_lightning(args,kwargs)
   
   if target ~= nil then
     table.insert(results,{consumed = true,message = Message("The "..target.name.." was hit with lightning")})
-    table.insert(results,target.fighter:take_damage(dmg))
+    table.insert(results,target.fighter:take_damage(dmg)[1])
   end
   
   return results
   
   
 end
+
+
+
+function item_function.cast_fireball(args,kwargs)
+    local results ={}
+    
+    --get variables
+    local entities = kwargs["entities"]
+    local dmg = kwargs["damage"]
+    local radius = kwargs["radius"]
+    local target_x = kwargs["target_x"]
+    local target_y = kwargs["target_y"]
+    
+    if fov_map[target_y][target_x] == false then
+        results ={message=Message("You cannot target a tile out of range!",colors.red)}
+        return results
+    end
+    
+    table.insert(results,{consumed = true,message =Message("The fireball explodes and burns everything in "..radius.." tiles!!",colors.orange)})
+    
+    for idx,entity in ipairs(entities) do
+        if entity:distance(target_x,target_y) <= radius and entity.fighter then
+            table.insert(results,{message = Message("The "..entity.name.." gets burned")})
+            table.insert(results,entity.fighter:tage_damage(dmg))
+        end
+    end
+    
+    return results
+end
+

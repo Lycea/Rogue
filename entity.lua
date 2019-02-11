@@ -142,6 +142,9 @@ function Entity:distance_to(other)
    return math.sqrt(math.pow(dx,2)+math.pow(dy,2))
 end
 
+function Entity:distance(x,y)
+    return self:distance_to({x=x,y=y})
+end
 
 
 function Entity:draw()
