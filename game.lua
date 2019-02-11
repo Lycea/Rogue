@@ -106,7 +106,10 @@ message_log ={}
 --game state
 game_state = GameStates.PLAYERS_TURN
 previous_game_state = game_state
+targeting_item = nil
 
+
+targeting_tile ={x=0,y=0}
 
 --others
 key_timer = 0--timer between movement
@@ -187,6 +190,7 @@ function game.update(dt)
       end
     end
     
+    
     if action["pickup"] and game_state ==GameStates.PLAYERS_TURN then
         
       
@@ -200,10 +204,38 @@ function game.update(dt)
         end
     end
     
+    
+    if action["taget_set"] then
+       local results_usage =player.inventory:use(player.inventory.items[player.inventory.active_item+1],player.inventory.active_item+1,{colors=colors,entities =entities,target_x = targeting_tile.x,target_y = targeting_tile.y})
+       local consumed_item = false
+       
+       for i,result in pairs(results_usage) do
+           if result.consumed == true then
+            consumed_item = true
+           end
+           table.insert(player_results,result)
+       end
+       
+       if consumed_item == true then
+         break
+       end
+   
+   end
+    
+    if action["target_idx_change"] then
+        local change = action["target_idx_change"]
+        targeting_tile.x = targeting_tile.x +change[1]
+        targeting_tile.y = targeting_tile.y +change[2]
+    end
+    
+    
     if action["exit"]  then
         if game_state == GameStates.SHOW_INVENTORY then
             print("return to prev state")
             game_state =previous_game_state
+            exit_timer =love.timer.getTime()
+        elseif game_state == GameStates.TARGETING then
+            table.insert(player_results,{targeting_cancelled=true})
             exit_timer =love.timer.getTime()
         else
             
@@ -246,6 +278,8 @@ function game.update(dt)
        table.insert(player_results,results_drop)
        break
     end
+    
+    
     
     if action["inventory_idx_change"] then
         if selector_timer+0.3 < love.timer.getTime() then
@@ -291,6 +325,19 @@ function game.update(dt)
         table.insert(entities,result["item_dropped"])
     end
     
+    
+    if result["targeting"]then
+        previous_game_state = GameStates.PLAYERS_TURN
+        game_state = GameStates.TARGETING
+        
+        targeting_item = result["targeting"]
+        message_log:add_message(targeting_item.item.targeting_message)
+    end
+    
+    if result["targeting_cancelled"] then
+        game_state = previous_game_state
+        message_log.add_message(Message('Targeting cancelled'))
+    end
     
     
   end

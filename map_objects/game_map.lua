@@ -233,11 +233,15 @@ function GameMap:place_entities(room,entities,max_monster_per_room)
     if free_space == true then
         local item = nil
         local num = math.random(0,100)
-        if num <= 70 then
-          local item_comp=Item(item_function.heal,{amount=4})
+        if num < 70 then
+          local item_comp=Item(item_function.heal,false,nil,{amount=4})
           item = Entity(x,y,0,"orange","health",false,nil,nil,RenderOrder.ITEM,item_comp)
+          
+        elseif num < 85 then
+            local item_comp = Item(item_function.cast_fireball,true,Message("Test",colors.green),{damage=10,radius=5})
+            item = Entity(x,y,0,"red","fireball_scroll",false,nil,nil,RenderOrder.ITEM,item_comp)
         else
-          local item_comp = Item(item_function.cast_lightning,{damage=10,max_range=5})
+          local item_comp = Item(item_function.cast_lightning,false,nil,{damage=20,max_range=5})
           item = Entity(x,y,0,"yellow","lightning_rune",false,nil,nil,RenderOrder.ITEM,item_comp)
         end
         table.insert(entities,item)

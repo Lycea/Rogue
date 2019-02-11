@@ -1,10 +1,12 @@
 Item = class_base:extend()
 Inventory = class_base:extend()
 
-function Item:new(use_function,args)
+function Item:new(use_function,targeting,targeting_message,args)
     self.use_function  = use_function or nil
     self.function_args = args
     
+    self.targeting = targeting or false
+    self.targeting_message = targeting_message or nil
 end
 
 
@@ -65,31 +67,42 @@ function Inventory:use(item_entity,idx,args)
     print("items in invi ",self.num_items)
     
     
-    
+    --check if there are items in the inventory
     if self.num_items == 0 then
       results={message=Message("No item there to be used",colors.orange)}
       print("nothing used...")
       return results
     end
+    
+    --check some item selection shenanigans ... "problem" with module and lua indexes...
     if self.active_item+1 > self.num_items then
       self.active_item = self.num_items -1
     end
+    
+    --get the item~
     local item = self.items[self.active_item+1].item
     
+    --check if the item is usable
     if item.use_function == nil then
       results={message=Message("The "..item.name.." can not be used",colors.orange)}
     else
-        args = merge_lists(args,item.function_args)
-        local use_results =item.use_function(self.owner,args)
-        for k,result in pairs(use_results) do
-           if result["consumed"] then
-             --print("removing item...")
-              table.remove(self.items,self.active_item+1) 
-              self.num_items = self.num_items-1
-           end
-        end
-        for key,result in ipairs(use_results) do
-          table.insert(results,result)
+        --check if the item can select a target, and if it is selected
+        if item.targeting == true and not args["target_x"] then
+            table.insert(results,{targeting= self.items[self.active_item+1]})
+        else
+            args = merge_lists(args,item.function_args)
+            
+            local use_results =item.use_function(self.owner,args)
+            for k,result in pairs(use_results) do
+               if result["consumed"] then
+                 --print("removing item...")
+                  table.remove(self.items,self.active_item+1) 
+                  self.num_items = self.num_items-1
+               end
+            end
+            for key,result in ipairs(use_results) do
+              table.insert(results,result)
+            end
         end
     end
     
