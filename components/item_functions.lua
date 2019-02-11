@@ -74,7 +74,7 @@ function item_function.cast_fireball(args,kwargs)
     for idx,entity in ipairs(entities) do
         if entity:distance(target_x,target_y) <= radius and entity.fighter then
             table.insert(results,{message = Message("The "..entity.name.." gets burned")})
-            table.insert(results,entity.fighter:tage_damage(dmg))
+            table.insert(results,entity.fighter:take_damage(dmg))
         end
     end
     

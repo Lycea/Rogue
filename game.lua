@@ -109,7 +109,7 @@ previous_game_state = game_state
 targeting_item = nil
 
 
-targeting_tile ={x=0,y=0}
+targeting_tile ={x=1,y=1}
 
 --others
 key_timer = 0--timer between movement
@@ -205,7 +205,7 @@ function game.update(dt)
     end
     
     
-    if action["taget_set"] then
+    if action["target_set"] then
        local results_usage =player.inventory:use(player.inventory.items[player.inventory.active_item+1],player.inventory.active_item+1,{colors=colors,entities =entities,target_x = targeting_tile.x,target_y = targeting_tile.y})
        local consumed_item = false
        
@@ -331,6 +331,9 @@ function game.update(dt)
         game_state = GameStates.TARGETING
         
         targeting_item = result["targeting"]
+        
+        targeting_tile.x = player.x
+        targeting_tile.y = player.y
         message_log:add_message(targeting_item.item.targeting_message)
     end
     
