@@ -231,9 +231,15 @@ function GameMap:place_entities(room,entities,max_monster_per_room)
     end
     --no mob on that grid field right now
     if free_space == true then
-      
-        local item_comp=Item(item_function.heal,{amount=4})
-        local item = Entity(x,y,0,"orange","health",false,nil,nil,RenderOrder.ITEM,item_comp)
+        local item = nil
+        local num = math.random(0,100)
+        if num <= 70 then
+          local item_comp=Item(item_function.heal,{amount=4})
+          item = Entity(x,y,0,"orange","health",false,nil,nil,RenderOrder.ITEM,item_comp)
+        else
+          local item_comp = Item(item_function.cast_lightning,{damage=10,max_range=5})
+          item = Entity(x,y,0,"yellow","lightning_rune",false,nil,nil,RenderOrder.ITEM,item_comp)
+        end
         table.insert(entities,item)
     end
   end
