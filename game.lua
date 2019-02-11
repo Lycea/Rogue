@@ -226,8 +226,16 @@ function game.update(dt)
     if action["use_item"] then
        --table.insert(player_results,{message=Message("trying to use item... no result",colors.orange)})
        local results_usage =player.inventory:use(player.inventory.items[player.inventory.active_item+1],player.inventory.active_item+1,{colors=colors,entities =entities})
-       table.insert(player_results,unpack(results_usage))
-       if results_usage.consumed == true then
+       
+       local consumed_item = false
+       for i,result in pairs(results_usage) do
+           if result.consumed == true then
+            consumed_item = true
+           end
+           table.insert(player_results,result)
+       end
+       
+       if consumed_item == true then
          break
        end
        
