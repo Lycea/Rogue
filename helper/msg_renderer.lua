@@ -40,7 +40,7 @@ end
 
 
 function MessageLog:draw()
-    print(self.height)
+    --print(self.height)
     for i,message in ipairs(self.messages) do
         
         print_colored(message.text,self.x*tile_size,scr_height-(self.height+3)*tile_size +i*(tile_size+2),message.color)

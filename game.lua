@@ -132,6 +132,7 @@ selector_timer = 0
 
 
 function game.load() 
+  debuger.on()
    
   scr_width,scr_height = love.graphics.getDimensions() 
   console.setPos(40*tile_size,(map_height+2)*tile_size)
@@ -154,6 +155,7 @@ function game.load()
   --init map
   map = GameMap(map_width,map_height)
   fov_map=compute_fov(map)
+  debuger.off()
 end 
  
  
@@ -231,7 +233,6 @@ function game.update(dt)
     
     if action["exit"]  then
         if game_state == GameStates.SHOW_INVENTORY then
-            print("return to prev state")
             game_state =previous_game_state
             exit_timer =love.timer.getTime()
         elseif game_state == GameStates.TARGETING then
@@ -294,7 +295,9 @@ function game.update(dt)
   end
   
   --evaluate results from the player
+  
   for k,result in pairs(player_results) do
+    
     if result.message then
       --console.print(result.message)
       message_log:add_message(result.message)

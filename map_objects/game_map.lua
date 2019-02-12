@@ -113,7 +113,7 @@ function GameMap:make_map()
         local center_prev = rooms[num_rooms]:center() --get the previous room center
         local prev_x,prev_y = center_prev[1],center_prev[2]
         if math.random(0,50)%2==1 then
-          console.print(prev_x)
+          --console.print(prev_x)
           self:create_h_tunnel(prev_x,center[1],prev_y)
           self:create_v_tunnel(prev_y,center[2],center[1])
         else

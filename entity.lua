@@ -12,7 +12,7 @@ function get_blocking_entitis_at_location(destin_x,destin_y)
 end
 
 --import pather , import after helper,it may need it
-print(...)
+--print(...)
 local BASE= ...
 local idx =string.find(BASE,"entity")
 BASE =BASE:sub(0,idx -1)

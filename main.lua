@@ -3,7 +3,11 @@ class_base= require("helper.classic")
 console =require("helper.console")
 game =require("game")
 
-
+debuger = {
+  on = function() print("Not able to turn debuger on , start in debug mode")end,
+  off = function() print("Not able to turn debuger off , start in debug mode")end,
+  start = function() print("Not able to start debuging , start in debug mode")end,
+          }
 
 
 local maj,min,rev=love.getVersion()
@@ -16,8 +20,13 @@ end
 
 
 
-function love.load(args)
-  --require("mobdebug").start()
+function love.load(arg)
+
+  if arg[1] == "-debug" then
+    debuger = require("mobdebug")
+    debuger.start()
+    debuger.off()
+  end
   --love.window.setMode(80*tile_size,50*tile_size)
   game.load()
   
