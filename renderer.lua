@@ -69,6 +69,10 @@ function render_all(entities,game_map,screen_width,screen_height)--could be adju
         invi_menue("Press key next to item to use or ESC to exit",player.inventory,tile_size*20)
     end
     
+    if game_state == GameStates.TARGETING then
+      love.graphics.rectangle("fill",targeting_tile.x*tile_size,targeting_tile.y*tile_size,tile_size,tile_size)
+    end
+    
 
 end
 
