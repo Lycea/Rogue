@@ -81,3 +81,33 @@ function item_function.cast_fireball(args,kwargs)
     return results
 end
 
+
+function item_function.cast_confuse(args,kwargs)
+    local results = {}
+    
+    local entities = kwargs["entities"]
+    local target_x = kwargs["target_x"]
+    local target_y = kwargs["target_y"]
+    
+    if fov_map[target_y][target_x] == false then
+        sults ={message=Message("You cannot target a tile out of range!",colors.red)}
+        return results
+    end
+    debuger.on()
+    for idx,entity in  ipairs(entities) do
+        if entity.x == target_x and entity.y == target_y then
+           confused_ai = ConfusedMonster(entity.ai,math.random(0,20))
+           
+           confused_ai.owner =entity
+           entity.ai = confused_ai
+           
+           table.insert(results,{consumed = true, message=Message("The "..entity.name.." looks confused!",colors.green)})
+           return results
+        end
+    end
+    debuger.off()
+    
+    return {}
+    
+end
+

@@ -27,3 +27,41 @@ function BasicMonster:take_turn(target)
     end
     return results
 end
+
+
+ConfusedMonster = class_base:extend()
+
+function ConfusedMonster:new(previous_ai,turns)
+    self.previous_ai = previous_ai
+    self.number_of_turns = turns or 10
+end
+
+
+function ConfusedMonster:take_turn(target)
+    local results ={}
+    if self.number_of_turns >0 then
+        local rnd_x =  math.random(0,2)-1
+        local rnd_y =  math.random(0,2)-1
+        
+        if rnd_x ~= 0 then
+            rnd_y =0
+        end
+        
+        rnd_x = self.owner.x + rnd_x
+        rnd_y = self.owner.x + rnd_y
+        
+        if rnd_x ~= self.owner.x and rnd_y ~= self.owner.y then
+           self.owner:move_towards4( rnd_x,rnd_y)
+        end
+        
+        self.number_of_turns = self.number_of_turns-1
+    else
+        self.owner.ai = self.previous_ai
+        table.insert(results,{message=Message("The "..self.owner.name.." is no longer confused!")})
+    end
+    
+    return results
+    
+    
+end
+
