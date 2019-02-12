@@ -13,6 +13,7 @@
    i="inventory",
    escape="exit",
    u ="use",
+   ["return"] = "select",
    d ="drop",
    mt={
      __index=function(table,key) 
@@ -64,7 +65,7 @@ key_list_targeting={
     left={target_idx_change={-1,0}},
     right={target_idx_change={1,0}},
     
-    use ={target_set = true},
+    select ={target_set = true},
     exit = {exit = true},
     
     mt={
