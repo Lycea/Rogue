@@ -32,6 +32,43 @@ paths:setBlocked(
     )
 
 
+function Entity:save()
+    local txt =""
+    local pos ="x: "..self.x.."\ny:  "..self.y.."\n"
+    local color = "color:"..self.color.."\n"
+    
+    local name = "name:"..self.name.."\n"
+    local blocks = self.blocks==true and "true\n" or "false\n"
+    
+    local fighter = ""
+    if self.fighter ~= nil then
+        fighter ="fighter{\n"..self.fighter:save().."}\n"
+    end
+    
+    local ai = ""
+    if self.ai ~= nil then
+        ai="ai{\n"..self.ai:save().."}\n"
+    end
+    
+    local item = ""
+    if self.item ~=nil then
+        item ="item{\n".. self.item:save().."}\n"
+    end
+    
+    local inventory = ""
+    if self.inventory~= nil then
+        inventory="inventory{\n"..self.inventory:save().."}\n"
+    end
+    
+    local render_order = "render_order:"..self.render_order.."\n"
+    
+    txt = pos..color..name.. "blocks:"..blocks..fighter..ai..item..inventory..render_order
+    
+    return txt
+end
+
+
+
 function Entity:new(x,y,tile,color,name,blocks,fighter,ai,render_order,item,inventory)
     self.x = x
     self.y = y

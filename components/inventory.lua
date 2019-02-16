@@ -9,6 +9,36 @@ function Item:new(use_function,targeting,targeting_message,args)
     self.targeting_message = targeting_message or nil
 end
 
+function Item:save()
+    local function_ = "use_function:"
+    for name,hash in pairs(item_function) do
+        if hash == self.use_function then
+           function_ = function_..name 
+        end
+    end
+    
+    local args = "function_args{\n"
+    for idx_args,data in pairs(self.function_args)do
+        if type(data)~= type({}) then
+            args = args..idx_args..":"..data.."\n"
+        else
+        
+        end
+    end
+    args=args.."}"
+    
+
+    local targeting =  "targeting:"
+    targeting = targeting..(self.targeting == true and "true" or "false")
+    
+    local target_msg ="targeting_message{"
+    if self.targeting_message ~= nil then
+       target_msg =target_msg..self.targeting_message:save().."\n}"
+    end
+    return function_.."\n"..args.."\n"..targeting.."\n"..target_msg
+    
+end
+
 
 
 function Inventory:new(slots)
@@ -16,6 +46,25 @@ function Inventory:new(slots)
     self.items = {}
     self.num_items = 0
     self.active_item = 0
+end
+
+
+function Inventory:save()
+    local content =""
+    
+    local capacity = "capacity:"..self.capacity.."\n"
+    local num_items = "num_items:"..self.num_items.."\n"
+    local active_item = "active_item:".."0".."\n"
+    
+    local items="items{\n"
+    
+    for idx,item in pairs(self.items) do
+        items=items..idx..":"..item:save()
+    end
+    items=items.."}"
+    
+    
+    return content..capacity..num_items..active_item..items
 end
 
 

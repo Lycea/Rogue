@@ -28,6 +28,11 @@ function BasicMonster:take_turn(target)
     return results
 end
 
+function BasicMonster:save()
+    return "ai:BasicMonster"
+end
+
+
 
 ConfusedMonster = class_base:extend()
 
@@ -63,5 +68,9 @@ function ConfusedMonster:take_turn(target)
     return results
     
     
+end
+
+function ConfusedMonster:save()
+    return "ai:ConfusedMonster \n previous:"..self.previous_ai:save().."\nnumber_of_turns:"..self.number_of_turns
 end
 

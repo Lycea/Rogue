@@ -7,6 +7,19 @@ function Fighter:new(hp,defense,power)
     self.power = power
 end
 
+function Fighter:save()
+    local txt = ""
+    
+    for idx,value in pairs(self) do
+        if type(value) ~= type(function () end) and type(value) ~= type({}) then
+           txt = txt..idx..":"..value.."\n" 
+        end
+    end
+    
+    return txt
+end
+
+
 function Fighter:take_damage(amount)
   local results={}
   self.hp = self.hp -amount

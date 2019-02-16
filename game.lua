@@ -21,6 +21,7 @@ require("death_functions")
 require("components.inventory")
 require("components.item_functions")
 
+require("loader_functions.data_loader")
 local game ={} 
 
 
@@ -89,6 +90,19 @@ function game.load()
    constants = get_constants()
    player,entities,message_log = get_game_variables()
    map,fov_map = init_map()
+   
+   debuger.on()
+   file =io.open("save.txt","w")
+   
+   entities_="entities{"
+   for idx,entity in pairs(entities) do
+       entities_= entities_.."\n"..idx.."{"..entity:save().."}"
+   end
+   entities_ = entities_.."\n}"
+
+    file:write(entities_)
+    file:close()
+   debuger.off()
 end 
  
  
@@ -177,6 +191,8 @@ function game.update(dt)
         else
             
             if exit_timer +0.3 < love.timer.getTime() then
+                
+                save_game()
                 love.event.quit()
             end
         end

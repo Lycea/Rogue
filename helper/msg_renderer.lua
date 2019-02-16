@@ -1,10 +1,14 @@
 Message = class_base:extend()
 
 function Message:new(text,color)
-    self.text = text
+    self.text = text or ""
     self.color =color or {255,255,255}
 end
 
+
+function Message:save()
+    return "text:"..self.text.."\ncolor:"..table.concat(self.color,",").."\n"
+end
 
 
 local function wrap_text(str,num)
