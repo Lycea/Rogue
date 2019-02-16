@@ -82,14 +82,14 @@ function GameMap:make_map()
   local rooms={}
   local num_rooms =0
   
-  for room=1 ,max_rooms do
+  for room=1 ,constants.max_rooms do
     --random size
-    local w = math.random(room_min_size,room_max_size)
-    local h = math.random(room_min_size,room_max_size)
+    local w = math.random(constants.room_min_size,constants.room_max_size)
+    local h = math.random(constants.room_min_size,constants.room_max_size)
     
     --random position
-    local x = math.random(1,map_width-w-1) 
-    local y = math.random(1,map_height-h-1) 
+    local x = math.random(1,constants.map_width-w-1) 
+    local y = math.random(1,constants.map_height-h-1) 
     
     local new_room = Rect(x,y,w,h)
     
@@ -159,25 +159,27 @@ function GameMap:draw()
         local wall =self.tiles[y][x].block_sight
         if fov_map[y][x] == true then
           if wall == true then
-            love.graphics.setColor(colors.light_wall)
+            love.graphics.setColor(constants.colors.light_wall)
           else
-            love.graphics.setColor(colors.light_ground)
+            love.graphics.setColor(constants.colors.light_ground)
           end
           self.tiles[y][x].explored = true
-          love.graphics.rectangle("fill",x*tile_size,y*tile_size,tile_size,tile_size)
+          love.graphics.rectangle("fill",x*constants.tile_size,
+              y*constants.tile_size,constants.tile_size,constants.tile_size)
         elseif self.tiles[y][x].explored then
           if wall == true then
-            love.graphics.setColor(colors.dark_wall)
+            love.graphics.setColor(constants.colors.dark_wall)
           else
-            love.graphics.setColor(colors.dark_ground)
+            love.graphics.setColor(constants.colors.dark_ground)
           end
-          love.graphics.rectangle("fill",x*tile_size,y*tile_size,tile_size,tile_size)
+          love.graphics.rectangle("fill",x*constants.tile_size,
+              y*constants.tile_size,constants.tile_size,constants.tile_size)
         end
         --love.graphics.setColor(colors.default)
         --love.graphics.rectangle("line",x*tile_size-tile_size,y*tile_size-tile_size,tile_size,tile_size)
       end
     end
-    love.graphics.setColor(colors.default)
+    love.graphics.setColor(constants.colors.default)
 end
 
 
@@ -238,10 +240,10 @@ function GameMap:place_entities(room,entities,max_monster_per_room)
           item = Entity(x,y,0,"orange","health",false,nil,nil,RenderOrder.ITEM,item_comp)
           
         elseif num < 80 then
-            local item_comp = Item(item_function.cast_fireball,true,Message("Hit enter to set target",colors.green),{damage=10,radius=5})
+            local item_comp = Item(item_function.cast_fireball,true,Message("Hit enter to set target",constants.colors.green),{damage=10,radius=5})
             item = Entity(x,y,0,"red","fireball_scroll",false,nil,nil,RenderOrder.ITEM,item_comp)
         elseif num < 90 then
-            local item_comp = Item(item_function.cast_confuse,true,Message("Hit enter to set target",colors.green),{})
+            local item_comp = Item(item_function.cast_confuse,true,Message("Hit enter to set target",constants.colors.green),{})
             item = Entity(x,y,0,"blue","confusing_scroll",false,nil,nil,RenderOrder.ITEM,item_comp)
         else
           local item_comp = Item(item_function.cast_lightning,false,nil,{damage=20,max_range=5})

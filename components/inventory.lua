@@ -41,7 +41,7 @@ end
 
 function Inventory:drop_item(item_entity,idx)
     if self.num_items == 0 then
-      results={message=Message("No item there to be used",colors.orange)}
+      results={message=Message("No item there to be used",constants.colors.orange)}
       print("nothing used...")
       return results
     end
@@ -56,7 +56,7 @@ function Inventory:drop_item(item_entity,idx)
     
     table.remove(self.items,self.active_item+1) 
     
-    return {item_dropped=item ,message =Message("Dropping "..item.name,colors.red)}
+    return {item_dropped=item ,message =Message("Dropping "..item.name,constants.colors.red)}
 end
 
 
@@ -69,7 +69,7 @@ function Inventory:use(item_entity,idx,args)
     
     --check if there are items in the inventory
     if self.num_items == 0 then
-      results={message=Message("No item there to be used",colors.orange)}
+      results={message=Message("No item there to be used",constants.colors.orange)}
       print("nothing used...")
       return results
     end
@@ -84,7 +84,7 @@ function Inventory:use(item_entity,idx,args)
     
     --check if the item is usable
     if item.use_function == nil then
-      results={message=Message("The "..item.name.." can not be used",colors.orange)}
+      results={message=Message("The "..item.name.." can not be used",constants.colors.orange)}
     else
         --check if the item can select a target, and if it is selected
         if item.targeting == true and not args["target_x"] then
@@ -117,9 +117,9 @@ function Inventory:add_item(item,id)
     local results={}
     
     if self.num_items >=self.capacity then
-        results ={message =Message("No space left,cannot pick up item!!",colors.orange)}
+        results ={message =Message("No space left,cannot pick up item!!",constants.colors.orange)}
     else
-        results ={message = Message("Picked up "..item.name:upper(),colors.white),item_added = id}
+        results ={message = Message("Picked up "..item.name:upper(),constants.colors.white),item_added = id}
         table.insert(self.items,item)
         self.num_items = self.num_items+1
     end

@@ -28,7 +28,7 @@ end
 
 
 function MessageLog:add_message(message)
-  local msg_lines = wrap_text(message.text,self.width/tile_size)
+  local msg_lines = wrap_text(message.text,self.width/constants.tile_size)
   
   for i,line in ipairs(msg_lines) do
     if #self.messages >=self.height then
@@ -43,8 +43,10 @@ function MessageLog:draw()
     --print(self.height)
     for i,message in ipairs(self.messages) do
         
-        print_colored(message.text,self.x*tile_size,scr_height-(self.height+3)*tile_size +i*(tile_size+2),message.color)
+        print_colored(message.text,self.x*constants.tile_size,
+            constants.scr_height-(self.height+3)*constants.tile_size +i*(constants.tile_size+2),
+            message.color)
     end
-    gr.setColor(colors.default)
+    gr.setColor(constants.colors.default)
 end
 

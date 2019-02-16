@@ -12,7 +12,7 @@ function item_function.heal(args,kwargs)
         table.insert(results,{consumed =false,message =Message("HP max no need to heal")})
     else
         entity.fighter:heal(amount)
-        table.insert(results,{consumed = true,message=Message(entity.name.." healed by "..amount,colors.green)})
+        table.insert(results,{consumed = true,message=Message(entity.name.." healed by "..amount,constants.colors.green)})
     end
     
     return results
@@ -68,11 +68,11 @@ function item_function.cast_fireball(args,kwargs)
    
     
     if fov_map[target_y][target_x] == false then
-        results ={message=Message("You cannot target a tile out of range!",colors.red)}
+        results ={message=Message("You cannot target a tile out of range!",constants.colors.red)}
         return results
     end
     
-    table.insert(results,{consumed = true,message =Message("The fireball explodes and burns everything in "..radius.." tiles!!",colors.orange)})
+    table.insert(results,{consumed = true,message =Message("The fireball explodes and burns everything in "..radius.." tiles!!",constants.colors.orange)})
     
     for idx,entity in ipairs(entities) do
         if entity:distance(target_x,target_y) <= radius and entity.fighter then
@@ -93,7 +93,7 @@ function item_function.cast_confuse(args,kwargs)
     local target_y = kwargs["target_y"]
     
     if fov_map[target_y][target_x] == false then
-        sults ={message=Message("You cannot target a tile out of range!",colors.red)}
+        results ={message=Message("You cannot target a tile out of range!",constants.colors.red)}
         return results
     end
     
@@ -105,7 +105,7 @@ function item_function.cast_confuse(args,kwargs)
            confused_ai.owner =entity
            entity.ai = confused_ai
            
-           table.insert(results,{consumed = true, message=Message("The "..entity.name.." looks confused!",colors.green)})
+           table.insert(results,{consumed = true, message=Message("The "..entity.name.." looks confused!",constants.colors.green)})
            return results
         end
     end

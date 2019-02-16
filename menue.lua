@@ -10,7 +10,7 @@ end
 function menue(header,options,x,y,width,marker_id)
     gr.setColor(0,0,0,255)
     if #options>26 then return end
-    gr.rectangle("fill",x,y,width,scr_height)
+    gr.rectangle("fill",x,y,width,constants.scr_height)
     
     local wrapped =wrap_text(header,width)
     local yoff =20

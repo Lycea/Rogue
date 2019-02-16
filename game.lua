@@ -1,3 +1,5 @@
+
+require ("loader_functions.initialize_new_game")
 require("helper.msg_renderer")
 
 require("entity")
@@ -32,55 +34,55 @@ local base={}
 --Base data fields 
 ------------------------------------------------------------ 
  --constants 
-tile_size = 10
+--tile_size = 10
 
 --map things
-map_width  = 80
-map_height = 50
+--map_width  = 80
+--map_height = 50
 
-room_max_size = 10
-room_min_size=6
-max_rooms = 20
+--room_max_size = 10
+--room_min_size=6
+--max_rooms = 20
 
 
 --fov settings
-fov_light_walls = true
-fov_radius= 10
+--fov_light_walls = true
+--fov_radius= 10
 
 
 
 --color definitions
-colors ={
+--colors ={
     --room colors
-  dark_wall = {0,0,100},
-  dark_ground ={50,50,150},
-  light_wall = {130,110,50},
-  light_ground = {200,180,50},
+--  dark_wall = {0,0,100},
+--  dark_ground ={50,50,150},
+--  light_wall = {130,110,50},
+--  light_ground = {200,180,50},
   --sosme more
-  desaturated_green= {63, 127, 63},
-  darker_green= {0, 127, 0},
+--  desaturated_green= {63, 127, 63},
+--  darker_green= {0, 127, 0},
   
-  dark_red ={191, 0, 0},
-  red ={255, 0, 0},
-  light_red ={255,114,114},
-  orange = {255,127,0},
+--  dark_red ={191, 0, 0},
+--  red ={255, 0, 0},
+ -- light_red ={255,114,114},
+--  orange = {255,127,0},
   
-  white ={255,255,255},
-  black ={0,0,0},
-  default ={255,255,255},
+--  white ={255,255,255},
+--  black ={0,0,0},
+--  default ={255,255,255},
   
-  violet ={127,0,255},
-  yellow={255,255,0},
-  blue = {0,0,255},
-  green = {0,255,0}
+--  violet ={127,0,255},
+--  yellow={255,255,0},
+--  blue = {0,0,255},
+--  green = {0,255,0}
   
-  }
+--  }
  
 --screen params, needed for some placements (and camera ?) 
-scr_width  = 0 
-scr_height = 0 
+--scr_width  = 0 
+--scr_height = 0 
 
- 
+ constants = nil
 
 
 ------------------------ 
@@ -98,9 +100,7 @@ fov_recompute = true
 
 
 
-message_x = 40
-message_width =12
-message_height = 5
+
 
 message_log ={}
 --game state
@@ -134,17 +134,18 @@ target_timer   = 0
 
 
 function game.load() 
-  debuger.on()
+  
    
-  scr_width,scr_height = love.graphics.getDimensions() 
-  console.setPos(40*tile_size,(map_height+2)*tile_size)
-  console.setSize(40*tile_size,8*tile_size)
+   constants = get_constants()
+  --scr_width,scr_height = love.graphics.getDimensions() 
+  console.setPos(40*constants.tile_size,(constants.map_height+2)*constants.tile_size)
+  console.setSize(40*constants.tile_size,8*constants.tile_size)
   --init entities
   
-  message_width = scr_width-message_x
-  message_height = 6
+  constants.message_width = constants.scr_width-constants.message_x
+  constants.message_height = 6
 
-  message_log = MessageLog(message_x,message_width,message_height)
+  message_log = MessageLog(constants.message_x,constants.message_width,constants.message_height)
   --math.randomseed(love.math.getRandomSeed())
   
   --fight stuff /stat stuff that makes a player a player
@@ -155,9 +156,9 @@ function game.load()
   table.insert(entities,player)
   
   --init map
-  map = GameMap(map_width,map_height)
+  map = GameMap(constants.map_width,constants.map_height)
   fov_map=compute_fov(map)
-  debuger.off()
+  
 end 
  
  
@@ -263,7 +264,7 @@ function game.update(dt)
     
     if action["use_item"] then
        --table.insert(player_results,{message=Message("trying to use item... no result",colors.orange)})
-       local results_usage =player.inventory:use(player.inventory.items[player.inventory.active_item+1],player.inventory.active_item+1,{colors=colors,entities =entities})
+       local results_usage =player.inventory:use(player.inventory.items[player.inventory.active_item+1],player.inventory.active_item+1,{colors=constants.colors,entities =entities})
        
        local consumed_item = false
        for i,result in pairs(results_usage) do
@@ -292,7 +293,7 @@ function game.update(dt)
             selector_timer =love.timer.getTime()
             local old_idx = player.inventory.active_item
             player.inventory.active_item = (player.inventory.active_item+ action["inventory_idx_change"][2])%player.inventory.num_items
-            table.insert(player_results,{message=Message("Item index from "..old_idx.." to "..player.inventory.active_item,colors.orange)})
+            table.insert(player_results,{message=Message("Item index from "..old_idx.." to "..player.inventory.active_item,constants.colors.orange)})
         end
     end
     
@@ -402,7 +403,7 @@ end
  
 function game.draw() 
   --love.graphics.rectangle("fill",player.x,player.y,tile_size,tile_size)
-  render_all(entities,map,scr_width,scr_height)
+  render_all(entities,map,constants.scr_width,constants.scr_height)
   if fov_recompute==true then
     compute_fov(map)
     fov_recompute = false

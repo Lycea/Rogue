@@ -150,9 +150,10 @@ end
 function Entity:draw()
   if fov_map[self.y][self.x]==true then
     
-    love.graphics.setColor( colors[self.color] or {255,0,0})
-    love.graphics.rectangle("fill",self.x*tile_size,self.y*tile_size,tile_size,tile_size)
-    love.graphics.setColor(colors.default)
+    love.graphics.setColor( constants.colors[self.color] or {255,0,0})
+    love.graphics.rectangle("fill",self.x*constants.tile_size,
+        self.y*constants.tile_size,constants.tile_size,constants.tile_size)
+    love.graphics.setColor(constants.colors.default)
   end
 end
 

@@ -8,9 +8,9 @@ deg = math.deg
 
 
 print_colored = function (txt,x,y,c)
-    gr.setColor(c or colors.default)
+    gr.setColor(c or constants.colors.default)
     gr.print(txt,x,y)
-    gr.setColor(colors.default)
+    gr.setColor(constants.colors.default)
 end
 
 
