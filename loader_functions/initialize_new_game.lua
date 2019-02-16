@@ -1,3 +1,35 @@
+
+function get_game_variables()
+  local entities ={}
+  
+  constants.message_width = constants.scr_width-constants.message_x
+  constants.message_height = 6
+
+  local message_log = MessageLog(constants.message_x,constants.message_width,constants.message_height)
+  --math.randomseed(love.math.getRandomSeed())
+    
+    
+  --fight stuff /stat stuff that makes a player a player
+  local stats_ = Fighter(30,2,5)
+  local invi_ = Inventory(26)
+  --final init
+  local player = Entity( math.floor(20),math.floor(20),0,"default","Player",true,stats_,nil,RenderOrder.ACTOR,nil,invi_)
+  table.insert(entities,player)
+  
+
+  
+  return player,entities,message_log
+end
+
+function init_map()
+      --init map
+  local map = GameMap(constants.map_width,constants.map_height)
+  local fov_map=compute_fov(map)
+  
+  return map,fov_map
+end
+
+
 function get_constants()
     local window_title = "DungeonGame"
     

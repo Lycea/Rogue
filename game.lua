@@ -33,54 +33,7 @@ local base={}
 ------------------------------------------------------------ 
 --Base data fields 
 ------------------------------------------------------------ 
- --constants 
---tile_size = 10
-
---map things
---map_width  = 80
---map_height = 50
-
---room_max_size = 10
---room_min_size=6
---max_rooms = 20
-
-
---fov settings
---fov_light_walls = true
---fov_radius= 10
-
-
-
---color definitions
---colors ={
-    --room colors
---  dark_wall = {0,0,100},
---  dark_ground ={50,50,150},
---  light_wall = {130,110,50},
---  light_ground = {200,180,50},
-  --sosme more
---  desaturated_green= {63, 127, 63},
---  darker_green= {0, 127, 0},
-  
---  dark_red ={191, 0, 0},
---  red ={255, 0, 0},
- -- light_red ={255,114,114},
---  orange = {255,127,0},
-  
---  white ={255,255,255},
---  black ={0,0,0},
---  default ={255,255,255},
-  
---  violet ={127,0,255},
---  yellow={255,255,0},
---  blue = {0,0,255},
---  green = {0,255,0}
-  
---  }
  
---screen params, needed for some placements (and camera ?) 
---scr_width  = 0 
---scr_height = 0 
 
  constants = nil
 
@@ -90,6 +43,7 @@ local base={}
 
 --entities ...
 entities ={}
+player ={}
 
 --maps
 map ={}
@@ -97,8 +51,6 @@ fov_map={}
 
 --fov state
 fov_recompute = true
-
-
 
 
 
@@ -134,31 +86,9 @@ target_timer   = 0
 
 
 function game.load() 
-  
-   
    constants = get_constants()
-  --scr_width,scr_height = love.graphics.getDimensions() 
-  console.setPos(40*constants.tile_size,(constants.map_height+2)*constants.tile_size)
-  console.setSize(40*constants.tile_size,8*constants.tile_size)
-  --init entities
-  
-  constants.message_width = constants.scr_width-constants.message_x
-  constants.message_height = 6
-
-  message_log = MessageLog(constants.message_x,constants.message_width,constants.message_height)
-  --math.randomseed(love.math.getRandomSeed())
-  
-  --fight stuff /stat stuff that makes a player a player
-  local stats_ = Fighter(30,2,5)
-  local invi_ = Inventory(26)
-  --final init
-  player = Entity( math.floor(20),math.floor(20),0,"default","Player",true,stats_,nil,RenderOrder.ACTOR,nil,invi_)
-  table.insert(entities,player)
-  
-  --init map
-  map = GameMap(constants.map_width,constants.map_height)
-  fov_map=compute_fov(map)
-  
+   player,entities,message_log = get_game_variables()
+   map,fov_map = init_map()
 end 
  
  
