@@ -56,7 +56,6 @@ function render_all(entities,game_map,screen_width,screen_height)--could be adju
     end
     
     love.graphics.rectangle("line",0,0,(map_width+1)*10,(map_height+1)*10)
-    --love.graphics.print("HP: "..player.fighter.hp.."/"..player.fighter.max_hp,10,screen_height -2*10)
     
     love.graphics.print(get_name_under_mouse(),0,0)
     
@@ -70,7 +69,16 @@ function render_all(entities,game_map,screen_width,screen_height)--could be adju
     end
     
     if game_state == GameStates.TARGETING then
-      love.graphics.rectangle("fill",targeting_tile.x*tile_size,targeting_tile.y*tile_size,tile_size,tile_size)
+      
+      love.graphics.setColor(255,0,0)
+      --love.graphics.rectangle("line",targeting_tile.x*tile_size,targeting_tile.y*tile_size,tile_size,tile_size)
+      love.graphics.circle("line",targeting_tile.x*tile_size +tile_size/2, targeting_tile.y*tile_size +tile_size/2,(target_range or 1)*(tile_size/2))
+      love.graphics.setColor(255,0,0,75)
+      love.graphics.circle("fill",targeting_tile.x*tile_size +tile_size/2, targeting_tile.y*tile_size +tile_size/2,(target_range or 1)*(tile_size/2))
+
+      
+      love.graphics.setColor(colors.default)
+      
     end
     
 

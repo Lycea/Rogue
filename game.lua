@@ -110,6 +110,7 @@ targeting_item = nil
 
 
 targeting_tile ={x=1,y=1}
+target_range = 1
 
 --others
 key_timer = 0--timer between movement
@@ -121,6 +122,7 @@ mouse_coords={0,0}
 
 exit_timer =0
 selector_timer = 0
+target_timer   = 0
 ----------------------------------------------------------- 
 -- special data fields for debugging / testing only 
 ----------------------------------------------------------- 
@@ -143,7 +145,7 @@ function game.load()
   message_height = 6
 
   message_log = MessageLog(message_x,message_width,message_height)
-  
+  --math.randomseed(love.math.getRandomSeed())
   
   --fight stuff /stat stuff that makes a player a player
   local stats_ = Fighter(30,2,5)
@@ -225,9 +227,12 @@ function game.update(dt)
    end
     
     if action["target_idx_change"] then
-        local change = action["target_idx_change"]
-        targeting_tile.x = targeting_tile.x +change[1]
-        targeting_tile.y = targeting_tile.y +change[2]
+        if love.timer.getTime()> target_timer+0.1 then
+            local change = action["target_idx_change"]
+            targeting_tile.x = targeting_tile.x +change[1]
+            targeting_tile.y = targeting_tile.y +change[2]
+            target_timer =love.timer.getTime()
+        end
     end
     
     
@@ -353,7 +358,7 @@ function game.update(dt)
   
   -- Enemy behaviour basic / Enemy turn
   if game_state == GameStates.ENEMY_TURN then
-    message_log:add_message(Message("Enemy turn start",colors.white))
+    --message_log:add_message(Message("Enemy turn start",colors.white))
       
       for k,entity in pairs(entities) do
         --check if it is a entity with some behaviour

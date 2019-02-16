@@ -88,7 +88,10 @@ function Inventory:use(item_entity,idx,args)
     else
         --check if the item can select a target, and if it is selected
         if item.targeting == true and not args["target_x"] then
+            
+            target_range = item.function_args["radius"] or item.function_args["max_range"]
             table.insert(results,{targeting= self.items[self.active_item+1]})
+            
         else
             args = merge_lists(args,item.function_args)
             

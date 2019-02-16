@@ -241,7 +241,7 @@ function GameMap:place_entities(room,entities,max_monster_per_room)
             local item_comp = Item(item_function.cast_fireball,true,Message("Hit enter to set target",colors.green),{damage=10,radius=5})
             item = Entity(x,y,0,"red","fireball_scroll",false,nil,nil,RenderOrder.ITEM,item_comp)
         elseif num < 90 then
-            local item_comp = Item(item_function.cast_confuse,true,Message("Hit enter to set target",colors.green),{damage=10,radius=5})
+            local item_comp = Item(item_function.cast_confuse,true,Message("Hit enter to set target",colors.green),{})
             item = Entity(x,y,0,"blue","confusing_scroll",false,nil,nil,RenderOrder.ITEM,item_comp)
         else
           local item_comp = Item(item_function.cast_lightning,false,nil,{damage=20,max_range=5})

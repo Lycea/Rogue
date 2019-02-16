@@ -47,6 +47,7 @@ function item_function.cast_lightning(args,kwargs)
     table.insert(results,target.fighter:take_damage(dmg)[1])
   end
   
+  target_radius = 1
   return results
   
   
@@ -64,6 +65,8 @@ function item_function.cast_fireball(args,kwargs)
     local target_x = kwargs["target_x"]
     local target_y = kwargs["target_y"]
     
+   
+    
     if fov_map[target_y][target_x] == false then
         results ={message=Message("You cannot target a tile out of range!",colors.red)}
         return results
@@ -77,7 +80,7 @@ function item_function.cast_fireball(args,kwargs)
             table.insert(results,entity.fighter:take_damage(dmg))
         end
     end
-    
+    target_radius = 1
     return results
 end
 
