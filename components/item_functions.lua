@@ -96,7 +96,8 @@ function item_function.cast_confuse(args,kwargs)
         sults ={message=Message("You cannot target a tile out of range!",colors.red)}
         return results
     end
-    debuger.on()
+    
+    
     for idx,entity in  ipairs(entities) do
         if entity.x == target_x and entity.y == target_y then
            confused_ai = ConfusedMonster(entity.ai,math.random(0,20))
@@ -108,7 +109,7 @@ function item_function.cast_confuse(args,kwargs)
            return results
         end
     end
-    debuger.off()
+    
     
     return {}
     

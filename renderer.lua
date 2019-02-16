@@ -72,9 +72,9 @@ function render_all(entities,game_map,screen_width,screen_height)--could be adju
       
       love.graphics.setColor(255,0,0)
       --love.graphics.rectangle("line",targeting_tile.x*tile_size,targeting_tile.y*tile_size,tile_size,tile_size)
-      love.graphics.circle("line",targeting_tile.x*tile_size +tile_size/2, targeting_tile.y*tile_size +tile_size/2,(target_range or 1)*(tile_size/2))
+      love.graphics.circle("line",targeting_tile.x*tile_size +tile_size/2, targeting_tile.y*tile_size +tile_size/2,(target_range or 1)*(tile_size/2+1))
       love.graphics.setColor(255,0,0,75)
-      love.graphics.circle("fill",targeting_tile.x*tile_size +tile_size/2, targeting_tile.y*tile_size +tile_size/2,(target_range or 1)*(tile_size/2))
+      love.graphics.circle("fill",targeting_tile.x*tile_size +tile_size/2, targeting_tile.y*tile_size +tile_size/2,(target_range or 1)*(tile_size/2+1))
 
       
       love.graphics.setColor(colors.default)
