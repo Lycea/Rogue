@@ -34,36 +34,40 @@ paths:setBlocked(
 
 function Entity:save()
     local txt =""
-    local pos ="x: "..self.x.."\ny:  "..self.y.."\n"
-    local color = "color:"..self.color.."\n"
     
-    local name = "name:"..self.name.."\n"
-    local blocks = self.blocks==true and "true\n" or "false\n"
+    offset_push()
+    local pos =add_offset().."x: "..self.x..",\n"..add_offset().."y:  "..self.y..",\n"
+    local color = add_offset().."color:"..self.color..",\n"
     
+    local name = add_offset().."name:"..self.name..",\n"
+    local blocks = self.blocks==true and "blocks: true,\n" or "blocks: false,\n"
+          blocks = add_offset()..blocks
+          
     local fighter = ""
     if self.fighter ~= nil then
-        fighter ="fighter{\n"..self.fighter:save().."}\n"
+        fighter =add_offset().."fighter:{\n"..self.fighter:save()..add_offset().."}\n"
     end
     
     local ai = ""
     if self.ai ~= nil then
-        ai="ai{\n"..self.ai:save().."}\n"
+        ai=add_offset().."ai:{\n"..self.ai:save().."\n"..add_offset().."}\n"
     end
     
     local item = ""
     if self.item ~=nil then
-        item ="item{\n".. self.item:save().."}\n"
+        item =add_offset().."item:{\n".. self.item:save()..add_offset().."}\n"
     end
     
     local inventory = ""
     if self.inventory~= nil then
-        inventory="inventory{\n"..self.inventory:save().."}\n"
+        inventory=add_offset().."inventory{\n"..self.inventory:save()..add_offset().."}\n"
     end
     
-    local render_order = "render_order:"..self.render_order.."\n"
+    local render_order = add_offset().."render_order:"..self.render_order.."\n"
     
-    txt = pos..color..name.. "blocks:"..blocks..fighter..ai..item..inventory..render_order
+    txt = pos..color..name..blocks..fighter..ai..item..inventory..render_order
     
+    offset_pop()
     return txt
 end
 

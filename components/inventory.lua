@@ -10,32 +10,36 @@ function Item:new(use_function,targeting,targeting_message,args)
 end
 
 function Item:save()
-    local function_ = "use_function:"
+    offset_push()
+    local function_ = add_offset().."use_function:"
     for name,hash in pairs(item_function) do
         if hash == self.use_function then
            function_ = function_..name 
         end
     end
     
-    local args = "function_args{\n"
+    local args = add_offset().."function_args:{\n"
+    offset_push()
     for idx_args,data in pairs(self.function_args)do
         if type(data)~= type({}) then
-            args = args..idx_args..":"..data.."\n"
+            args = args..add_offset()..idx_args..":"..data.."\n"
         else
         
         end
     end
-    args=args.."}"
+    offset_pop()
+    args=args..add_offset().."}"
     
 
-    local targeting =  "targeting:"
+    local targeting =  add_offset().."targeting:"
     targeting = targeting..(self.targeting == true and "true" or "false")
     
-    local target_msg ="targeting_message{"
+    local target_msg =add_offset().."targeting_message:{"
     if self.targeting_message ~= nil then
-       target_msg =target_msg..self.targeting_message:save().."\n}"
+       target_msg =target_msg..self.targeting_message:save().."\n".. add_offset().."}"
     end
-    return function_.."\n"..args.."\n"..targeting.."\n"..target_msg
+    offset_pop()
+    return function_..",\n"..args..",\n"..targeting..",\n"..target_msg
     
 end
 

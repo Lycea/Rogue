@@ -52,6 +52,15 @@ function Object:is(T)
   return false
 end
 
+function Object:load()
+  
+end
+
+function Object:save()
+  
+end
+
+
 
 function Object:__tostring()
   return "Object"

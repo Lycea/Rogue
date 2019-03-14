@@ -29,7 +29,11 @@ function BasicMonster:take_turn(target)
 end
 
 function BasicMonster:save()
-    return "ai:BasicMonster"
+    offset_push()
+    local ai=add_offset().."ai:BasicMonster"
+    offset_pop()
+    
+    return  ai
 end
 
 
