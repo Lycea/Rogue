@@ -21,6 +21,35 @@ function GameMap:new(width,height)
   self.make_map(self)
 end
 
+function GameMap:save()
+    local save_txt =""
+    offset_push()
+    
+    save_txt =save_txt..'"width":'..self.width..",\n"
+    save_txt =save_txt..'"height":'..self.height..",\n"
+    
+    local tiles_tmp ={}
+    local rows_tmp={}
+    
+    save_txt = save_txt..add_offset().."tiles:[\n"
+    for idx_y,row in ipairs(self.tiles) do
+        tiles_tmp={}
+        offset_push()
+        for idx_x,tile in ipairs(row)do
+            table.insert(tiles_tmp,add_offset().."{"..tile:save().."}\n")
+        end
+        offset_pop()
+        table.insert(rows_tmp,add_offset().."[\n"..table.concat(tiles_tmp,",\n").."\n"..add_offset().."]")
+    end
+    
+    offset_pop()
+    
+    
+    save_txt = save_txt..table.concat(rows_tmp,",\n")..add_offset()
+    save_txt = save_txt.."\n"..add_offset().."]\n"
+    return save_txt
+end
+
 
 
 function GameMap:initialize_tiles()

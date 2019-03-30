@@ -28,7 +28,7 @@ end
 
 
 function save_game()
-   load_game()
+   --load_game()
     
    offset_level = 0
    file =io.open("save.json","w")
@@ -41,8 +41,9 @@ function save_game()
        offset_pop()
    end
    entities_ = string.sub(entities_,0,-1)
-   entities_ = entities_.."\n]}"
+   entities_ = entities_.."\n],"
 
-    file:write(entities_)
+   map_ = '"map":{'..map:save().."\n}}"
+    file:write(entities_..map_)
     file:close()    
 end
