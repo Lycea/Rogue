@@ -42,15 +42,20 @@ function Entity:save()
     local name = add_offset()..'"name":"'..self.name..'",\n'
     local blocks = self.blocks==true and '"blocks": true,\n' or '"blocks": false,\n'
           blocks = add_offset()..blocks
-          
+    
+    
+    local tmp_string_list ={}
+    
     local fighter = ""
     if self.fighter ~= nil then
-        fighter =add_offset()..'"fighter":{\n'..self.fighter:save()..add_offset().."},\n"
+        fighter =add_offset()..'"fighter":{\n'..self.fighter:save()..add_offset().."}\n"
+        table.insert(tmp_string_list,fighter)
     end
     
     local ai = ""
     if self.ai ~= nil then
         ai=add_offset()..'"ai":{\n'..self.ai:save().."\n"..add_offset().."}\n"
+        table.insert(tmp_string_list,ai)
     end
     
     local item = ""
@@ -59,17 +64,24 @@ function Entity:save()
         --item =add_offset().."item:{\n"..self.item:save()..add_offset().."},\n"--self.item:save()..add_offset().."}\n"
         item_txt =self.item:save()--self.item:save()..add_offset().."}\n"
         item =add_offset()..'"item":{\n'..item_txt..add_offset().."}\n"
+        table.insert(tmp_string_list,item)
     end
     
     
     local inventory = ""
     if self.inventory~= nil then
         inventory=add_offset()..'"inventory":{\n'..self.inventory:save()..add_offset().."}\n"
+        table.insert(tmp_string_list,inventory)
     end
     
     local render_order = add_offset()..'"render_order":'..self.render_order.."\n"
     
-    txt = pos..color..name..blocks..fighter..ai..item..inventory..render_order
+    txt = pos..color..name..blocks..table.concat(tmp_string_list,",\n")
+    
+    if #tmp_string_list>0 then
+       txt = txt.."," 
+    end
+    txt = txt..render_order
     
     offset_pop()
     return txt

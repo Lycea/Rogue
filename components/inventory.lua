@@ -64,15 +64,18 @@ end
 function Inventory:save()
     local content =""
     offset_push()
-    local capacity = add_offset()..'"capacity":'..self.capacity.."\n"
-    local num_items = add_offset()..'"num_items":'..self.num_items.."\n"
-    local active_item = add_offset()..'"active_item":'.."0".."\n"
+    local capacity = add_offset()..'"capacity":'..self.capacity..",\n"
+    local num_items = add_offset()..'"num_items":'..self.num_items..",\n"
+    local active_item = add_offset()..'"active_item":'.."0"..",\n"
     
     local items=add_offset()..'"items":[\n'
+    local tmp_item_list ={}
     
     for idx,item in pairs(self.items) do
-        items=items.."{\n"..item:save().."\n}\n"
+        table.insert(tmp_item_list,"{\n"..item:save().."\n}")
+        --items=items.."{\n"..item:save().."\n}\n"
     end
+    items = items..table.concat(tmp_item_list,",\n")
     items=items.."]"
     
     offset_pop()
