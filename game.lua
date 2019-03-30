@@ -104,6 +104,8 @@ function game.load()
     file:write(entities_)
     file:close()
    debuger.off()
+   
+   --load_game()
 end 
  
  

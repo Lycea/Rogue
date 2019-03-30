@@ -46,6 +46,8 @@ function Item:save()
        target_msg = add_offset()..'"targeting_message":{'
        target_msg =target_msg.."".."\n".. add_offset().."}"
     end
+    
+    
     offset_pop()
     return function_..",\n"..args..",\n"..targeting..",\n"..target_msg
     

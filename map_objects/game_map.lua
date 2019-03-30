@@ -14,11 +14,13 @@ GameMap = class_base:extend()
 local max_monster_per_room = 3
 local max_items_per_room = 1
 
-function GameMap:new(width,height)
+function GameMap:new(width,height,bare)
   self.width = width
   self.height = height
   self.tiles = self.initialize_tiles(self)
-  self.make_map(self)
+  if bare ~= false then
+    self.make_map(self)
+  end
 end
 
 function GameMap:save()
@@ -31,7 +33,7 @@ function GameMap:save()
     local tiles_tmp ={}
     local rows_tmp={}
     
-    save_txt = save_txt..add_offset().."tiles:[\n"
+    save_txt = save_txt..add_offset()..'"tiles":[\n'
     for idx_y,row in ipairs(self.tiles) do
         tiles_tmp={}
         offset_push()
