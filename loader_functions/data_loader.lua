@@ -21,13 +21,19 @@ function add_offset()
     return string.rep(" ",offset_p_level*offset_level)
 end
 
+function load_game()
+   file = io.open("save.json","r")
+   json.decode(file:read("*all"))
+end
 
 
 function save_game()
+   load_game()
+    
    offset_level = 0
    file =io.open("save.json","w")
    
-   entities_='"entities":['
+   entities_='{"entities":['
    offset_push()
    for idx,entity in pairs(entities) do
        offset_push()
@@ -35,7 +41,7 @@ function save_game()
        offset_pop()
    end
    entities_ = string.sub(entities_,0,-1)
-   entities_ = entities_.."\n]"
+   entities_ = entities_.."\n]}"
 
     file:write(entities_)
     file:close()    

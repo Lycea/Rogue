@@ -11,32 +11,40 @@ end
 
 function Item:save()
     offset_push()
-    local function_ = add_offset().."use_function:"
+    local function_ = add_offset()..'"use_function":'
     for name,hash in pairs(item_function) do
         if hash == self.use_function then
-           function_ = function_..name 
+           function_ = function_..'"'..name..'"' 
         end
     end
     
-    local args = add_offset().."function_args:{\n"
+    local args = add_offset()..'"function_args":{\n'
     offset_push()
+    
+    local arg_list ={}
+    
     for idx_args,data in pairs(self.function_args)do
         if type(data)~= type({}) then
-            args = args..add_offset()..idx_args..":"..data.."\n"
+            --args = args..add_offset()..idx_args..":"..data.."\n"
+            table.insert(arg_list,add_offset()..'"'..idx_args..'"'..":"..data)
         else
         
         end
     end
+    
     offset_pop()
+    args= args ..table.concat(arg_list,",\n").."\n"
+    
     args=args..add_offset().."}"
     
 
-    local targeting =  add_offset().."targeting:"
+    local targeting =  add_offset()..'"targeting":'
     targeting = targeting..(self.targeting == true and "true" or "false")
     
-    local target_msg =add_offset().."targeting_message:{"
+    local target_msg =""
     if self.targeting_message ~= nil then
-       target_msg =target_msg..self.targeting_message:save().."\n".. add_offset().."}"
+       target_msg = add_offset()..'"targeting_message":{'
+       target_msg =target_msg.."".."\n".. add_offset().."}"
     end
     offset_pop()
     return function_..",\n"..args..",\n"..targeting..",\n"..target_msg
@@ -55,19 +63,19 @@ end
 
 function Inventory:save()
     local content =""
+    offset_push()
+    local capacity = add_offset()..'"capacity":'..self.capacity.."\n"
+    local num_items = add_offset()..'"num_items":'..self.num_items.."\n"
+    local active_item = add_offset()..'"active_item":'.."0".."\n"
     
-    local capacity = "capacity:"..self.capacity.."\n"
-    local num_items = "num_items:"..self.num_items.."\n"
-    local active_item = "active_item:".."0".."\n"
-    
-    local items="items{\n"
+    local items=add_offset()..'"items":[\n'
     
     for idx,item in pairs(self.items) do
-        items=items..idx..":"..item:save()
+        items=items.."{\n"..item:save().."\n}\n"
     end
-    items=items.."}"
+    items=items.."]"
     
-    
+    offset_pop()
     return content..capacity..num_items..active_item..items
 end
 

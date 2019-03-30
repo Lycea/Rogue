@@ -30,7 +30,7 @@ end
 
 function BasicMonster:save()
     offset_push()
-    local ai=add_offset().."ai:BasicMonster"
+    local ai=add_offset()..'"ai":"BasicMonster"'
     offset_pop()
     
     return  ai
@@ -75,6 +75,6 @@ function ConfusedMonster:take_turn(target)
 end
 
 function ConfusedMonster:save()
-    return "ai:ConfusedMonster \n previous:"..self.previous_ai:save().."\nnumber_of_turns:"..self.number_of_turns
+    return '"ai":"ConfusedMonster", \n "previous":'..self.previous_ai:save()..',\n"number_of_turns":'..self.number_of_turns
 end
 

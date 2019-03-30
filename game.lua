@@ -1,6 +1,7 @@
 
 require ("loader_functions.initialize_new_game")
 require("helper.msg_renderer")
+json =require("helper.json")
 
 require("entity")
 require("key_handle")

@@ -36,34 +36,38 @@ function Entity:save()
     local txt =""
     
     offset_push()
-    local pos =add_offset().."x: "..self.x..",\n"..add_offset().."y:  "..self.y..",\n"
-    local color = add_offset().."color:"..self.color..",\n"
+    local pos =add_offset()..'"x":'..self.x..",\n"..add_offset()..'"y":'..self.y..",\n"
+    local color = add_offset()..'"color":"'..self.color..'",\n'
     
-    local name = add_offset().."name:"..self.name..",\n"
-    local blocks = self.blocks==true and "blocks: true,\n" or "blocks: false,\n"
+    local name = add_offset()..'"name":"'..self.name..'",\n'
+    local blocks = self.blocks==true and '"blocks": true,\n' or '"blocks": false,\n'
           blocks = add_offset()..blocks
           
     local fighter = ""
     if self.fighter ~= nil then
-        fighter =add_offset().."fighter:{\n"..self.fighter:save()..add_offset().."}\n"
+        fighter =add_offset()..'"fighter":{\n'..self.fighter:save()..add_offset().."},\n"
     end
     
     local ai = ""
     if self.ai ~= nil then
-        ai=add_offset().."ai:{\n"..self.ai:save().."\n"..add_offset().."}\n"
+        ai=add_offset()..'"ai":{\n'..self.ai:save().."\n"..add_offset().."}\n"
     end
     
     local item = ""
+    local item_txt =""
     if self.item ~=nil then
-        item =add_offset().."item:{\n".. self.item:save()..add_offset().."}\n"
+        --item =add_offset().."item:{\n"..self.item:save()..add_offset().."},\n"--self.item:save()..add_offset().."}\n"
+        item_txt =self.item:save()--self.item:save()..add_offset().."}\n"
+        item =add_offset()..'"item":{\n'..item_txt..add_offset().."}\n"
     end
+    
     
     local inventory = ""
     if self.inventory~= nil then
-        inventory=add_offset().."inventory{\n"..self.inventory:save()..add_offset().."}\n"
+        inventory=add_offset()..'"inventory":{\n'..self.inventory:save()..add_offset().."}\n"
     end
     
-    local render_order = add_offset().."render_order:"..self.render_order.."\n"
+    local render_order = add_offset()..'"render_order":'..self.render_order.."\n"
     
     txt = pos..color..name..blocks..fighter..ai..item..inventory..render_order
     

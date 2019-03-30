@@ -12,11 +12,11 @@ function Fighter:save()
     offset_push()
     for idx,value in pairs(self) do
         if type(value) ~= type(function () end) and type(value) ~= type({}) then
-           txt = txt..add_offset()..idx..":"..value..",\n" 
+           txt = txt..add_offset()..'"'..idx..'"'..":"..value..",\n" 
         end
     end
     offset_pop()
-    txt = string.gsub(txt,".+(,).-"," ")
+    
     return txt
 end
 
