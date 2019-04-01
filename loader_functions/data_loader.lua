@@ -26,6 +26,7 @@ end
 local function load_entitys(entity_list)
     print("----")
     print("loading entities")
+    entities ={}
     --cgtalk /cgsociity
     --artstation
     --3dring
@@ -77,9 +78,10 @@ local function load_map(map_)
     print(#map_.tiles)
     
     map = GameMap(map_.width,map_.height)
-    for idx_y,row in ipairs(map_) do
+    for idx_y,row in ipairs(map_.tiles) do
         for idx_x,tile in ipairs(row) do
             map.tiles[idx_y][idx_x].blocked = tile.blocked
+            
             map.tiles[idx_y][idx_x].explored = tile.explored
             map.tiles[idx_y][idx_x].block_sight = tile.block_sight
         end
@@ -89,12 +91,25 @@ local function load_map(map_)
 end
 
 function load_game()
+  
    local file = io.open("save.json","r")
-   local save_= json.decode(file:read("*all"))
-   io.close(file)
+   local error_ ,save_= pcall(json.decode,file:read("*all"))
+   file:close()
    
-   --load_map(save_.map)
-   load_entitys(save_.entities)
+   print(error_,save_)
+   
+   if error_ == false then
+      return false
+   else
+     
+     load_map(save_.map)
+     debuger.on()
+     load_entitys(save_.entities)
+     debuger.off()
+     return true
+   end
+   
+  
 end
 
 

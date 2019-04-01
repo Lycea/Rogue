@@ -39,6 +39,13 @@ function menue(header,options,x,y,width,marker_id)
 
 end
 
+
+function main_menue()
+  
+  menue("NotTheRogue",{"Start new","Load old","Options","Exit"},0,0,400,main_menue_item)
+end
+
+
 function invi_menue(header,inventory,width)
  local options ={}
  if inventory.num_items == 0 then

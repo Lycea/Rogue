@@ -59,6 +59,18 @@ key_list_invi={
 }
 
 
+key_list_main_manue={
+    up={menue_idx_change={0,-1}},
+    down={menue_idx_change={0,1}},
+    use={selected_item = true},
+    exit = {exit = true},
+    mt={
+     __index=function(table,key) 
+      return  {}
+     end
+     }
+}
+
 key_list_targeting={
     up={target_idx_change ={0,-1}},
     down={target_idx_change ={0,1}},
@@ -88,6 +100,7 @@ key_list_dead={
      }
 }
 
+setmetatable(key_list_main_manue,key_list_main_manue.mt)
 setmetatable(key_list_dead,key_list_dead.mt)
 setmetatable(key_list_invi,key_list_invi.mt)
 setmetatable(key_list_game,key_list_game.mt)
@@ -109,6 +122,11 @@ function handle_keys2(key)
   elseif game_status == GameStates.TARGETING then
     return key_list_targeting[key_mapper[key]]
   end
+end
+
+
+function handle_main_menue(key)
+  return key_list_main_manue[key_mapper[key]]
 end
 
 function handle_keys(key)

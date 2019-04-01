@@ -65,6 +65,7 @@ end
 
 function Inventory:save()
     local content =""
+    
     offset_push()
     local capacity = add_offset()..'"capacity":'..self.capacity..",\n"
     local num_items = add_offset()..'"num_items":'..self.num_items..",\n"

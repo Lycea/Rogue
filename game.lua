@@ -52,7 +52,7 @@ map ={}
 fov_map={}
 
 --fov state
-fov_recompute = true
+fov_recompute = false
 
 
 
@@ -77,6 +77,9 @@ mouse_coords={0,0}
 exit_timer =0
 selector_timer = 0
 target_timer   = 0
+
+show_main_menue =true
+main_menue_item = 1
 ----------------------------------------------------------- 
 -- special data fields for debugging / testing only 
 ----------------------------------------------------------- 
@@ -90,26 +93,19 @@ target_timer   = 0
 function game.load() 
    constants = get_constants()
    player,entities,message_log = get_game_variables()
-   map,fov_map = init_map()
-   
-   debuger.on()
-   file =io.open("save.txt","w")
-   
-   entities_="entities{"
-   for idx,entity in pairs(entities) do
-       entities_= entities_.."\n"..idx.."{"..entity:save().."}"
-   end
-   entities_ = entities_.."\n}"
-
-    file:write(entities_)
-    file:close()
-   debuger.off()
    
    --load_game()
 end 
  
  
-function game.update(dt) 
+ 
+function game.new()
+   map,fov_map = init_map()
+end
+
+ 
+
+function game.play(dt) 
   --handler for the keys
   local player_results ={}
   --check all the keys ...
@@ -349,6 +345,67 @@ function game.update(dt)
 end 
  
  
+--main loop
+function game.update(dt) 
+  
+  if show_main_menue == false then
+    game.play(dt)
+    return
+  end
+  
+  --game.play(dt)
+  for key,v in pairs(key_list) do
+    local action=handle_main_menue(key)--get key callbacks
+        if action["menue_idx_change"] ~= nil then
+          if key_timer+0.2 < love.timer.getTime() then
+            
+            main_menue_item = main_menue_item+ action["menue_idx_change"][2] 
+            if main_menue_item <1 then main_menue_item = 1 end
+            if main_menue_item>4 then main_menue_item = 4 end
+            print(main_menue_item)
+          
+            key_timer = love.timer.getTime()
+          
+          end
+          
+        end
+        
+        if action["selected_item"]~= nil then
+          show_main_menue = false
+          --menue item switcher
+          if main_menue_item == 1 then--new game
+         
+            game.new()
+            fov_recompute=true
+          elseif main_menue_item == 2 then--load game
+            map={}
+            entities={}
+            
+            if load_game() == false then
+              show_main_menue= true
+            else
+              fov_map=compute_fov(map)
+            end
+            
+            
+            
+          elseif main_menue_item == 3 then
+            show_main_menue = true
+          else
+            love.event.quit()
+          end
+          
+          
+        end
+        
+        if action["exit"]~= nil then
+            love.event.quit()
+        end
+  end
+  
+    
+end
+
  
 function game.draw() 
   --love.graphics.rectangle("fill",player.x,player.y,tile_size,tile_size)

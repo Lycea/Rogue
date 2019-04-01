@@ -48,7 +48,16 @@ end
 
 function render_all(entities,game_map,screen_width,screen_height)--could be adjusted to work without params,but lets see
     --console.clear()
+    
+    
+    if show_main_menue ==true then
+      main_menue()
+      return
+    end
+    
     game_map:draw()
+    
+    
     
     table.sort(entities,function (a,b) return a.render_order < b.render_order  end)
     for key,entity in pairs(entities) do
