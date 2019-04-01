@@ -22,6 +22,45 @@ function add_offset()
 end
 
 
+local function load_single_entity(entity)
+  local tmp_ai = nil
+  local tmp_fighter = nil
+  local tmp_item = nil
+  local tmp_inventory = nil
+  
+  if entity.ai then
+      if entity.ai.ai== "BasicMonster"then
+         tmp_ai =BasicMonster() 
+      else
+         tmp_ai = ConfusedMonster(entity.ai.previous,entity.ai.number_of_turns)
+      end
+  end
+  if entity.fighter then
+      tmp_fighter = Fighter(entity.fighter.max_hp,entity.fighter.defense,entity.fighter.power)
+      tmp_fighter.hp = entity.fighter.hp
+  end
+  if entity.item then
+      tmp_item = Item(item_function[entity.item.use_function],entity.item.targeting,"test_msg",entity.item.function_args)
+  end
+  if entity.inventory then
+      tmp_inventory = Inventory(entity.inventory.capacity)
+      
+      for idx,item in ipairs(entity.inventory.items) do
+        tmp_inventory:add_item( load_single_entity(item))
+      end
+      
+      --[[for idx,item in ipairs(entity.inventory.items) do
+          tmp_item_ = nil
+          tmp_item_ = Item(item_function[item.use_function],item.targeting,"test_msg",item.function_args)
+          tmp_item_.name =item.name
+          tmp_inventory:add_item(tmp_item_)
+      end]]
+  end
+  local tmp_entity=Entity(entity.x,entity.y,nil,entity.color,entity.name,entity.blocks,tmp_fighter,tmp_ai,entity.render_order,tmp_item,tmp_inventory)
+  return tmp_entity
+    
+    --tmp_entity =Entity(x,y,tile,color,name,blocks,fighter,ai,render_order,item,inventory)
+end
 
 local function load_entitys(entity_list)
     print("----")
@@ -31,41 +70,11 @@ local function load_entitys(entity_list)
     --artstation
     --3dring
     for idx,entity in ipairs(entity_list) do
-        local tmp_ai = nil
-        local tmp_fighter = nil
-        local tmp_item = nil
-        local tmp_inventory = nil
-        
-        if entity.ai then
-            if entity.ai.ai== "BasicMonster"then
-               tmp_ai =BasicMonster() 
-            else
-               tmp_ai = ConfusedMonster(entity.ai.previous,entity.ai.number_of_turns)
-            end
-        end
-        if entity.fighter then
-            tmp_fighter = Fighter(entity.fighter.max_hp,entity.fighter.defense,entity.fighter.power)
-            tmp_fighter.hp = entity.fighter.hp
-        end
-        if entity.item then
-            tmp_item = Item(item_function[entity.item.use_function],entity.item.targeting,"test_msg",entity.item.function_args)
-        end
-        if entity.inventory then
-            tmp_inventory = Inventory(entity.inventory.capacity)
-            for idx,item in ipairs(entity.inventory.items) do
-                tmp_item_ = nil
-                tmp_item_ = Item(item_function[item.use_function],item.targeting,"test_msg",item.function_args)
-                tmp_item_.name =item.name
-                tmp_inventory:add_item(tmp_item_)
-            end
-        end
-        local tmp_entity=Entity(entity.x,entity.y,nil,entity.color,entity.name,entity.blocks,tmp_fighter,tmp_ai,entity.render_order,tmp_item,tmp_inventory)
-        table.insert(entities,tmp_entity)
+       local tmp_entity= load_single_entity(entity)
+       table.insert(entities,tmp_entity)
         if entity.name == "Player"then
             player = tmp_entity
         end
-        
-        --tmp_entity =Entity(x,y,tile,color,name,blocks,fighter,ai,render_order,item,inventory)
     end
     
     print("----")

@@ -145,10 +145,11 @@ function Inventory:use(item_entity,idx,args)
     if self.active_item+1 > self.num_items then
       self.active_item = self.num_items -1
     end
-    
+    debuger.on()
     --get the item~
     local item = self.items[self.active_item+1].item
-    
+    debuger.off()
+      
     --check if the item is usable
     if item.use_function == nil then
       results={message=Message("The "..item.name.." can not be used",constants.colors.orange)}
