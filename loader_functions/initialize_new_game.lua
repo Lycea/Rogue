@@ -23,7 +23,12 @@ end
 
 function init_map()
       --init map
-  local map = GameMap(constants.map_width,constants.map_height)
+  local level = 1
+  if map.dungeon_level then
+      level = map.dungeon_level
+  end
+  
+  local map = GameMap(constants.map_width,constants.map_height,true,level)
   local fov_map=compute_fov(map)
   
   return map,fov_map
