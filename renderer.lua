@@ -73,6 +73,8 @@ function render_all(entities,game_map,screen_width,screen_height)--could be adju
         10*constants.tile_size,player.fighter.hp,player.fighter.max_hp,
         constants.colors.light_red,constants.colors.dark_red)
     message_log:draw()
+    
+    love.graphics.print("Depth: "..game_map.dungeon_level,constants.tile_size*3,(constants.map_height+4.5)*constants.tile_size)
     --menue("This is a test header,it tests heading",{"blah","test","noch was","meh"},0,0,scr_width)
     
     if game_state == GameStates.SHOW_INVENTORY then

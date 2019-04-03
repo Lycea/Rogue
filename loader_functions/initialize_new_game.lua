@@ -22,14 +22,19 @@ function get_game_variables()
 end
 
 function init_map()
-      --init map
-  local level = 1
+ --init map
+  entities ={}
+  
+  table.insert(entities,player)
+  local level = 0
   if map.dungeon_level then
       level = map.dungeon_level
   end
   
-  local map = GameMap(constants.map_width,constants.map_height,true,level)
+  local map = GameMap(constants.map_width,constants.map_height,true,level+1)
   local fov_map=compute_fov(map)
+  print("Player_x:"..player.x)
+  print("Player_y:"..player.y)
   
   return map,fov_map
 end
