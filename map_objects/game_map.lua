@@ -14,10 +14,15 @@ GameMap = class_base:extend()
 local max_monster_per_room = 3
 local max_items_per_room = 1
 
-function GameMap:new(width,height,bare)
+function GameMap:new(width,height,bare,level)
   self.width = width
   self.height = height
   self.tiles = self.initialize_tiles(self)
+  if level == nil then
+      level = 1
+  end
+  
+  self.dungeon_level = level
   if bare ~= false then
     self.make_map(self)
   end
@@ -113,6 +118,7 @@ function GameMap:make_map()
   local rooms={}
   local num_rooms =0
   
+  local last_center = 0
   for room=1 ,constants.max_rooms do
     --random size
     local w = math.random(constants.room_min_size,constants.room_max_size)
@@ -141,6 +147,8 @@ function GameMap:make_map()
           player.x = center[1]
           player.y = center[2]
       else
+          
+          last_center = center
         local center_prev = rooms[num_rooms]:center() --get the previous room center
         local prev_x,prev_y = center_prev[1],center_prev[2]
         if math.random(0,50)%2==1 then
@@ -165,7 +173,11 @@ function GameMap:make_map()
     
     
   end
-  
+  local tmp_stairs    = stairs(self.dungeon_level+1)
+  local stairs_entity = Entity(last_center[1],last_center[2],0,"black","stairs",false,nil,nil,RenderOrder.ITEM,nil,nil,tmp_stairs)
+
+  table.insert(entities,stairs_entity)
+    
 end
 
 

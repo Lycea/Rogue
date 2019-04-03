@@ -34,6 +34,7 @@ key_list_game={
   right={move={1,0}},
   pickup ={pickup = true},
   inventory={show_inventory = true},
+  use={use_stairs = true},
   exit = {exit = true},
   default={},
   mt={

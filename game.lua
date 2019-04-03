@@ -21,6 +21,7 @@ require("death_functions")
 
 require("components.inventory")
 require("components.item_functions")
+require("components.stairs")
 
 require("loader_functions.data_loader")
 local game ={} 
@@ -179,6 +180,20 @@ function game.play(dt)
         end
     end
     
+    if action["use_stairs"] then
+       
+         for _,entity in pairs(entities) do
+             
+             
+           if entity.x == player.x and entity.y == player.y and entity.name == "stairs" then
+              local result = Message("going down ...",constants.colors.yellow)
+              map,fov_map =init_map()
+              message_log:add_message(result)
+           end
+        end
+    end
+    
+    
     
     if action["exit"]  then
         if game_state == GameStates.SHOW_INVENTORY then
@@ -217,6 +232,7 @@ function game.play(dt)
             consumed_item = true
            end
            table.insert(player_results,result)
+           
        end
        
        if consumed_item == true then
