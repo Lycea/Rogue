@@ -1,10 +1,11 @@
 Fighter = class_base:extend()
 
-function Fighter:new(hp,defense,power)
+function Fighter:new(hp,defense,power,xp_)
     self.max_hp = hp
     self.hp = hp
     self.defense = defense
     self.power = power
+    self.xp = xp_ or 0
 end
 
 function Fighter:save()
@@ -28,7 +29,7 @@ function Fighter:take_damage(amount)
   
   
   if self.hp <=0 then
-    table.insert(results,{dead=self.owner})
+    table.insert(results,{dead=self.owner,xp=self.xp})
   end
   
   return results

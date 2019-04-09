@@ -72,7 +72,13 @@ function Entity:save()
     if self.inventory~= nil then
         inventory=add_offset()..'"inventory":{\n'..self.inventory:save()..add_offset().."}\n"
         table.insert(tmp_string_list,inventory)
+    end 
+
+    local level =""
+    if self.level ~= nil then
+        level=add_offset()..''
     end
+    
     
     local render_order = add_offset()..'"render_order":'..self.render_order.."\n"
     
@@ -89,7 +95,7 @@ end
 
 
 
-function Entity:new(x,y,tile,color,name,blocks,fighter,ai,render_order,item,inventory,stairs_)
+function Entity:new(x,y,tile,color,name,blocks,fighter,ai,render_order,item,inventory,stairs_,level_)
     self.x = x
     self.y = y
     
@@ -107,7 +113,7 @@ function Entity:new(x,y,tile,color,name,blocks,fighter,ai,render_order,item,inve
     self.inventory = inventory or nil
     
     self.stairs_ = stairs_ or nil
-    
+    self.level = level_ or nil
     --set the parent to access it in the module
     if self.fighter then
       self.fighter.owner = self
@@ -128,6 +134,11 @@ function Entity:new(x,y,tile,color,name,blocks,fighter,ai,render_order,item,inve
     if self.stairs_ then
         self.stairs_.owner = self
     end
+    
+    if self.level then
+      self.level.owner = self
+    end
+    
     
 end
 

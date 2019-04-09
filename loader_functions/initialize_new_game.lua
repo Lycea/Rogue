@@ -10,10 +10,10 @@ function get_game_variables()
     
     
   --fight stuff /stat stuff that makes a player a player
-  local stats_ = Fighter(30,2,5)
+  local stats_ = Fighter(30,2,5,0)
   local invi_ = Inventory(26)
   --final init
-  local player = Entity( math.floor(20),math.floor(20),0,"default","Player",true,stats_,nil,RenderOrder.ACTOR,nil,invi_)
+  local player = Entity( math.floor(20),math.floor(20),0,"default","Player",true,stats_,nil,RenderOrder.ACTOR,nil,invi_,Level())
   table.insert(entities,player)
   
 

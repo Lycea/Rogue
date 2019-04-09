@@ -24,6 +24,8 @@ require("components.item_functions")
 require("components.stairs")
 
 require("loader_functions.data_loader")
+require("components.level")
+
 local game ={} 
 
 
@@ -280,6 +282,11 @@ function game.play(dt)
       --console.print(msg)
       message_log:add_message(msg)
     end
+    
+    if result.xp then
+      
+    end
+    
     
     if result.item_added then
         table.remove(entities,result.item_added)

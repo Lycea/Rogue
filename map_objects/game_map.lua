@@ -246,12 +246,12 @@ function GameMap:place_entities(room,entities,max_monster_per_room)
     if free_space == true then
       local monster
       if math.random(0,100)<80 then
-        local stats_= Fighter(10,0,3)
+        local stats_= Fighter(10,0,3,10)
         local behaviour_ =BasicMonster()
         
         monster = Entity(x,y,0,"darker_green","Goblin",true,stats_,behaviour_,RenderOrder.ACTOR)
       else
-        local stats_= Fighter(16,1,4)
+        local stats_= Fighter(16,1,4,15)
         local behaviour_ =BasicMonster()
         
         monster = Entity(x,y,0,"desaturated_green","Orc",true,stats_,behaviour_,RenderOrder.ACTOR)
