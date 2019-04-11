@@ -60,6 +60,7 @@ function Entity:save()
     
     local item = ""
     local item_txt =""
+    
     if self.item ~=nil then
         --item =add_offset().."item:{\n"..self.item:save()..add_offset().."},\n"--self.item:save()..add_offset().."}\n"
         item_txt =self.item:save()--self.item:save()..add_offset().."}\n"
@@ -73,12 +74,20 @@ function Entity:save()
         inventory=add_offset()..'"inventory":{\n'..self.inventory:save()..add_offset().."}\n"
         table.insert(tmp_string_list,inventory)
     end 
+    
+    local stairs_ = ""
+    if self.stairs_ ~= nil then
+        stairs_ = add_offset()..'"stairs":{\n'..self.stairs_:save()..add_offset().."}\n"
+        table.insert(tmp_string_list,stairs_)
+    end
+    
 
     local level =""
     if self.level ~= nil then
-        level=add_offset()..''
+        level=add_offset()..'"level":{\n'..self.level:save().."}"
+        table.insert(tmp_string_list,level)
     end
-    
+  
     
     local render_order = add_offset()..'"render_order":'..self.render_order.."\n"
     

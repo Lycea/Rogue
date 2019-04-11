@@ -7,5 +7,6 @@ end
 
 
 function stairs:save()
-    return add_offset()..'"floor": '..self.floor.."\n"
+    offset_push()
+    return add_offset()..'"floor": '..self.floor.."\n",offset_pop()
 end

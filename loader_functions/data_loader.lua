@@ -23,10 +23,12 @@ end
 
 
 local function load_single_entity(entity)
-  local tmp_ai = nil
-  local tmp_fighter = nil
-  local tmp_item = nil
+  local tmp_ai        = nil
+  local tmp_fighter   = nil
+  local tmp_item      = nil
   local tmp_inventory = nil
+  local tmp_stairs    = nil
+  local tmp_level     = nil
   
   if entity.ai then
       if entity.ai.ai== "BasicMonster"then
@@ -36,7 +38,7 @@ local function load_single_entity(entity)
       end
   end
   if entity.fighter then
-      tmp_fighter = Fighter(entity.fighter.max_hp,entity.fighter.defense,entity.fighter.power)
+      tmp_fighter = Fighter(entity.fighter.max_hp,entity.fighter.defense,entity.fighter.power,entity.fighter.xp)
       tmp_fighter.hp = entity.fighter.hp
   end
   if entity.item then
@@ -56,7 +58,17 @@ local function load_single_entity(entity)
           tmp_inventory:add_item(tmp_item_)
       end]]
   end
-  local tmp_entity=Entity(entity.x,entity.y,nil,entity.color,entity.name,entity.blocks,tmp_fighter,tmp_ai,entity.render_order,tmp_item,tmp_inventory)
+  
+  if entity.stairs then
+    tmp_stairs = stairs(entity.stairs.floor)
+  end
+  
+  
+  if entity.level then
+    tmp_level = Level(entity.level.current_level,entity.level.current_xp,entity.level.level_base,entity.level.level_up_factor)
+  end
+  
+  local tmp_entity=Entity(entity.x,entity.y,nil,entity.color,entity.name,entity.blocks,tmp_fighter,tmp_ai,entity.render_order,tmp_item,tmp_inventory,tmp_stairs,tmp_level)
   return tmp_entity
     
     --tmp_entity =Entity(x,y,tile,color,name,blocks,fighter,ai,render_order,item,inventory)

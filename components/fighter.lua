@@ -41,10 +41,17 @@ function Fighter:attack(target)
     local damage = self.power - target.fighter.defense
     
     if damage> 0 then
-      
-      results =target.fighter:take_damage(damage)
       msg =Message(self.owner.name.." attacks "..target.name.." for "..damage.." hitpoints.")
       table.insert(results,{message =msg})
+      
+      local dmg_result =target.fighter:take_damage(damage)
+      if #dmg_result>0 then
+        for idx,result in ipairs(dmg_result) do
+          table.insert(results,result)
+        end
+      end
+      
+      
     else
       msg =Message(self.owner.name.." tries to attack "..target.name.." but misses!")
       table.insert(results,{message =msg})

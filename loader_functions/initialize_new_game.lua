@@ -13,7 +13,7 @@ function get_game_variables()
   local stats_ = Fighter(30,2,5,0)
   local invi_ = Inventory(26)
   --final init
-  local player = Entity( math.floor(20),math.floor(20),0,"default","Player",true,stats_,nil,RenderOrder.ACTOR,nil,invi_,Level())
+  local player = Entity( math.floor(20),math.floor(20),0,"default","Player",true,stats_,nil,RenderOrder.ACTOR,nil,invi_,nil,Level())
   table.insert(entities,player)
   
 

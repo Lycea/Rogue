@@ -284,7 +284,9 @@ function game.play(dt)
     end
     
     if result.xp then
-      
+     if player.level:addExp(result.xp) == true then
+       message_log.add_message(Message('Leveled up to: '..player.level.current_level,constants.colors.violet))
+     end
     end
     
     
