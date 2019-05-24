@@ -13,7 +13,7 @@ function get_game_variables()
   local stats_ = Fighter(30,2,5,0)
   local invi_ = Inventory(26)
   --final init
-  local player = Entity( math.floor(20),math.floor(20),0,"default","Player",true,stats_,nil,RenderOrder.ACTOR,nil,invi_,nil,Level())
+  local player = Entity( math.floor(20),math.floor(20),0,"default","Player",true,stats_,nil,RenderOrder.ACTOR,nil,invi_,nil,Level(nil,0,20))
   table.insert(entities,player)
   
 
@@ -68,6 +68,7 @@ function get_constants()
       violet ={127,0,255},
       yellow={255,255,0},
       blue = {0,0,255},
+      light_blue ={30,144,255},
       green = {0,255,0}
     }
     

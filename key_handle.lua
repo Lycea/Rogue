@@ -72,6 +72,19 @@ key_list_main_manue={
      }
 }
 
+key_list_level_up={
+    up={state_selection_change={0,1}},
+    down={state_selection_change={0,-1}},
+    use={selected_state = true},
+    mt={
+     __index=function(table,key) 
+      return  {}
+     end
+     }
+}
+
+
+
 key_list_targeting={
     up={target_idx_change ={0,-1}},
     down={target_idx_change ={0,1}},
@@ -106,6 +119,7 @@ setmetatable(key_list_dead,key_list_dead.mt)
 setmetatable(key_list_invi,key_list_invi.mt)
 setmetatable(key_list_game,key_list_game.mt)
 setmetatable(key_list_targeting,key_list_targeting.mt)
+setmetatable(key_list_level_up,key_list_level_up.mt)
 
 
 
@@ -136,6 +150,7 @@ function handle_keys(key)
       [GameStates.PLAYER_DEAD] = key_list_dead,
       [GameStates.SHOW_INVENTORY] = key_list_invi,
       [GameStates.TARGETING] = key_list_targeting,
+      [GameStates.LEVEL_UP] = key_list_level_up,
     }
 
      return state_caller_list[game_state][key_mapper[key]]

@@ -157,7 +157,7 @@ function paths:gen_map_fill(map,start,goal)
       end
     end
     if frontier[index][2] == goal.y and frontier[index][1] == goal.y then
-      print("Found end "..steps)
+      --print("Found end "..steps)
       break
     end
     
@@ -220,7 +220,7 @@ function paths:gen_map_breadth(start,goal)
         
          came_from[v[2]][v[1]] = {frontier[index][1],frontier[index][2]}--true
           if v[2] == goal.y and v[1] == goal.x then
-            print("Found end "..steps)
+            --print("Found end "..steps)
             end_found = true
             break
           end
@@ -266,8 +266,8 @@ function paths:gen_map_breadth(start,goal)
     steps = steps+1
     table.insert(path,1,step)
   end
-  print("Steps to goal: "..steps)
-  print("First step: "..path[1][1].." "..path[1][2])  
+  --print("Steps to goal: "..steps)
+  --print("First step: "..path[1][1].." "..path[1][2])  
   return path
 end
 

@@ -9,6 +9,7 @@ GameStates.PLAYER_DEAD    = 3
 
 GameStates.SHOW_INVENTORY = 4
 GameStates.TARGETING      = 5
+GameStates.LEVEL_UP       = 6
 
 
 

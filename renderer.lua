@@ -72,14 +72,26 @@ function render_all(entities,game_map,screen_width,screen_height)--could be adju
     render_bar("hp: ",constants.tile_size*3,(constants.map_height+3)*constants.tile_size,
         10*constants.tile_size,player.fighter.hp,player.fighter.max_hp,
         constants.colors.light_red,constants.colors.dark_red)
+    
+    
+    --exp bar (?)
+    render_bar("exp: ",constants.tile_size*3,(constants.map_height+5)*constants.tile_size,
+        10*constants.tile_size,player.level.current_xp,player.level:expToNextLevel(),
+        constants.colors.light_blue,constants.colors.blue)
+    
     message_log:draw()
     
-    love.graphics.print("Depth: "..game_map.dungeon_level,constants.tile_size*3,(constants.map_height+4.5)*constants.tile_size)
+    love.graphics.print("Depth: "..game_map.dungeon_level,constants.tile_size*3,(constants.map_height+7)*constants.tile_size)
     --menue("This is a test header,it tests heading",{"blah","test","noch was","meh"},0,0,scr_width)
     
     if game_state == GameStates.SHOW_INVENTORY then
         invi_menue("Press key next to item to use or ESC to exit",player.inventory,constants.tile_size*20)
     end
+    
+    if game_state == GameStates.LEVEL_UP then
+        level_up_menue("Select a state to increase:",constants.tile_size*20)
+    end
+    
     
     if game_state == GameStates.TARGETING then
       

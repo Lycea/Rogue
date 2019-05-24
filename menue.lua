@@ -58,3 +58,10 @@ function invi_menue(header,inventory,width)
  menue(header,options,0,0,width,inventory.active_item+1)
  
 end
+
+
+function level_up_menue(header,width)
+    local options =getSelectableStates()
+    menue(header,options,0,0,width,selected_state_idx)
+
+end

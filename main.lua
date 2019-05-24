@@ -20,12 +20,15 @@ end
 
 
 
-function love.load(arg)
-
-  if arg[1] == "-debug" then
-    debuger = require("mobdebug")
-    debuger.start()
-    debuger.off()
+function love.load(args)
+  
+  for idx, arg in pairs(args) do
+      if arg == "-debug" then
+        debuger = require("mobdebug")
+        debuger.start()
+        debuger.off()
+        break
+      end
   end
   --love.window.setMode(80*tile_size,50*tile_size)
   game.load()

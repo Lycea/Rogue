@@ -83,6 +83,8 @@ target_timer   = 0
 
 show_main_menue =true
 main_menue_item = 1
+
+selected_state_idx = 1
 ----------------------------------------------------------- 
 -- special data fields for debugging / testing only 
 ----------------------------------------------------------- 
@@ -260,6 +262,24 @@ function game.play(dt)
         end
     end
     
+    
+    if action["state_selection_change"] then
+        if selector_timer+0.3 < love.timer.getTime() then
+            selector_timer =love.timer.getTime()
+        
+            selected_state_idx = (selected_state_idx + action["state_selection_change"][2])%3 +1
+        end
+    end
+    
+    if action["selected_state"] then
+        player.fighter:increase_state(getSelectedStateName(selected_state_idx))
+        
+        print(getSelectedStateName(selected_state_idx).." was increased")
+        
+        selected_state_idx = 1
+        game_state = GameStates.PLAYERS_TURN 
+    end
+    
 
   end
   
@@ -284,9 +304,13 @@ function game.play(dt)
     end
     
     if result.xp then
-     if player.level:addExp(result.xp) == true then
-       message_log.add_message(Message('Leveled up to: '..player.level.current_level,constants.colors.violet))
-     end
+        print("Got exp:"..result.xp)
+        print("Exp missing:"..player.level:expToNextLevel())
+        if player.level:addExp(result.xp) == true then
+           print("Level up!!!!")
+           message_log:add_message(Message('Leveled up to: '..player.level.current_level,constants.colors.violet))
+           game_state = GameStates.LEVEL_UP
+        end
     end
     
     

@@ -78,9 +78,7 @@ local function load_entitys(entity_list)
     print("----")
     print("loading entities")
     entities ={}
-    --cgtalk /cgsociity
-    --artstation
-    --3dring
+
     for idx,entity in ipairs(entity_list) do
        local tmp_entity= load_single_entity(entity)
        table.insert(entities,tmp_entity)

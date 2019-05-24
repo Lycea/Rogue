@@ -60,6 +60,13 @@ function Fighter:attack(target)
 end
 
 
+--increases the state giving in the parameter for 1 or a defined number
+function Fighter:increase_state(state_name,number)
+    number = number or 1
+    self[state_name] = self[state_name] + number
+end
+
+
 function Fighter:heal(amount)
     self.hp = self.hp+amount
     if self.hp> self.max_hp then
