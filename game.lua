@@ -267,7 +267,13 @@ function game.play(dt)
         if selector_timer+0.3 < love.timer.getTime() then
             selector_timer =love.timer.getTime()
         
-            selected_state_idx = (selected_state_idx + action["state_selection_change"][2])%3 +1
+            selected_state_idx = selected_state_idx + action["state_selection_change"][2]
+            if selected_state_idx == 0 then
+                selected_state_idx =3
+            elseif selected_state_idx == 4 then
+                selected_state_idx=1
+            end
+            
         end
     end
     

@@ -73,8 +73,8 @@ key_list_main_manue={
 }
 
 key_list_level_up={
-    up={state_selection_change={0,1}},
-    down={state_selection_change={0,-1}},
+    up={state_selection_change={0,-1}},
+    down={state_selection_change={0,1}},
     use={selected_state = true},
     mt={
      __index=function(table,key) 
