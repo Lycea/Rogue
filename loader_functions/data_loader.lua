@@ -96,7 +96,7 @@ local function load_map(map_)
     print(map_.width,map_.height)
     print(#map_.tiles)
     
-    map = GameMap(map_.width,map_.height)
+    map = GameMap(map_.width,map_.height,true,map_.dungeon_level)
     for idx_y,row in ipairs(map_.tiles) do
         for idx_x,tile in ipairs(row) do
             map.tiles[idx_y][idx_x].blocked = tile.blocked

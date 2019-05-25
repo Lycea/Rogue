@@ -34,6 +34,7 @@ function GameMap:save()
     
     save_txt =save_txt..'"width":'..self.width..",\n"
     save_txt =save_txt..'"height":'..self.height..",\n"
+    save_txt =save_txt..'"dungeon_level":'..self.dungeon_level..",\n"
     
     local tiles_tmp ={}
     local rows_tmp={}
