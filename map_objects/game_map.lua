@@ -229,13 +229,37 @@ end
 
 
 function GameMap:place_entities(room,entities,max_monster_per_room)
-  local number_of_monsters = math.random(0,max_monster_per_room)
-  local number_of_items = floor(math.random(0,max_items_per_room))
+    
+  local monster_number_level_idx = {
+      {2,1},
+      {3,2},
+      {5,5},
+      {6,7},
+  }
   
-  local monster_chances ={orc=20,goblin=80}
-  local item_changes ={healing_potion= 70, lightning_scroll= 10, fireball_scroll= 10, confusing_scroll= 10}
+  local item_number_level_idx ={
+        {2,1},
+        {3,3},
+        {5,7},
+        {7,11}
+  }
+    
+  local number_of_monsters = get_value_from_table(monster_number_level_idx,self.dungeon_level) --math.random(0,max_monster_per_room)
+  local number_of_items = get_value_from_table(item_number_level_idx,self.dungeon_level)--floor(math.random(0,max_items_per_room))
   
-  for i=0,number_of_monsters do
+  local monster_chances ={
+      orc=get_value_from_table({{15,1},{30,2},{50,3},{70,7}},self.dungeon_level),--20,
+      goblin=80
+  }
+  
+  local item_changes ={
+      healing_potion= 70,
+      lightning_scroll= get_value_from_table({{10,1},{15,3}},self.dungeon_level),
+      fireball_scroll = get_value_from_table({{10,2},{15,4}},self.dungeon_level),
+      confusing_scroll= 5
+  }
+  
+  for i=1,number_of_monsters do
     local x,y
     x= math.random(room.x1+1,room.x2-1)
     y= math.random(room.y1+1,room.y2-1)
@@ -270,7 +294,7 @@ function GameMap:place_entities(room,entities,max_monster_per_room)
   end
   
   
-  for i=0,number_of_items do
+  for i=1,number_of_items do
     local x,y
     x= math.random(room.x1+1,room.x2-1)
     y= math.random(room.y1+1,room.y2-1)
