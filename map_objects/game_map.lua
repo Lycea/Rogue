@@ -148,7 +148,7 @@ function GameMap:make_map()
           player.y = center[2]
       else
           
-          last_center = center
+        last_center = center
         local center_prev = rooms[num_rooms]:center() --get the previous room center
         local prev_x,prev_y = center_prev[1],center_prev[2]
         if math.random(0,50)%2==1 then
@@ -230,6 +230,10 @@ end
 function GameMap:place_entities(room,entities,max_monster_per_room)
   local number_of_monsters = math.random(0,max_monster_per_room)
   local number_of_items = floor(math.random(0,max_items_per_room))
+  
+  local monster_chances ={orc=20,goblin=80}
+  local item_changes ={healing_potion= 70, lightning_scroll= 10, fireball_scroll= 10, confusing_scroll= 10}
+  
   for i=0,number_of_monsters do
     local x,y
     x= math.random(room.x1+1,room.x2-1)
@@ -245,7 +249,10 @@ function GameMap:place_entities(room,entities,max_monster_per_room)
     --no mob on that grid field right now
     if free_space == true then
       local monster
-      if math.random(0,100)<80 then
+      local monster_choice = random_choice_from_dict(monster_chances)
+      print(monster_choice)
+      
+      if monster_choice == "goblin" then
         local stats_= Fighter(10,0,3,10)
         local behaviour_ =BasicMonster()
         
@@ -277,15 +284,17 @@ function GameMap:place_entities(room,entities,max_monster_per_room)
     --no mob on that grid field right now
     if free_space == true then
         local item = nil
+        local item_choice = random_choice_from_dict(item_changes)
+        
         local num = math.random(0,100)
-        if num < 70 then
+        if item_choice == "healing_potion" then
           local item_comp=Item(item_function.heal,false,nil,{amount=4})
           item = Entity(x,y,0,"orange","health",false,nil,nil,RenderOrder.ITEM,item_comp)
           
-        elseif num < 80 then
+        elseif item_choice == "fireball_scroll" then
             local item_comp = Item(item_function.cast_fireball,true,Message("Hit enter to set target",constants.colors.green),{damage=10,radius=5})
             item = Entity(x,y,0,"red","fireball_scroll",false,nil,nil,RenderOrder.ITEM,item_comp)
-        elseif num < 90 then
+        elseif item_choice == "confusing_scroll" then
             local item_comp = Item(item_function.cast_confuse,true,Message("Hit enter to set target",constants.colors.green),{})
             item = Entity(x,y,0,"blue","confusing_scroll",false,nil,nil,RenderOrder.ITEM,item_comp)
         else

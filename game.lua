@@ -7,7 +7,7 @@ require("entity")
 require("key_handle")
 require("renderer")
 
-
+require("helper.random_utils")
 
 require("map_objects.game_map")
 require("fov_functions")
