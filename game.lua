@@ -123,6 +123,13 @@ function game.play(dt)
     
     
     --Players turn and keys used
+    
+    if action["save"] then
+        print("test_save")
+        save_game()
+        print("save generated")
+    end
+    
     if action["move"] and game_state==GameStates.PLAYERS_TURN then
       if love.timer.getTime()> key_timer+0.1 then
         local dirs=action["move"]

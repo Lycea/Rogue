@@ -7,6 +7,50 @@ function Equipment:new(hand_equip,off_hand_equip)
     self.off_hand = off_hand_equip
 end
 
+function Equipment:save()
+    local txt = ""
+    offset_push()
+    
+    local function find_invi_idx(item_hash)
+        --iterate all item in parent inventory to find 
+        --responsible item in slot ...  hacky?
+        
+        --TODO: check if smth could go wrong with dropping equip and finding it here
+        for idx, item in pairs(self.owner.inventory.items) do
+            if item == item_hash then
+                print(idx)
+                return idx
+            end
+        end
+    end
+    
+    
+    
+    local equipp_string_list ={}
+    
+    if self.main_hand ~= nil then
+        
+        local idx =find_invi_idx(self.main_hand)
+        txt='"main_hand":{\n'..'"invi_idx":'..idx..","..self.main_hand:save().."}"
+        table.insert(equipp_string_list,txt)
+    end
+    if self.off_hand ~= nil then
+        local idx =find_invi_idx(self.off_hand)
+        txt= '"off_hand":{\n'..'"invi_idx":'..idx..","..self.off_hand:save().."}"
+        table.insert(equipp_string_list,txt)
+    end
+        
+    txt = table.concat(equipp_string_list,",\n")
+    
+    
+    offset_pop()
+    
+    return txt
+end
+
+
+
+
 function Equipment:get_hp_bonus()
     local bonus = 0
     
@@ -57,17 +101,21 @@ function Equipment:toggle_equip(equippable)
     if equippable.equippable.slot == EquipmentSlots.HAND_LEFT then
         if equippable == self.main_hand then
             self.main_hand = nil
+            
             table.insert(results,{unequipped=equippable})
         else
             self.main_hand = equippable
+            
             table.insert(results,{equipped=equippable})
         end
     elseif equippable.equippable.slot == EquipmentSlots.OFF_HAND then
         if equippable == self.off_hand then
             self.off_hand = nil
+            
             table.insert(results,{unequipped=equippable})
         else
             self.off_hand = equippable
+            
             table.insert(results,{equipped=equippable})
         end
     end
