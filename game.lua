@@ -26,6 +26,10 @@ require("components.stairs")
 require("loader_functions.data_loader")
 require("components.level")
 
+require("components.equipable")
+require("components.equipment")
+require("equipment_slots")
+
 local game ={} 
 
 
@@ -145,16 +149,16 @@ function game.play(dt)
     
     
     if action["pickup"] and game_state ==GameStates.PLAYERS_TURN then
-        
-      
+        debuger.on()
         for _,entity in pairs(entities) do
            if entity.x == player.x and entity.y == player.y and entity.item then
-               local result =player.inventory:add_item(entity,_)
+              local result =player.inventory:add_item(entity,_)
                
               table.insert(player_results,result)
               
            end
         end
+        debuger.off()
     end
     
     
@@ -227,6 +231,8 @@ function game.play(dt)
     end
     
     if action["use_item"] then
+        
+       debuger.on()
        --table.insert(player_results,{message=Message("trying to use item... no result",colors.orange)})
        local results_usage =player.inventory:use(player.inventory.items[player.inventory.active_item+1],player.inventory.active_item+1,{colors=constants.colors,entities =entities})
        
@@ -239,6 +245,7 @@ function game.play(dt)
            
        end
        
+       debuger.off()
        if consumed_item == true then
          break
        end
@@ -250,6 +257,9 @@ function game.play(dt)
        table.insert(player_results,results_drop)
        break
     end
+    
+    
+    
     
     
     
@@ -318,6 +328,23 @@ function game.play(dt)
            game_state = GameStates.LEVEL_UP
         end
     end
+    
+    if result["equip"] then
+        debuger.on()
+        
+        local results_ = player.equippment:toggle_equip(result["equip"])
+        for idx ,result in pairs(results_) do
+          if result.equipped then
+              message_log:add_message(Message('Equipped item',constants.colors.yellow))
+          elseif result.unequipped then
+              message_log:add_message(Message('Unequipped item',constants.color.yellow))
+          end
+        end
+        debuger.off()
+        game_state = GameStates.ENEMY_TURN
+        break
+    end
+    
     
     
     if result.item_added then

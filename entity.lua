@@ -104,7 +104,7 @@ end
 
 
 
-function Entity:new(x,y,tile,color,name,blocks,fighter,ai,render_order,item,inventory,stairs_,level_)
+function Entity:new(x,y,tile,color,name,blocks,fighter,ai,render_order,item,inventory,stairs_,level_,equippment,equippable)
     self.x = x
     self.y = y
     
@@ -112,8 +112,8 @@ function Entity:new(x,y,tile,color,name,blocks,fighter,ai,render_order,item,inve
     self.color = color
     
     self.name = name
-    self.blocks = blocks or false
-    self.fighter =fighter 
+    self.blocks  = blocks or false
+    self.fighter = fighter 
     self.ai = ai
     
     self.render_order = render_order
@@ -123,6 +123,10 @@ function Entity:new(x,y,tile,color,name,blocks,fighter,ai,render_order,item,inve
     
     self.stairs_ = stairs_ or nil
     self.level = level_ or nil
+    
+    self.equippment = equippment or nil
+    self.equippable = equippable or nil
+    
     --set the parent to access it in the module
     if self.fighter then
       self.fighter.owner = self
@@ -148,7 +152,24 @@ function Entity:new(x,y,tile,color,name,blocks,fighter,ai,render_order,item,inve
       self.level.owner = self
     end
     
+ 
     
+    if self.equippment then
+        self.equippment.owner = self
+    end
+    
+    
+    
+    if self.equippable then
+        self.equippable.owner = self
+        
+        if not self.item then
+            item = Item()
+            self.item = item
+            self.item.owner = self
+        end
+    end
+   
 end
 
 

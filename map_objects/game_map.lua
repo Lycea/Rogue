@@ -256,6 +256,8 @@ function GameMap:place_entities(room,entities,max_monster_per_room)
       healing_potion= 70,
       lightning_scroll= get_value_from_table({{10,1},{15,3}},self.dungeon_level),
       fireball_scroll = get_value_from_table({{10,2},{15,4}},self.dungeon_level),
+      sword= get_value_from_table({{5,1},{7,3}},self.dungeon_level),
+      shield= get_value_from_table({{5,1},{7,3}},self.dungeon_level),
       confusing_scroll= 5
   }
   
@@ -322,6 +324,14 @@ function GameMap:place_entities(room,entities,max_monster_per_room)
         elseif item_choice == "confusing_scroll" then
             local item_comp = Item(item_function.cast_confuse,true,Message("Hit enter to set target",constants.colors.green),{})
             item = Entity(x,y,0,"blue","confusing_scroll",false,nil,nil,RenderOrder.ITEM,item_comp)
+        elseif item_choice == "shield" then
+            --hp,def,pow
+            local equip =Equipable(EquipmentSlots.HAND_LEFT,3,5,0)
+            item = Entity(x,y,0,"green","shield",false,nil,nil,RenderOrder.ITEM,nil,nil,nil,nil,nil,equip)
+        elseif item_choice == "sword" then
+            --hp,def,pow
+            local equip =Equipable(EquipmentSlots.OFF_HAND,0,0,5)
+            item = Entity(x,y,0,"light_blue","sword",false,nil,nil,RenderOrder.ITEM,nil,nil,nil,nil,nil,equip)
         else
           local item_comp = Item(item_function.cast_lightning,false,nil,{damage=20,max_range=5})
           item = Entity(x,y,0,"yellow","lightning_rune",false,nil,nil,RenderOrder.ITEM,item_comp)

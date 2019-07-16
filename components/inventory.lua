@@ -10,28 +10,39 @@ function Item:new(use_function,targeting,targeting_message,args)
 end
 
 function Item:save()
+    
+    debuger.on()
     offset_push()
     local function_ = add_offset()..'"use_function":'
+    local found = false
     for name,hash in pairs(item_function) do
         if hash == self.use_function then
            function_ = function_..'"'..name..'"' 
+           found = true
         end
     end
+    
+    if found == false then
+        function_ = function_..'"no_function"'
+    end
+    
+    
     
     local args = add_offset()..'"function_args":{\n'
     offset_push()
     
     local arg_list ={}
     
-    for idx_args,data in pairs(self.function_args)do
-        if type(data)~= type({}) then
-            --args = args..add_offset()..idx_args..":"..data.."\n"
-            table.insert(arg_list,add_offset()..'"'..idx_args..'"'..":"..data)
-        else
-        
+    if self.function_args then
+        for idx_args,data in pairs(self.function_args)do
+            if type(data)~= type({}) then
+                --args = args..add_offset()..idx_args..":"..data.."\n"
+                table.insert(arg_list,add_offset()..'"'..idx_args..'"'..":"..data)
+            else
+            
+            end
         end
     end
-    
     offset_pop()
     args= args ..table.concat(arg_list,",\n").."\n"
     
@@ -49,6 +60,9 @@ function Item:save()
     
     
     offset_pop()
+    
+    
+    debuger.off()
     return function_..",\n"..args..",\n"..targeting..",\n"..target_msg
     
 end
@@ -115,7 +129,13 @@ function Inventory:drop_item(item_entity,idx)
     if self.active_item+1 > self.num_items then
       self.active_item = self.num_items -1
     end
+    
     local item = self.items[self.active_item+1]
+    
+    if item == self.owner.equippment.main_hand or item == self.owner.equipment.off_hand then
+        self.owner.equipment:toggle_equip(item)
+        return
+    end
     
     
     item.x =self.owner.x
@@ -136,7 +156,7 @@ function Inventory:use(item_entity,idx,args)
     
     --check if there are items in the inventory
     if self.num_items == 0 then
-      results={message=Message("No item there to be used",constants.colors.orange)}
+      table.insert(results,{message=Message("No item there to be used",constants.colors.orange)})
       print("nothing used...")
       return results
     end
@@ -145,14 +165,18 @@ function Inventory:use(item_entity,idx,args)
     if self.active_item+1 > self.num_items then
       self.active_item = self.num_items -1
     end
-    debuger.on()
+    
     --get the item~
     local item = self.items[self.active_item+1].item
-    debuger.off()
-      
+     
     --check if the item is usable
     if item.use_function == nil then
-      results={message=Message("The "..item.name.." can not be used",constants.colors.orange)}
+        if item.owner.equippable then
+            results={{equip=item.owner}}
+        else
+            results={{message=Message("The "..item.name.." can not be used",constants.colors.orange)}}
+        end
+        
     else
         --check if the item can select a target, and if it is selected
         if item.targeting == true and not args["target_x"] then
@@ -176,7 +200,7 @@ function Inventory:use(item_entity,idx,args)
             end
         end
     end
-    
+
     return results
 end
 
