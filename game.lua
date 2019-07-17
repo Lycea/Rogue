@@ -337,17 +337,17 @@ function game.play(dt)
     end
     
     if result["equip"] then
-        debuger.on()
+        
         
         local results_ = player.equippment:toggle_equip(result["equip"])
         for idx ,result in pairs(results_) do
           if result.equipped then
               message_log:add_message(Message('Equipped item',constants.colors.yellow))
           elseif result.unequipped then
-              message_log:add_message(Message('Unequipped item',constants.color.yellow))
+              message_log:add_message(Message('Unequipped item',constants.colors.yellow))
           end
         end
-        debuger.off()
+        
         game_state = GameStates.ENEMY_TURN
         break
     end

@@ -97,13 +97,18 @@ end
 function Equipment:toggle_equip(equippable)
     local results ={}
     
-    
+    print("checking equipped ..")
     if equippable.equippable.slot == EquipmentSlots.HAND_LEFT then
+        
+        print("is left hand")
         if equippable == self.main_hand then
+            print("is equipped already so unequip")
             self.main_hand = nil
             
             table.insert(results,{unequipped=equippable})
         else
+            print(self.main_hand,equippable)
+            print("is not equipped so equipp???")
             self.main_hand = equippable
             
             table.insert(results,{equipped=equippable})
