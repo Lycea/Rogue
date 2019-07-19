@@ -21,6 +21,32 @@ function Fighter:save()
     return txt
 end
 
+function Fighter:get_hp()
+    if self.owner and self.owner.equipment then
+        return self.max_hp + self.owner.equipment:get_hp_bonus()
+    else
+        return self.max_hp
+    end
+    
+end
+
+function Fighter:get_power()
+    if self.owner and self.owner.equippment then
+        return self.power + self.owner.equippment:get_power_bonus()
+    else
+        return self.power
+    end
+end
+
+function Fighter:get_def()
+    if self.owner and self.owner.equippment then
+        return self.defense + self.owner.equippment:get_def_bonus()
+    else
+        return self.defense
+    end
+end
+
+
 
 function Fighter:take_damage(amount)
   local results={}
@@ -38,7 +64,7 @@ end
 
 function Fighter:attack(target)
     local results ={}
-    local damage = self.power - target.fighter.defense
+    local damage = self:get_power() - target.fighter:get_def()
     
     if damage> 0 then
       msg =Message(self.owner.name.." attacks "..target.name.." for "..damage.." hitpoints.")
@@ -69,8 +95,8 @@ end
 
 function Fighter:heal(amount)
     self.hp = self.hp+amount
-    if self.hp> self.max_hp then
-        self.hp  = self.max_hp
+    if self.hp> self:get_hp() then
+        self.hp  = self:get_hp()
     end
 end
 

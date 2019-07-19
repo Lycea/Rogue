@@ -84,10 +84,23 @@ function Entity:save()
 
     local level =""
     if self.level ~= nil then
-        level=add_offset()..'"level":{\n'..self.level:save().."}"
+        level=add_offset()..'"level":{\n'..self.level:save()..add_offset().."}\n"
         table.insert(tmp_string_list,level)
     end
   
+    
+    local equippment_ =""
+    if self.equippment ~= nil then
+        print("saving equippment...")
+        equippment_=add_offset()..'"equippment":{\n'..self.equippment:save()..add_offset().."}\n"
+        table.insert(tmp_string_list,equippment_)
+    end
+    
+    local equippable_ =""
+    if self.equippable ~= nil then
+        equippable_=add_offset()..'"equippable":{\n'..self.equippable:save()..add_offset().."}\n"
+        table.insert(tmp_string_list,equippable_)
+    end
     
     local render_order = add_offset()..'"render_order":'..self.render_order.."\n"
     
@@ -104,7 +117,7 @@ end
 
 
 
-function Entity:new(x,y,tile,color,name,blocks,fighter,ai,render_order,item,inventory,stairs_,level_)
+function Entity:new(x,y,tile,color,name,blocks,fighter,ai,render_order,item,inventory,stairs_,level_,equippment,equippable)
     self.x = x
     self.y = y
     
@@ -112,8 +125,8 @@ function Entity:new(x,y,tile,color,name,blocks,fighter,ai,render_order,item,inve
     self.color = color
     
     self.name = name
-    self.blocks = blocks or false
-    self.fighter =fighter 
+    self.blocks  = blocks or false
+    self.fighter = fighter 
     self.ai = ai
     
     self.render_order = render_order
@@ -123,6 +136,10 @@ function Entity:new(x,y,tile,color,name,blocks,fighter,ai,render_order,item,inve
     
     self.stairs_ = stairs_ or nil
     self.level = level_ or nil
+    
+    self.equippment = equippment or nil
+    self.equippable = equippable or nil
+    
     --set the parent to access it in the module
     if self.fighter then
       self.fighter.owner = self
@@ -148,7 +165,24 @@ function Entity:new(x,y,tile,color,name,blocks,fighter,ai,render_order,item,inve
       self.level.owner = self
     end
     
+ 
     
+    if self.equippment then
+        self.equippment.owner = self
+    end
+    
+    
+    
+    if self.equippable then
+        self.equippable.owner = self
+        
+        if not self.item then
+            item = Item()
+            self.item = item
+            self.item.owner = self
+        end
+    end
+   
 end
 
 

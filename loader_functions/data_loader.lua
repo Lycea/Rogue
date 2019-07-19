@@ -29,6 +29,8 @@ local function load_single_entity(entity)
   local tmp_inventory = nil
   local tmp_stairs    = nil
   local tmp_level     = nil
+  local tmp_equippment = nil
+  local tmp_equippable = nil
   
   if entity.ai then
       if entity.ai.ai== "BasicMonster"then
@@ -67,8 +69,39 @@ local function load_single_entity(entity)
   if entity.level then
     tmp_level = Level(entity.level.current_level,entity.level.current_xp,entity.level.level_base,entity.level.level_up_factor)
   end
+
   
-  local tmp_entity=Entity(entity.x,entity.y,nil,entity.color,entity.name,entity.blocks,tmp_fighter,tmp_ai,entity.render_order,tmp_item,tmp_inventory,tmp_stairs,tmp_level)
+  
+  if entity.equippment then
+    local main_equip = nil
+    local off_equip = nil
+    
+    tmp_equippment = Equipment()
+    debuger.on()
+    if entity.equippment.main_hand then
+        main_equip =tmp_inventory.items[entity.equippment.main_hand.invi_idx]
+        
+        tmp_equippment:toggle_equip(main_equip)
+    end
+    
+    if entity.equippment.off_hand then
+        off_equip =entity.inventory.items[entity.equippment.off_hand.invi_idx]
+        tmp_equippment:toggle_equip(off_equip)
+    end
+    debuger.off()
+    
+  end
+  
+  
+  
+  if entity.equippable then
+    tmp_equippable = Equipable(entity.equippable.slot,entity.equippable.health,entity.equippable.def,entity.equippable.power)
+  end
+  
+  
+  
+  
+  local tmp_entity=Entity(entity.x,entity.y,nil,entity.color,entity.name,entity.blocks,tmp_fighter,tmp_ai,entity.render_order,tmp_item,tmp_inventory,tmp_stairs,tmp_level,tmp_equippment,tmp_equippable)
   return tmp_entity
     
     --tmp_entity =Entity(x,y,tile,color,name,blocks,fighter,ai,render_order,item,inventory)
