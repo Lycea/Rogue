@@ -85,11 +85,11 @@ function render_all(entities,game_map,screen_width,screen_height)--could be adju
     --menue("This is a test header,it tests heading",{"blah","test","noch was","meh"},0,0,scr_width)
     
     if game_state == GameStates.SHOW_INVENTORY then
-        invi_menue("Press key next to item to use or ESC to exit",player.inventory,constants.tile_size*20)
+        invi_menue("Press key next to item to use or ESC to exit",player.inventory,0,0,constants.tile_size*20,constants.scr_height)
     end
     
     if game_state == GameStates.LEVEL_UP then
-        level_up_menue("Select a state to increase:",constants.tile_size*20)
+        level_up_menue("Select a state to increase:",0,0,constants.tile_size*20,constants.scr_height)
     end
     
     

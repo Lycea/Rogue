@@ -7,10 +7,10 @@ local function wrap_text(str,num)
   return ret
 end
 
-function menue(header,options,x,y,width,marker_id)
+function menue(header,options,x,y,width,height,marker_id)
     gr.setColor(0,0,0,255)
     if #options>26 then return end
-    gr.rectangle("fill",x,y,width,constants.scr_height)
+    gr.rectangle("fill",x,y,width,height)
     
     local wrapped =wrap_text(header,width)
     local yoff =20
@@ -42,26 +42,25 @@ end
 
 function main_menue()
   
-  menue("NotTheRogue",{"Start new","Load old","Options","Exit"},0,0,400,main_menue_item)
+  menue("NotTheRogue",{"Start new","Load old","Options","Exit"},0,0,400,400,main_menue_item)
 end
 
 
-function invi_menue(header,inventory,width)
+function invi_menue(header,inventory,x,y,width,height)
  local options ={}
  if inventory.num_items == 0 then
      options={"No item in the inventory"}
- else
-     for _,item in pairs(inventory.items)do
-     table.insert(options,item.name)
+     else
+         for _,item in pairs(inventory.items)do
+            table.insert(options,item.name)
+         end
      end
- end
- menue(header,options,0,0,width,inventory.active_item+1)
- 
+     menue(header,options,x,y,width,height,inventory.active_item+1)
 end
 
 
-function level_up_menue(header,width)
+function level_up_menue(header,x,y,width,height)
     local options =getSelectableStates()
-    menue(header,options,0,0,width,selected_state_idx)
+    menue(header,options,x,y,width,height,selected_state_idx)
 
 end
