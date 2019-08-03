@@ -1,4 +1,7 @@
 
+
+
+
 function get_game_variables()
   local entities ={}
   
@@ -33,10 +36,16 @@ function init_map()
       level = map.dungeon_level
   end
   
+  load_enemies()
+  load_items()
+  
+  
   local map = GameMap(constants.map_width,constants.map_height,true,level+1)
   local fov_map=compute_fov(map)
   print("Player_x:"..player.x)
   print("Player_y:"..player.y)
+  
+  
   
   return map,fov_map
 end

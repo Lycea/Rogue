@@ -41,7 +41,7 @@ end
 ConfusedMonster = class_base:extend()
 
 function ConfusedMonster:new(previous_ai,turns)
-    self.previous_ai = previous_ai
+    self.previous_ai = previous_ai or BasicMonster()
     self.number_of_turns = turns or 10
 end
 
@@ -78,3 +78,8 @@ function ConfusedMonster:save()
     return '"ai":"ConfusedMonster", \n "previous":'..self.previous_ai:save()..',\n"number_of_turns":'..self.number_of_turns
 end
 
+
+ai_list ={
+BasicMonster = BasicMonster,
+ConfusedMonster = ConfusedMonster
+}

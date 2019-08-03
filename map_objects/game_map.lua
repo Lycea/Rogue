@@ -247,11 +247,6 @@ function GameMap:place_entities(room,entities,max_monster_per_room)
   local number_of_monsters = get_value_from_table(monster_number_level_idx,self.dungeon_level) --math.random(0,max_monster_per_room)
   local number_of_items = get_value_from_table(item_number_level_idx,self.dungeon_level)--floor(math.random(0,max_items_per_room))
   
-  local monster_chances ={
-      orc=get_value_from_table({{15,1},{30,2},{50,3},{70,7}},self.dungeon_level),--20,
-      goblin=80
-  }
-  
   local item_changes ={
       healing_potion= 70,
       lightning_scroll= get_value_from_table({{10,1},{15,3}},self.dungeon_level),
@@ -260,6 +255,12 @@ function GameMap:place_entities(room,entities,max_monster_per_room)
       shield= get_value_from_table({{5,1},{7,3}},self.dungeon_level),
       confusing_scroll= 5
   }
+  
+  -- generate chance list
+  monster_chances ={}
+  for idx,monster_stats in pairs(enemie_lookup)do
+      monster_chances[idx] = get_value_from_table(monster_stats.chances,self.dungeon_level)
+  end
   
   for i=1,number_of_monsters do
     local x,y
@@ -276,20 +277,16 @@ function GameMap:place_entities(room,entities,max_monster_per_room)
     --no mob on that grid field right now
     if free_space == true then
       local monster
-      local monster_choice = random_choice_from_dict(monster_chances)
+      local monster_choice = random_choice_from_dict(monster_chances)--enemie_lookup
       print(monster_choice)
       
-      if monster_choice == "goblin" then
-        local stats_= Fighter(10,0,3,10)
-        local behaviour_ =BasicMonster()
-        
-        monster = Entity(x,y,0,"darker_green","Goblin",true,stats_,behaviour_,RenderOrder.ACTOR)
-      else
-        local stats_= Fighter(16,1,4,15)
-        local behaviour_ =BasicMonster()
-        
-        monster = Entity(x,y,0,"desaturated_green","Orc",true,stats_,behaviour_,RenderOrder.ACTOR)
-      end
+      
+      
+      local mob = enemie_lookup[monster_choice]
+      local stats_= Fighter(mob.hp,mob.def,mob.power,mob.exp)
+      local behaviour_ =ai_list[mob.ai]()
+      
+      monster = Entity(x,y,0,mob.color,mob.name,mob.blocking,stats_,behaviour_,mob.render)
       
       table.insert(entities,monster)
     end

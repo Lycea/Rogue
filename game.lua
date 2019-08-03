@@ -1,4 +1,5 @@
 
+require("loader_functions.entity_loader")
 require ("loader_functions.initialize_new_game")
 require("helper.msg_renderer")
 json =require("helper.json")
@@ -509,6 +510,7 @@ end
  
  
 --default key list to check
+
 
 function game.keyHandle(key,s,r,pressed_) 
   if pressed_ == true then
