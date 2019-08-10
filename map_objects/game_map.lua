@@ -247,24 +247,17 @@ function GameMap:place_entities(room,entities,max_monster_per_room)
   local number_of_monsters = get_value_from_table(monster_number_level_idx,self.dungeon_level) --math.random(0,max_monster_per_room)
   local number_of_items = get_value_from_table(item_number_level_idx,self.dungeon_level)--floor(math.random(0,max_items_per_room))
   
-  local item_changes ={
-      --healing_potion= 70,
-      --lightning_scroll= get_value_from_table({{10,1},{15,3}},self.dungeon_level),
-      --fireball_scroll = get_value_from_table({{10,2},{15,4}},self.dungeon_level),
-      --sword= get_value_from_table({{5,1},{7,3}},self.dungeon_level),
-      --shield= get_value_from_table({{5,1},{7,3}},self.dungeon_level),
-      --confusing_scroll= 5
-  }
+  local item_changes ={}
   
   -- generate monster chance list
-  monster_chances ={}
+  local monster_chances ={}
   for idx,monster_stats in pairs(enemie_lookup)do
       monster_chances[idx] = get_value_from_table(monster_stats.chances,self.dungeon_level)
   end
   
   -- TODO fix naming ...
   -- generate item chance list
-  item_changes = {}
+  
   
   for idx,item_stats in pairs(item_lookup) do
     item_changes[idx] = get_value_from_table(item_stats.chances,self.dungeon_level)
@@ -289,8 +282,6 @@ function GameMap:place_entities(room,entities,max_monster_per_room)
       local monster
       local monster_choice = random_choice_from_dict(monster_chances)--enemie_lookup
      -- print(monster_choice)
-      
-      
       
       local mob = enemie_lookup[monster_choice]
       local stats_= Fighter(mob.hp,mob.def,mob.power,mob.exp)
@@ -337,35 +328,9 @@ function GameMap:place_entities(room,entities,max_monster_per_room)
         end
         
         
-        local collectable = Entity(x,y,0,item_tmp.color,item_tmp.name,item_tmp.blocking,nil,nil,item_tmp.render,item_comp,nil,nil,nil,nil,equippment_component)--equippment,equippable)
-                            --Entity(x,y,0,"orange","health",false,nil,nil,RenderOrder.ITEM,item_comp)
+        local collectable = Entity(x,y,0,item_tmp.color,item_tmp.name,item_tmp.blocking,nil,nil,item_tmp.render,item_comp,nil,nil,nil,nil,equippment_component)
           
         table.insert(entities,collectable)
-        
-        
-        --if item_choice == "healing_potion" then
-        --  local item_comp=Item(item_function.heal,false,nil,{amount=4})
-        --  item = Entity(x,y,0,"orange","health",false,nil,nil,RenderOrder.ITEM,item_comp)
-          
-        --if item_choice == "fireball_scroll" then
-         --   local item_comp = Item(item_function.cast_fireball,true,Message("Hit enter to set target",constants.colors.green),{damage=10,radius=5})
-         --   item = Entity(x,y,0,"red","fireball_scroll",false,nil,nil,RenderOrder.ITEM,item_comp)
-        --elseif item_choice == "confusing_scroll" then
-        --    local item_comp = Item(item_function.cast_confuse,true,Message("Hit enter to set target",constants.colors.green),{})
-        --    item = Entity(x,y,0,"blue","confusing_scroll",false,nil,nil,RenderOrder.ITEM,item_comp)
-       --if item_choice == "shield" then
-            --hp,def,pow
-        --    local equip =Equipable(EquipmentSlots.HAND_LEFT,3,5,0)
-        --    item = Entity(x,y,0,"green","shield",false,nil,nil,RenderOrder.ITEM,nil,nil,nil,nil,nil,equip)
-        --elseif item_choice == "sword" then
-            --hp,def,pow
-        --    local equip =Equipable(EquipmentSlots.OFF_HAND,0,0,5)
-        --    item = Entity(x,y,0,"light_blue","sword",false,nil,nil,RenderOrder.ITEM,nil,nil,nil,nil,nil,equip)
-        --else
-        --  local item_comp = Item(item_function.cast_lightning,false,nil,{damage=20,max_range=5})
-        --  item = Entity(x,y,0,"yellow","lightning_rune",false,nil,nil,RenderOrder.ITEM,item_comp)
-        --end
-        --table.insert(entities,item)
     end
   end
 end

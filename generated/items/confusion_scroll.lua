@@ -4,7 +4,7 @@ local confusion_scroll={
     ["type"] = "item", --can be item or equipable
     
     chances ={
-        {100,1}
+        {5,1}
     },
     
     
