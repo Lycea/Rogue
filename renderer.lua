@@ -26,7 +26,7 @@ function get_name_under_mouse()
 end
 
 
-local function render_bar(name,x,y,width,value,max,bar_col,back_col,string_col,show_num)
+function render_bar(name,x,y,width,value,max,bar_col,back_col,string_col,show_num)
   local bar_width = math.floor(value/max*width)
   local bar_start = x+love.graphics.getFont():getWidth(name) +10
   
@@ -75,7 +75,9 @@ function render_all(entities,game_map,screen_width,screen_height)--could be adju
     
     
     --exp bar (?)
-    render_bar("exp: ",constants.tile_size*3,(constants.map_height+5)*constants.tile_size,
+    render_bar("exp: ",
+        constants.tile_size*3,
+        (constants.map_height+5)*constants.tile_size,
         10*constants.tile_size,player.level.current_xp,player.level:expToNextLevel(),
         constants.colors.light_blue,constants.colors.blue)
     
@@ -110,6 +112,20 @@ function render_all(entities,game_map,screen_width,screen_height)--could be adju
       
       love.graphics.setColor(constants.colors.default)
       
+    end
+    
+    -- Draw a health bar for this entity, if it was attacked before
+    if player.last_target ~= 0 then
+        render_bar("enemy's hp:",
+            (constants.scr_width)-20*constants.tile_size,
+            (constants.map_height+3)*constants.tile_size,
+            10*constants.tile_size,
+            player.last_target.fighter.hp,
+            player.last_target.fighter:get_hp(),
+            constants.colors.desaturated_green,
+            constants.colors.green
+        )
+            
     end
     
 

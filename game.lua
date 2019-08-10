@@ -141,6 +141,13 @@ function game.play(dt)
           local target = get_blocking_entitis_at_location(dest_x,dest_y)
           if target ~=nil then
             player_results = player.fighter:attack(target)
+            
+            -- we dont need to remember a dead target, but a living one to draw hp bar
+            if target.fighter.hp > 0 then
+              player.last_target = target
+            else
+              player.last_target = 0
+            end
           else
             player:move(dirs[1],dirs[2])
             fov_recompute=true
@@ -460,6 +467,7 @@ function game.update(dt)
           
         end
         
+        -- main menu action handling
         if action["selected_item"]~= nil then
           show_main_menue = false
           --menue item switcher

@@ -19,6 +19,7 @@ function get_game_variables()
   local equipment_component = Equipment()
   --final init
   local player = Entity( math.floor(20),math.floor(20),0,"default","Player",true,stats_,nil,RenderOrder.ACTOR,nil,invi_,nil,Level(nil,0,20),equipment_component)
+  player.last_target = 0
   table.insert(entities,player)
   
 
@@ -103,7 +104,7 @@ function get_constants()
         fov_radius = 10,
         
         --log info
-        message_x = 40,
+        message_x = 35,
         message_width =12,
         message_height = 5,
         
