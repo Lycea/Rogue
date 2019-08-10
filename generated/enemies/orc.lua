@@ -1,6 +1,6 @@
 
 
-local template_mob ={
+local orc ={
     name="Orc",
     
     hp = 16,
@@ -25,4 +25,4 @@ local template_mob ={
 }
 
 
-return template_mob
+return orc

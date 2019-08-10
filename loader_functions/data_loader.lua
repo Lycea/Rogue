@@ -23,12 +23,12 @@ end
 
 
 local function load_single_entity(entity)
-  local tmp_ai        = nil
-  local tmp_fighter   = nil
-  local tmp_item      = nil
-  local tmp_inventory = nil
-  local tmp_stairs    = nil
-  local tmp_level     = nil
+  local tmp_ai         = nil
+  local tmp_fighter    = nil
+  local tmp_item       = nil
+  local tmp_inventory  = nil
+  local tmp_stairs     = nil
+  local tmp_level      = nil
   local tmp_equippment = nil
   local tmp_equippable = nil
   
@@ -36,7 +36,8 @@ local function load_single_entity(entity)
       if entity.ai.ai== "BasicMonster"then
          tmp_ai =BasicMonster() 
       else
-         tmp_ai = ConfusedMonster(entity.ai.previous,entity.ai.number_of_turns)
+         local prev_ai = BasicMonster()
+         tmp_ai = ConfusedMonster(prev_ai,entity.ai.number_of_turns)
       end
   end
   if entity.fighter then
@@ -108,8 +109,9 @@ local function load_single_entity(entity)
 end
 
 local function load_entitys(entity_list)
-    print("----")
+    print("\n\n----")
     print("loading entities")
+    
     entities ={}
 
     for idx,entity in ipairs(entity_list) do
@@ -124,7 +126,7 @@ local function load_entitys(entity_list)
 end
 
 local function load_map(map_)
-    print("----")
+    print("\n\n----")
     print("loading up map")
     print(map_.width,map_.height)
     print(#map_.tiles)
@@ -155,9 +157,7 @@ function load_game()
    else
      
      load_map(save_.map)
-     debuger.on()
      load_entitys(save_.entities)
-     debuger.off()
      return true
    end
    

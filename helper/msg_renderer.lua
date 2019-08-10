@@ -13,7 +13,7 @@ end
 
 local function wrap_text(str,num)
   local ret = {}
-  for i = 1, string.len(str), num do
+  for i = 1, string.len(str or ""), num do
 		table.insert(ret, string.sub(str,i,i+num-1))
   end
   return ret

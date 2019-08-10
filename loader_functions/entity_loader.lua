@@ -34,6 +34,7 @@ end
 function load_enemies()
     enemie_lookup={}
     enemie_spawn_lookup={}
+    require_paths = {}
     
     print("loading mobs")
     
@@ -52,18 +53,30 @@ function load_enemies()
         print(mob_info.name)
     end
     
-    
-    
-    
-    
-    dir_stack = {}
 end
 
 
 function load_items()
-    print("loading items")
-    items =love.filesystem.getDirectoryItems("generated/items")
-    for idx, item in pairs(items) do
+    item_lookup={}
+    item_spawn_lookup={}
+    require_paths = {}
+    
+    print("\n\nloading items")
+    
+    
+    debuger.on()
+    --get all lua files in subdirectories
+    local paths =recursiveEnumerate("generated/items","")
+    
+    for idx,result_ in pairs(paths) do
+        item_info =require(result_)
         
+        item_lookup[item_info.name] =item_info
+        item_spawn_lookup[item_info.name]=item_info.chances
+        
+        print(item_info.name)
     end
+    
+    debuger.off()
+    
 end

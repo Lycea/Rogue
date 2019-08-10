@@ -65,7 +65,9 @@ function ConfusedMonster:take_turn(target)
         
         self.number_of_turns = self.number_of_turns-1
     else
+        self.previous_ai.owner = self.owner
         self.owner.ai = self.previous_ai
+        
         table.insert(results,{message=Message("The "..self.owner.name.." is no longer confused!")})
     end
     
@@ -75,7 +77,7 @@ function ConfusedMonster:take_turn(target)
 end
 
 function ConfusedMonster:save()
-    return '"ai":"ConfusedMonster", \n "previous":'..self.previous_ai:save()..',\n"number_of_turns":'..self.number_of_turns
+    return '"ai":"ConfusedMonster", \n "previous": {'..self.previous_ai:save()..'},\n"number_of_turns":'..self.number_of_turns
 end
 
 
