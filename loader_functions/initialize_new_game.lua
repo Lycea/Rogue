@@ -36,8 +36,7 @@ function init_map()
       level = map.dungeon_level
   end
   
-  load_enemies()
-  load_items()
+
   
   
   local map = GameMap(constants.map_width,constants.map_height,true,level+1)

@@ -102,9 +102,11 @@ selected_state_idx = 1
 
 function game.load() 
    constants = get_constants()
-   player,entities,message_log = get_game_variables()
    
-   --load_game()
+   load_enemies()
+   load_items()
+   
+   player,entities,message_log = get_game_variables()
 end 
  
  
