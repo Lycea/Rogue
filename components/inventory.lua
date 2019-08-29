@@ -127,21 +127,24 @@ function Inventory:drop_item(item_entity,idx)
       return results
     end
     if self.active_item+1 > self.num_items then
-      self.active_item = self.num_items -1
+      self.active_item = self.num_items - 1
     end
     
     local item = self.items[self.active_item+1]
-    
-    if item == self.owner.equippment.main_hand or item == self.owner.equipment.off_hand then
+    debuger.on()
+    if item == self.owner.equippment.main_hand or item == self.owner.equippment.off_hand then
         self.owner.equipment:toggle_equip(item)
         return
     end
+    debuger.off()
     
     
     item.x =self.owner.x
     item.y =self.owner.y
     
     table.remove(self.items,self.active_item+1) 
+    
+    self.num_items =self.num_items - 1
     
     return {item_dropped=item ,message =Message("Dropping "..item.name,constants.colors.red)}
 end
