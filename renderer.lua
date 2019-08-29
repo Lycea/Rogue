@@ -88,6 +88,33 @@ function render_all(entities,game_map,screen_width,screen_height)--could be adju
     
     if game_state == GameStates.SHOW_INVENTORY then
         invi_menue("Press key next to item to use or ESC to exit",player.inventory,constants.tile_size*1,constants.tile_size*1,constants.tile_size*30,constants.scr_height -constants.tile_size*2)
+        menue("Stats",{"Defense: "..player.fighter:get_def(),"Attack: "..player.fighter:get_power()},constants.tile_size*35,constants.tile_size*1,constants.tile_size*20,constants.tile_size*10)
+        
+        --equippment information
+        
+        slot_main = "Main hand"
+        if player.equippment.main_hand ~= nil then
+            off_info =player.equippment.main_hand.equippable
+            
+            slot_main=slot_main.."\n  Name: "..player.equippment.main_hand.name
+            slot_main=slot_main.."\n  Power: "..off_info.power or 0
+            slot_main=slot_main.."\n  Def: "..off_info.def or 0
+            slot_main=slot_main.."\n  Hp: "..off_info.health or 0
+            
+        end
+        
+        slot_off = "\nOff hand:"
+        if player.equippment.off_hand ~= nil then
+            off_info =player.equippment.off_hand.equippable
+            
+            slot_off=slot_off.."\n  Name: "..player.equippment.off_hand.name
+            slot_off=slot_off.."\n  Power: "..off_info.power or 0
+            slot_off=slot_off.."\n  Def: "..off_info.def or 0
+            slot_off=slot_off.."\n  Hp: "..off_info.health or 0
+        end
+        
+        menue("Equipment",{slot_main.."\n"..slot_off} ,constants.tile_size*35,constants.tile_size*12,constants.tile_size*20,constants.tile_size*39)
+   
     end
     
     if game_state == GameStates.LEVEL_UP then

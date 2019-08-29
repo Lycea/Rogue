@@ -285,7 +285,7 @@ function game.play(dt)
             selector_timer =love.timer.getTime()
             local old_idx = player.inventory.active_item
             player.inventory.active_item = (player.inventory.active_item+ action["inventory_idx_change"][2])%player.inventory.num_items
-            table.insert(player_results,{message=Message("Item index from "..old_idx.." to "..player.inventory.active_item,constants.colors.orange)})
+            --table.insert(player_results,{message=Message("Item index from "..old_idx.." to "..player.inventory.active_item,constants.colors.orange)})
         end
     end
     
