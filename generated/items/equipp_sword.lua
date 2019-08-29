@@ -15,7 +15,6 @@ local sword={
     tile= 0,
     
     
-    
     --item specific stuff
     ["function"] = nil,
     is_ranged = false,
@@ -24,7 +23,7 @@ local sword={
     
     
     --equipment info
-    slot =EquipmentSlots.OFF_HAND ,
+    slot =EquipmentSlots.HAND_LEFT ,
     health = 0,
     power = 5,
     def = 0
