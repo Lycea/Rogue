@@ -1,4 +1,5 @@
-
+--require("loader_functions.animation_loader")
+require("components.player_animation")
 
 
 
@@ -17,9 +18,24 @@ function get_game_variables()
   local invi_ = Inventory(26)
   
   local equipment_component = Equipment()
+  
+
+  
+  
+  
   --final init
   local player = Entity( math.floor(20),math.floor(20),0,"default","Player",true,stats_,nil,RenderOrder.ACTOR,nil,invi_,nil,Level(nil,0,20),equipment_component)
   player.last_target = 0
+  
+  player.animator = load_player_animations()
+  
+  
+  for k,v in pairs(player.animator.animations) do
+    print(k)
+    
+  end
+  
+  
   table.insert(entities,player)
   
 

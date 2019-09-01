@@ -1,5 +1,6 @@
 
 require("loader_functions.entity_loader")
+require("loader_functions.animation_loader")
 require ("loader_functions.initialize_new_game")
 require("helper.msg_renderer")
 json =require("helper.json")
@@ -73,6 +74,10 @@ targeting_item = nil
 
 targeting_tile ={x=1,y=1}
 target_range = 1
+
+
+-- container for animations
+animations = {}
 
 --others
 key_timer = 0--timer between movement

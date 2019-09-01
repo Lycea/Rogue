@@ -117,7 +117,7 @@ end
 
 
 
-function Entity:new(x,y,tile,color,name,blocks,fighter,ai,render_order,item,inventory,stairs_,level_,equippment,equippable)
+function Entity:new(x,y,tile,color,name,blocks,fighter,ai,render_order,item,inventory,stairs_,level_,equippment,equippable,animator)
     self.x = x
     self.y = y
     
@@ -139,6 +139,8 @@ function Entity:new(x,y,tile,color,name,blocks,fighter,ai,render_order,item,inve
     
     self.equippment = equippment or nil
     self.equippable = equippable or nil
+    
+    self.animator= animator or nil
     
     --set the parent to access it in the module
     if self.fighter then
@@ -264,12 +266,18 @@ end
 
 
 function Entity:draw()
+  -- draw the player
+  -- TODO add animation draw, but where to load?
   if fov_map[self.y][self.x]==true then
     
     love.graphics.setColor( constants.colors[self.color] or {255,0,0})
     love.graphics.rectangle("fill",self.x*constants.tile_size,
         self.y*constants.tile_size,constants.tile_size,constants.tile_size)
-    love.graphics.setColor(constants.colors.default)
+    love.graphics.setColor(constants.colors.default) 
+
+    
+    
+    
   end
 end
 

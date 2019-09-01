@@ -1,13 +1,13 @@
-class_base= require("externals.classic")
+class_base = require("helper.classic")
 
 
 AnimationSequence = class_base:extend()
 Animator = class_base:extend()
 
 function Animator:new(
-    sprite_path
+    sprite_file
 )
-    self.sprite_path = sprite_path
+    self.sprite_file = sprite_file
     self.animations = {}
     
 
@@ -22,8 +22,8 @@ function Animator:addAnimation(
     start_increment_y,
     end_increment_y,
     increment_width_in_px, 
-    increment_height_in_px)
-)
+    increment_height_in_px )
+
     local sequence_definitions = AnimationSequence(
       start_increment_x,
       end_increment_x,
@@ -35,8 +35,8 @@ function Animator:addAnimation(
     
     -- we want multiple animations in 1 animator so 1 entity can have a sinlge animator
     -- a sprite can contain multiple animations, so we define the sequence we want to have
-    animation = newAnimation(love.graphics.newImage(self.sprite_path), sequence_definitions)
-    table.insert( self.animations, animation_name, animation )
+    animation = self:newAnimation_( sequence_definitions )
+    self.animations[animation_name] = animation
     
     --print table to debug
     print(table)
@@ -97,7 +97,7 @@ function Animator:update(animation_name,dt)
     -- cant I just do that instead of looping?
     -- we want do restart the sequence when currentTime exceeds duration of sequence
     animi.currenTime = animi.currentTime + dt
-    if animi.currenTime >= animi.duration 
+    if animi.currenTime >= animi.duration then
         -- animation went through, reset to 0-ish value
         animi.currenTime = animi.currenTime - animi.duration
     end
@@ -123,91 +123,57 @@ function Animator:update(animation_name,dt)
 
 end
  
-function Animator:draw(animation_name)
+function Animator:draw( animation_name, pos_x, pos_y )
   
     local animi = self.animations[animation_name]
 
     -- prites numbers are kinda ints, time is kinda float, so we have to cast
     local spriteNum = math.floor(animi.currentTime / animi.duration * #animi.quads) + 1
-    love.graphics.draw(animi.spriteSheet, animi.quads[spriteNum], 0, 0, 0, 4)
+    love.graphics.draw(animi.spriteSheet, animi.quads[spriteNum], pos_x, pos_y, 0, 4)
     
-    --[[
-  
-  
-    
-    
-    if state == 0 then
-        local spriteNum = math.floor(animation.currentTime / animation.duration * #animation.quads) + 1
-        love.graphics.draw(animation.spriteSheet, animation.quads[spriteNum], 0, 0, 0, 4)
-        --counter = counter + 1
-        --[[
-        if #animation.quads == counter then
-          print("walk ends" .. counter)
-          counter = 1
-          state = 1
-        end
-        ]]--
-    else
-        local spriteNum = math.floor(animation_strike_vrt.currentTime / animation_strike_vrt.duration * #animation_strike_vrt.quads) + 1
-        
-        love.graphics.draw(animation_strike_vrt.spriteSheet, animation_strike_vrt.quads[spriteNum], 0, 0, 0, 4)
-        --counter = counter + 1
-        --[[
-        if #animation_strike_vrt.quads == counter then
-          print("strike ends" .. counter)
-          counter = 1
-          state = 0
-        end
-        ]]--
-
-    end
-    --]]
-end
+ end
  
 -- function newAnimation(image, width, height, duration)
 function Animator:newAnimation_(AnimationSequence)
   
-    local animation = {}
-    animation.spriteSheet = self.sprite_path;
+  local animation = {}
+
+print(self.sprite_file)
+    
+  if love.filesystem.exists( self.sprite_file ) then
+    animation.spriteSheet = self.sprite_file;
     animation.quads = {};
     
-    
-    
-    
-    
-    
     for y = AnimationSequence.start_increment_y_px, AnimationSequence.end_increment_y_px,AnimationSequence.increment_heigth_px do      
-      
-        for x = AnimationSequence.start_increment_x_px, AnimationSequence.end_increment_x_px, AnimationSequence.increment_width_px do
+    
+      for x = AnimationSequence.start_increment_x_px, AnimationSequence.end_increment_x_px, AnimationSequence.increment_width_px do          
+         
+        myQuad = love.graphics.newQuad(
+              x,
+              y, 
+              AnimationSequence.increment_width_px, 
+              AnimationSequence.increment_heigth_px,
+              love.graphics.newImage(self.sprite_file):getDimensions()              
+              )
+        
+        table.insert(animation.quads,myQuad)
           
-          myQuad = love.graphics.newQuad(
-                x,
-                y, 
-                AnimationSequence.increment_width_px, 
-                AnimationSequence.increment_heigth_px,
-                self.sprite_path:getDimensions()              
-                )
-          
-          table.insert(animation.quads,myQuad)
-          
-        end
+
+                      
+      end
     end
-    print(#animation.quads)
---[[
   
- 
-
-    for y = 0, image:getHeight() - height, height do
-        for x = 0, image:getWidth() - width, width do
-            table.insert(animation.quads, love.graphics.newQuad(x, y, width, height, image:getDimensions()))
-        end
-    end
-]]--
-
- 
     animation.duration = duration or 1
     animation.currentTime = 0
- 
+
+  else
+    error("File " .. self.sprite_file .. " does not exist")
+    -- TODO in the future we should have a fallback solution with a warning, not an error
+    -- We might use the corresponding rectangle (red for player, green for enemy)
+    -- but this might be the wrong place to do this. Check for animation == nil during draw?
+  
+  end
+  -- we return an empty animation = {} if sprite_file does not exist
     return animation
 end
   
