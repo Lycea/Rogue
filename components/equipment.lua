@@ -11,17 +11,22 @@ function Equipment:save()
     local txt = ""
     offset_push()
     
-    local function find_invi_idx(item_hash)
+local function find_invi_idx(item_hash)
         --iterate all item in parent inventory to find 
         --responsible item in slot ...  hacky?
         
+        debuger.on()
         --TODO: check if smth could go wrong with dropping equip and finding it here
-        for idx, item in pairs(self.owner.inventory.items) do
-            if item == item_hash then
+        for idx, item in pairs(self.owner.inventory.item_stacks) do
+            print(item,item_hash,item.item_type)
+            if item.item_type == item_hash then
                 print(idx)
                 return idx
+            else
+                print("fail....")
             end
         end
+        debuger.off()
     end
     
     
