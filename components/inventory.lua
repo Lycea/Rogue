@@ -1,5 +1,6 @@
 Item = class_base:extend()
 Inventory = class_base:extend()
+ItemStack = class_base:extend()
 
 function Item:new(use_function,targeting,targeting_message,args)
     self.use_function  = use_function or nil
@@ -69,17 +70,48 @@ end
 
 
 
+
+function ItemStack:new(item)
+    self.max_stack = item.max_stack or 10
+    self.stack_size = 1
+    self.item_type = item
+end
+
+function ItemStack:get_type()
+    return self.item_type.name
+end
+
+
+function ItemStack:add_item()
+    self.stack_size = self.stack_size+1
+end
+
+function ItemStack:remove_item()
+    self.stack_size = self.stack_size-1
+    return self.stack_size
+end
+
+function ItemStack:has_space()
+    return self.stack_size < self.max_stack
+end
+
+
 function Inventory:new(slots)
     self.capacity =slots
-    self.items = {}
+    self.item_stacks = {}
     self.num_items = 0
     self.active_item = 0
+    self.num_stacks = 0
+    self.item_list ={}
+    
+    self.stack_lookup ={}
 end
 
 
 function Inventory:save()
     local content =""
     
+    debuger.on()
     offset_push()
     local capacity = add_offset()..'"capacity":'..self.capacity..",\n"
     local num_items = add_offset()..'"num_items":'..self.num_items..",\n"
@@ -88,14 +120,18 @@ function Inventory:save()
     local items=add_offset()..'"items":[\n'
     local tmp_item_list ={}
     
-    for idx,item in pairs(self.items) do
-        table.insert(tmp_item_list,"{\n"..item:save().."\n}")
+    for idx,stack in pairs(self.item_stacks) do
+        for counter_=1,stack.stack_size do
+            table.insert(tmp_item_list,"{\n"..stack.item_type:save().."\n}")
+            
+        end
         --items=items.."{\n"..item:save().."\n}\n"
     end
     items = items..table.concat(tmp_item_list,",\n")
     items=items.."]"
     
     offset_pop()
+    debuger.off()
     return content..capacity..num_items..active_item..items
 end
 
@@ -119,10 +155,30 @@ local function merge_lists(a,b)
     return new
 end
 
+function Inventory:decrease_stack(item)
+    if self.item_stacks[self.active_item+1].stack_size == 1 then
+      for idx,stack in pairs(self.stack_lookup[item.owner.name]) do
+        if stack == self.item_stacks[self.active_item+1] then
+            table.remove(self.stack_lookup[item.owner.name],idx)
+        end
+      end
+      
+          
+      table.remove(self.item_stacks,self.active_item+1)
+      self.num_stacks=self.num_stacks -1
+    else
+      self.item_stacks[self.active_item+1].stack_size=self.item_stacks[self.active_item+1].stack_size-1
+    end
+  
+    --table.remove(self.items,self.active_item+1) 
+    self.num_items = self.num_items-1
+end
+
+
 
 function Inventory:drop_item(item_entity,idx)
-    if self.num_items == 0 then
-      results={message=Message("No item there to be used",constants.colors.orange)}
+    if self.num_stacks == 0 then
+      results={message=Message("No item there to be droppd",constants.colors.orange)}
       print("nothing used...")
       return results
     end
@@ -130,23 +186,23 @@ function Inventory:drop_item(item_entity,idx)
       self.active_item = self.num_items - 1
     end
     
-    local item = self.items[self.active_item+1]
     debuger.on()
+    local item = self.item_stacks[self.active_item+1].item_type.item
+    
     if item == self.owner.equippment.main_hand or item == self.owner.equippment.off_hand then
         self.owner.equipment:toggle_equip(item)
         return
     end
-    debuger.off()
+    
     
     
     item.x =self.owner.x
     item.y =self.owner.y
     
-    table.remove(self.items,self.active_item+1) 
+    self:decrease_stack(item)
     
-    self.num_items =self.num_items - 1
-    
-    return {item_dropped=item ,message =Message("Dropping "..item.name,constants.colors.red)}
+    debuger.off()
+    return {item_dropped=item.owner ,message =Message("Dropping "..item.owner.name,constants.colors.red)}
 end
 
 
@@ -170,8 +226,8 @@ function Inventory:use(item_entity,idx,args)
     end
     
     --get the item~
-    local item = self.items[self.active_item+1].item
-     
+    local item = self.item_stacks[self.active_item+1].item_type.item
+    debuger.on() 
     --check if the item is usable
     if item.use_function == nil then
         if item.owner.equippable then
@@ -185,7 +241,7 @@ function Inventory:use(item_entity,idx,args)
         if item.targeting == true and not args["target_x"] then
             
             target_range = item.function_args["radius"] or item.function_args["max_range"]
-            table.insert(results,{targeting= self.items[self.active_item+1]})
+            table.insert(results,{targeting= self.item_stacks[self.active_item+1]})
             
         else
             args = merge_lists(args,item.function_args)
@@ -193,17 +249,38 @@ function Inventory:use(item_entity,idx,args)
             local use_results =item.use_function(self.owner,args)
             for k,result in pairs(use_results) do
                if result["consumed"] then
+                   self:decrease_stack(item)
                  --print("removing item...")
-                  table.remove(self.items,self.active_item+1) 
+                  --[[if self.item_stacks[self.active_item+1].stack_size == 1 then
+                      for idx,stack in pairs(self.stack_lookup[item.owner.name]) do
+                        if stack == self.item_stacks[self.active_item+1] then
+                            table.remove(self.stack_lookup[item.owner.name],idx)
+                        end
+                      end
+                      
+                          
+                      table.remove(self.item_stacks,self.active_item+1)
+                      self.num_stacks=self.num_stacks -1
+                  else
+                    self.item_stacks[self.active_item+1].stack_size=self.item_stacks[self.active_item+1].stack_size-1
+                  end
+                  
+                  
+                 
+                  --table.remove(self.items,self.active_item+1) 
                   self.num_items = self.num_items-1
-               end
+                  ]]
+                end
             end
+            
             for key,result in ipairs(use_results) do
               table.insert(results,result)
             end
         end
     end
-
+    
+    debuger.off()
+    
     return results
 end
 
@@ -211,12 +288,50 @@ end
 function Inventory:add_item(item,id)
     local results={}
     
-    if self.num_items >=self.capacity then
-        results ={message =Message("No space left,cannot pick up item!!",constants.colors.orange)}
+    if self.num_items >= self.capacity then
+        results ={message = Message("No space left,cannot pick up item!!",constants.colors.orange)}
     else
         results ={message = Message("Picked up "..item.name:upper(),constants.colors.white),item_added = id}
-        table.insert(self.items,item)
+       
+       if self.stack_lookup[item.name] then
+        local added = false
+        --table.sort(self.stack_lookup[item.name], function (a,b) return a.num_items >b.num_items end)
+        
+        --iterate all available stacks
+        for idx,stack in ipairs(self.stack_lookup[item.name]) do
+           if stack:has_space() then
+             stack:add_item()
+             added = true 
+             self.num_items = self.num_items+1
+             break
+           end
+        end
+        
+        --we could not add it so probably the stack was full, soooo create a new one and add it
+        if added == false then
+            item.owner = self.owner
+            local new_stack = ItemStack(item)
+            table.insert(self.stack_lookup[item.name],new_stack)
+            table.insert(self.item_stacks,new_stack)
+            self.num_stacks = self.num_stacks+1
+            self.num_items = self.num_items+1
+        end
+        
+        
+       else
+        debuger.on()
+        item.owner = self.owner
+        local new_stack = ItemStack(item)
+        self.stack_lookup[item.name]={}
+        table.insert(self.stack_lookup[item.name],new_stack)
+        table.insert(self.item_stacks,new_stack)
+        self.num_stacks = self.num_stacks+1
         self.num_items = self.num_items+1
+        debuger.off()
+       end
+           
+        --table.insert(self.items,item)
+        --self.num_items = self.num_items+1
     end
     
     return results

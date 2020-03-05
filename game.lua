@@ -251,7 +251,7 @@ function game.play(dt)
         
        debuger.on()
        --table.insert(player_results,{message=Message("trying to use item... no result",colors.orange)})
-       local results_usage =player.inventory:use(player.inventory.items[player.inventory.active_item+1],player.inventory.active_item+1,{colors=constants.colors,entities =entities})
+       local results_usage =player.inventory:use(player.inventory.item_stacks[player.inventory.active_item+1],player.inventory.active_item+1,{colors=constants.colors,entities =entities})
        
        local consumed_item = false
        for i,result in pairs(results_usage) do
@@ -270,7 +270,7 @@ function game.play(dt)
     end
     
     if action["drop_item"]then
-        local results_drop =player.inventory:drop_item(player.inventory.items[player.inventory.active_item+1],player.inventory.active_item+1,{})
+        local results_drop =player.inventory:drop_item(player.inventory.item_stacks[player.inventory.active_item+1],player.inventory.active_item+1,{})
        table.insert(player_results,results_drop)
        break
     end
@@ -284,7 +284,7 @@ function game.play(dt)
         if selector_timer+0.3 < love.timer.getTime() then
             selector_timer =love.timer.getTime()
             local old_idx = player.inventory.active_item
-            player.inventory.active_item = (player.inventory.active_item+ action["inventory_idx_change"][2])%player.inventory.num_items
+            player.inventory.active_item = (player.inventory.active_item+ action["inventory_idx_change"][2])%player.inventory.num_stacks
             --table.insert(player_results,{message=Message("Item index from "..old_idx.." to "..player.inventory.active_item,constants.colors.orange)})
         end
     end
@@ -345,6 +345,7 @@ function game.play(dt)
            game_state = GameStates.LEVEL_UP
         end
     end
+    
     
     if result["equip"] then
         

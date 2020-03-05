@@ -80,13 +80,13 @@ local function load_single_entity(entity)
     tmp_equippment = Equipment()
     debuger.on()
     if entity.equippment.main_hand then
-        main_equip =tmp_inventory.items[entity.equippment.main_hand.invi_idx]
+        main_equip =tmp_inventory.item_stacks[entity.equippment.main_hand.invi_idx].item_type
         
         tmp_equippment:toggle_equip(main_equip)
     end
     
     if entity.equippment.off_hand then
-        off_equip =entity.inventory.items[entity.equippment.off_hand.invi_idx]
+        off_equip =tmp_inventory.item_stacks[entity.equippment.off_hand.invi_idx].item_type
         tmp_equippment:toggle_equip(off_equip)
     end
     debuger.off()
@@ -119,6 +119,7 @@ local function load_entitys(entity_list)
        table.insert(entities,tmp_entity)
         if entity.name == "Player"then
             player = tmp_entity
+            player.last_target = 0
         end
     end
     

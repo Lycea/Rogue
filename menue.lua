@@ -58,14 +58,16 @@ end
 
 function invi_menue(header,inventory,x,y,width,height)
  local options ={}
- if inventory.num_items == 0 then
+ debuger.on()
+ if inventory.num_stacks == 0 then
      options={"No item in the inventory"}
      else
-         for _,item in pairs(inventory.items)do
-            table.insert(options,item.name)
+         for _,stack in pairs(inventory.item_stacks)do
+            table.insert(options,stack.stack_size.." x "..stack.item_type.name)
          end
      end
      menue(header,options,x,y,width,height,inventory.active_item+1)
+  debuger.off()
 end
 
 
