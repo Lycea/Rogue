@@ -59,7 +59,22 @@ function render_all(entities,game_map,screen_width,screen_height)--could be adju
     
     
     
-    table.sort(entities,function (a,b) return a.render_order < b.render_order  end)
+    --sort with a halfway stable sort
+    table.sort(entities,
+        function (a,b) 
+            r =false
+            if a.render_order < b.render_order then
+                r = true
+            elseif a.render_order == b.render_order then
+                if a.name<b.name then
+                    r=true
+                else
+                    r=false
+                end
+            end
+            return r
+        end)
+    
     for key,entity in pairs(entities) do
       draw_entity(entity)
     end
