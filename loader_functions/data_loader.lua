@@ -1,6 +1,8 @@
 offset_level   = 0
 offset_p_level = 2
 
+
+local file_version = {1,0,0,0}
 -----------------------------
 --save game helper functions
 -----------------------------
@@ -21,6 +23,31 @@ function add_offset()
     return string.rep(" ",offset_p_level*offset_level)
 end
 
+
+function save_game()
+   --load_game()
+    
+   offset_level = 0
+   file =io.open("save.json","w")
+   
+   entities_='{'..'"file_version":{'..table.concat(file_version,",")..'}, \n "entities":['
+   offset_push()
+   for idx,entity in pairs(entities) do
+       offset_push()
+       entities_= entities_.."\n"..add_offset().."{\n"..entity:save()..add_offset().."},"
+       offset_pop()
+   end
+   entities_ = string.sub(entities_,0,-1)
+   entities_ = entities_.."\n],"
+
+   map_ = '"map":{'..map:save().."\n}}"
+    file:write(entities_..map_)
+    file:close()    
+end
+
+-----------------------------
+--load game helper functions
+-----------------------------
 
 local function load_single_entity(entity)
   local tmp_ai         = nil
@@ -166,23 +193,4 @@ function load_game()
 end
 
 
-function save_game()
-   --load_game()
-    
-   offset_level = 0
-   file =io.open("save.json","w")
-   
-   entities_='{"entities":['
-   offset_push()
-   for idx,entity in pairs(entities) do
-       offset_push()
-       entities_= entities_.."\n"..add_offset().."{\n"..entity:save()..add_offset().."},"
-       offset_pop()
-   end
-   entities_ = string.sub(entities_,0,-1)
-   entities_ = entities_.."\n],"
 
-   map_ = '"map":{'..map:save().."\n}}"
-    file:write(entities_..map_)
-    file:close()    
-end

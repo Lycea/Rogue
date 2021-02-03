@@ -11,7 +11,9 @@ function Tile:new(blocked,block_sight)
   self.block_sight =block_sight
 end
 
-function Tile:save()
+function Tile:save(position)
+    
+    
     local tmp_tile =""
     offset_push()
     local block = self.blocked==true and '"blocked": true' or '"blocked": false'
@@ -21,6 +23,13 @@ function Tile:save()
     
     tmp_tile= tmp_tile .. "\n"..add_offset()..explored..","
     tmp_tile= tmp_tile .. "\n"..add_offset()..block_sight
+    
+    
+    if position ~= nil then
+        tmp_tile= tmp_tile ..",\n"..add_offset()..'"x": '..position.x..","
+        tmp_tile= tmp_tile .."\n" ..add_offset()..'"y": '..position.y
+    end
+    
     
     offset_pop()
     

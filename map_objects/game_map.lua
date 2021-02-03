@@ -44,7 +44,7 @@ function GameMap:save()
         tiles_tmp={}
         offset_push()
         for idx_x,tile in ipairs(row)do
-            table.insert(tiles_tmp,add_offset().."{"..tile:save().."}\n")
+            table.insert(tiles_tmp,add_offset().."{"..tile:save({x=idx_x,y=idx_y}).."}\n")
         end
         offset_pop()
         table.insert(rows_tmp,add_offset().."[\n"..table.concat(tiles_tmp,",\n").."\n"..add_offset().."]")
