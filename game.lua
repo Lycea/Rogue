@@ -376,6 +376,11 @@ function game.play(dt)
     end
     if result["item_dropped"] then
         game_state = GameStates.ENEMY_TURN
+        
+        --setting x and y of the item to the player since we want
+        --it to drop underneath
+        result["item_dropped"].x=player.x
+        result["item_dropped"].y=player.y
         table.insert(entities,result["item_dropped"])
     end
     
