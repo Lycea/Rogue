@@ -39,23 +39,26 @@ function GameMap:save()
     
     local tiles_tmp ={}
     local rows_tmp={}
-    
-    save_txt = save_txt..add_offset()..'"tiles":[\n'
+    debuger:on()
+    save_txt = save_txt..add_offset()..'"tiles":'
     for idx_y,row in ipairs(self.tiles) do
-        tiles_tmp={}
         offset_push()
         for idx_x,tile in ipairs(row)do
-            table.insert(tiles_tmp,add_offset().."{"..tile:save({x=idx_x,y=idx_y}).."}\n")
+            if tile.empty == false then
+                table.insert(tiles_tmp,add_offset().."{"..tile:save({x=idx_x,y=idx_y}).."}\n")
+            end
         end
         offset_pop()
-        table.insert(rows_tmp,add_offset().."[\n"..table.concat(tiles_tmp,",\n").."\n"..add_offset().."]")
+
     end
     
+    table.insert(rows_tmp,add_offset().."[\n"..table.concat(tiles_tmp,",\n").."\n"..add_offset().."]")
+    debuger:off()
     offset_pop()
     
     
-    save_txt = save_txt..table.concat(rows_tmp,",\n")..add_offset()
-    save_txt = save_txt.."\n"..add_offset().."]\n"
+    save_txt = save_txt..rows_tmp[1]..add_offset()
+    save_txt = save_txt.."\n"
     return save_txt
 end
 

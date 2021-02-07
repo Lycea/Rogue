@@ -2,7 +2,11 @@ offset_level   = 0
 offset_p_level = 2
 
 
-local file_version = {1,0,0,0}
+local file_version = {1,1,0,0}
+
+
+local loading_version= {}
+local version_string =""
 -----------------------------
 --save game helper functions
 -----------------------------
@@ -158,17 +162,32 @@ local function load_map(map_)
     print("loading up map")
     print(map_.width,map_.height)
     print(#map_.tiles)
-    
+    debuger:on()
     map = GameMap(map_.width,map_.height,true,map_.dungeon_level)
-    for idx_y,row in ipairs(map_.tiles) do
-        for idx_x,tile in ipairs(row) do
-            map.tiles[idx_y][idx_x].blocked = tile.blocked
+    
+    --check which version is used since we changed something in there then
+    if loading_version == "1.0.0.0" then
+        --load up the old way, every , single,tile
+        for idx_y,row in ipairs(map_.tiles) do
+            for idx_x,tile in ipairs(row) do
+                map.tiles[idx_y][idx_x].blocked = tile.blocked
+                
+                map.tiles[idx_y][idx_x].explored = tile.explored
+                map.tiles[idx_y][idx_x].block_sight = tile.block_sight
+            end
+        end
+    else
+        --load up the new way, all tiles by tile x and y
+        for idx_y,tile in ipairs(map_.tiles) do
+            local xpos,ypos = tile.x,tile.y
+            map.tiles[tile.y][tile.x].blocked = tile.blocked
             
-            map.tiles[idx_y][idx_x].explored = tile.explored
-            map.tiles[idx_y][idx_x].block_sight = tile.block_sight
+            map.tiles[tile.y][tile.x].explored = tile.explored
+            map.tiles[tile.y][tile.x].block_sight = tile.block_sight
+        
         end
     end
-    
+    debuger:off()
     print("----")
 end
 
@@ -183,7 +202,11 @@ function load_game()
    if error_ == false then
       return false
    else
+     loading_version = save_.file_version
+     version_string  = table.concat(loading_version,".")
      
+     print("loading save version:  "..version_string,".")
+ 
      load_map(save_.map)
      load_entitys(save_.entities)
      return true
