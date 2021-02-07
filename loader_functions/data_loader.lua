@@ -30,7 +30,7 @@ function save_game()
    offset_level = 0
    file =io.open("save.json","w")
    
-   entities_='{'..'"file_version":{'..table.concat(file_version,",")..'}, \n "entities":['
+   entities_='{'..'"file_version":['..table.concat(file_version,",")..'], \n "entities":['
    offset_push()
    for idx,entity in pairs(entities) do
        offset_push()

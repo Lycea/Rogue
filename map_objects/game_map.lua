@@ -23,7 +23,8 @@ function GameMap:new(width,height,bare,level)
   end
   
   self.dungeon_level = level
-  if bare ~= false then
+  if bare == false then
+      print("creating map....")
     self.make_map(self)
   end
 end

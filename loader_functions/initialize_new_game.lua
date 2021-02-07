@@ -40,7 +40,7 @@ function init_map()
 
   
   
-  local map = GameMap(constants.map_width,constants.map_height,true,level+1)
+  local map = GameMap(constants.map_width,constants.map_height,false,level+1)
   local fov_map=compute_fov(map)
   print("Player_x:"..player.x)
   print("Player_y:"..player.y)
