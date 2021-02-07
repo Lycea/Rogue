@@ -68,6 +68,7 @@ function GameMap:initialize_tiles()
     for x=1,self.width do
       --tmp_tiles[y][x]=Tile(false)
       tmp_tiles[y][x]=Tile(true)  --for generation purpose ?
+      tmp_tiles[y][x].empty=true
     end
   end
   return tmp_tiles
@@ -83,6 +84,8 @@ function GameMap:create_h_tunnel(x1,x2,y)
     --print(x,y)
     self.tiles[y][x].blocked=false
     self.tiles[y][x].block_sight=false
+    
+    self.tiles[y][x].empty=false
   end
 end
 
@@ -90,6 +93,8 @@ function GameMap:create_v_tunnel(y1,y2,x)
   for y=math.min(y1,y2),math.max(y1,y2) do
     self.tiles[y][x].blocked=false
     self.tiles[y][x].block_sight=false
+    
+    self.tiles[y][x].empty=false
   end
 end
 
@@ -99,6 +104,8 @@ function GameMap:create_room(room)
     for y=room.y1+1,room.y2 do
       self.tiles[y][x].blocked = false
       self.tiles[y][x].block_sight = false
+      
+      self.tiles[y][x].empty=false
     end
   end
 
