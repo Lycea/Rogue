@@ -11,5 +11,7 @@ GameStates.SHOW_INVENTORY = 4
 GameStates.TARGETING      = 5
 GameStates.LEVEL_UP       = 6
 
+GameStates.MAGIC          = 7
+
 
 

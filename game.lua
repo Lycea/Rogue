@@ -94,6 +94,8 @@ selected_state_idx = 1
 -- special data fields for debugging / testing only 
 ----------------------------------------------------------- 
 
+text_content = ""
+save_text    = false
 
 
 
@@ -313,6 +315,26 @@ function game.play(dt)
         game_state = GameStates.PLAYERS_TURN 
     end
     
+    
+    --magic actions
+    if action["enter_command"] then
+        print("send command...")
+        save_text = false
+        game_state = GameStates.PLAYERS_TURN
+    end
+    
+    if action["remove_last"]then
+       text_content= string.sub(text_content,1,-2)
+       print(text_content)
+    end
+    
+    if action["enable_magic"] then
+       print("now magic is happening :3")
+       game_state = GameStates.MAGIC
+       save_text = true
+       
+       
+    end
 
   end
   
@@ -446,6 +468,8 @@ function game.play(dt)
       end
       
       game_state = game_state ==GameStates.PLAYER_DEAD and game_state or  GameStates.PLAYERS_TURN
+  --elseif game_state == GameStates.MAGIC then
+      
   end
 end 
  
@@ -546,6 +570,14 @@ function game.MouseMoved(mx,my)
   mouse_coords={mx,my}
 end 
  
- 
+function game.TextInput(text)
+     if save_text == true then
+         text_content=text_content..text
+        print(text_content)
+     else
+        print(text)
+     end
+     
+end
 
 return game
