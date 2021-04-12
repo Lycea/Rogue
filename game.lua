@@ -12,7 +12,7 @@ require("helper.random_utils")
 
 require("map_objects.game_map")
 require("fov_functions")
-require("game_states")
+require("states.game_states")
 
 require("components.fighter")
 require("components.ai")
