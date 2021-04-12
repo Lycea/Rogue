@@ -126,6 +126,7 @@ function game.play(dt)
   for key,v in pairs(key_list) do
     local action=handle_keys(key)--get key callbacks
     
+    GameStates.states[game_state]:handle_action(action)
     
     --Players turn and keys used
     
@@ -433,42 +434,8 @@ function game.play(dt)
   if game_state == GameStates.ENEMY_TURN then
     --message_log:add_message(Message("Enemy turn start",colors.white))
       
-      for k,entity in pairs(entities) do
-        --check if it is a entity with some behaviour
-        if entity.ai then
-          --console.print("The "..entity.name.." thinks about its life.")
-          local turn_result =entity.ai:take_turn(player)
-          
-          for k,result in pairs(turn_result) do
-            if result.message then
-              --console.print(result.message)
-              message_log:add_message(result.message)
-            elseif result.dead then
-              local msg =""
-              
-              if result.dead.name == "Player"then
-                 msg,game_state =  kill_player() 
-              else
-                  msg = kill_monster(result.dead)
-              end
-              --console.print(msg)
-              message_log:add_message(msg)
-              
-              if game_state == GameStates.PLAYER_DEAD then
-                  break
-              end
-            end
-          end
-        end
-        
-        if game_state == GameStates.PLAYER_DEAD then
-            break
-        end
-        
-      end
-      
-      game_state = game_state ==GameStates.PLAYER_DEAD and game_state or  GameStates.PLAYERS_TURN
-  --elseif game_state == GameStates.MAGIC then
+     GameStates.states[GameStates.ENEMY_TURN].update()
+  elseif game_state == GameStates.MAGIC then
       
   end
 end 
