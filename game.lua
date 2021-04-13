@@ -126,7 +126,9 @@ function game.play(dt)
   for key,v in pairs(key_list) do
     local action=handle_keys(key)--get key callbacks
     
-    GameStates.states[game_state]:handle_action(action)
+    if GameStates.states[game_state]:handle_action(action) == false then
+      break
+    end
     
     --Players turn and keys used
     
@@ -136,50 +138,7 @@ function game.play(dt)
         print("save generated")
     end
     
-    if action["move"] and game_state==GameStates.PLAYERS_TURN then
-      if love.timer.getTime()> key_timer+0.1 then
-        local dirs=action["move"]
-        local dest_x = player.x+dirs[1]
-        local dest_y = player.y+dirs[2]
-        
-        if not map:is_blocked(dest_x,dest_y)then
-          local target = get_blocking_entitis_at_location(dest_x,dest_y)
-          if target ~=nil then
-            player_results = player.fighter:attack(target)
-            
-            -- we dont need to remember a dead target, but a living one to draw hp bar
-            if target.fighter.hp > 0 then
-              player.last_target = target
-            else
-              player.last_target = 0
-            end
-          else
-            player:move(dirs[1],dirs[2])
-            fov_recompute=true
-           
-          end
-          key_timer=love.timer.getTime()
-          game_state = GameStates.ENEMY_TURN
-           break
-        end
-        
-        
-      end
-    end
-    
-    
-    if action["pickup"] and game_state ==GameStates.PLAYERS_TURN then
-        debuger.on()
-        for _,entity in pairs(entities) do
-           if entity.x == player.x and entity.y == player.y and entity.item then
-              local result =player.inventory:add_item(entity,_)
-               
-              table.insert(player_results,result)
-              
-           end
-        end
-        debuger.off()
-    end
+
     
     
     if action["target_set"] then
@@ -208,18 +167,7 @@ function game.play(dt)
         end
     end
     
-    if action["use_stairs"] then
-       
-         for _,entity in pairs(entities) do
-             
-             
-           if entity.x == player.x and entity.y == player.y and entity.name == "stairs" then
-              local result = Message("going down ...",constants.colors.yellow)
-              map,fov_map =init_map()
-              message_log:add_message(result)
-           end
-        end
-    end
+
     
     
     
@@ -242,79 +190,12 @@ function game.play(dt)
     end
     
     
-    if action["show_inventory"] then
-        if game_state ~= GameStates.SHOW_INVENTORY then
-            previous_game_state = game_state
-            game_state = GameStates.SHOW_INVENTORY
-            player.inventory.active_item =1
-        end
-    end
+
     
-    if action["use_item"] then
-        
-       debuger.on()
-       --table.insert(player_results,{message=Message("trying to use item... no result",colors.orange)})
-       local results_usage =player.inventory:use(player.inventory.item_stacks[player.inventory.active_item+1],player.inventory.active_item+1,{colors=constants.colors,entities =entities})
-       
-       local consumed_item = false
-       for i,result in pairs(results_usage) do
-           if result.consumed == true then
-            consumed_item = true
-           end
-           table.insert(player_results,result)
-           
-       end
-       
-       debuger.off()
-       if consumed_item == true then
-         break
-       end
-       
-    end
-    
-    if action["drop_item"]then
-        local results_drop =player.inventory:drop_item(player.inventory.item_stacks[player.inventory.active_item+1],player.inventory.active_item+1,{})
-       table.insert(player_results,results_drop)
-       break
-    end
+
     
     
-    
-    
-    
-    
-    if action["inventory_idx_change"] then
-        if selector_timer+0.3 < love.timer.getTime() then
-            selector_timer =love.timer.getTime()
-            local old_idx = player.inventory.active_item
-            player.inventory.active_item = (player.inventory.active_item+ action["inventory_idx_change"][2])%player.inventory.num_stacks
-            --table.insert(player_results,{message=Message("Item index from "..old_idx.." to "..player.inventory.active_item,constants.colors.orange)})
-        end
-    end
-    
-    
-    if action["state_selection_change"] then
-        if selector_timer+0.3 < love.timer.getTime() then
-            selector_timer =love.timer.getTime()
-        
-            selected_state_idx = selected_state_idx + action["state_selection_change"][2]
-            if selected_state_idx == 0 then
-                selected_state_idx =3
-            elseif selected_state_idx == 4 then
-                selected_state_idx=1
-            end
-            
-        end
-    end
-    
-    if action["selected_state"] then
-        player.fighter:increase_state(getSelectedStateName(selected_state_idx))
-        
-        print(getSelectedStateName(selected_state_idx).." was increased")
-        
-        selected_state_idx = 1
-        game_state = GameStates.PLAYERS_TURN 
-    end
+
     
     
     --magic actions
