@@ -31,12 +31,12 @@ function tmp_function.init(base_state)
           player.fighter:increase_state(getSelectedStateName(selected_state_idx))
           
           print(getSelectedStateName(selected_state_idx).." was increased")
-          
+       
           selected_state_idx = 1
           game_state = GameStates.PLAYERS_TURN 
       end
       
-      return true
+      return {true,{}}
     end
     
     function level_up_state:draw()

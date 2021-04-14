@@ -1,5 +1,5 @@
-
-require("loader_functions.entity_loader")
+global = {}
+global.loader =require("loader_functions.entity_loader")
 require ("loader_functions.initialize_new_game")
 require("helper.msg_renderer")
 json =require("helper.json")
@@ -43,7 +43,7 @@ local base={}
 ------------------------------------------------------------ 
 --Base data fields 
 ------------------------------------------------------------ 
- 
+
 
 constants = nil
 
@@ -119,6 +119,7 @@ end
 
  
 
+
 function game.play(dt) 
   --handler for the keys
   local player_results ={}
@@ -126,49 +127,22 @@ function game.play(dt)
   for key,v in pairs(key_list) do
     local action=handle_keys(key)--get key callbacks
     
-    if GameStates.states[game_state]:handle_action(action) == false then
+    local action_results = GameStates.states[game_state]:handle_action(action)
+    debuger.on()
+    for _,result in pairs(action_results[2]) do
+        table.insert(player_results,result)
+    end
+    debuger.off()
+    
+    if action_results[1] == false then
       break
     end
-    
-    --Players turn and keys used
     
     if action["save"] then
         print("test_save")
         save_game()
         print("save generated")
     end
-    
-
-    
-    
-    if action["target_set"] then
-       local results_usage =player.inventory:use(player.inventory.items[player.inventory.active_item+1],player.inventory.active_item+1,{colors=colors,entities =entities,target_x = targeting_tile.x,target_y = targeting_tile.y})
-       local consumed_item = false
-       
-       for i,result in pairs(results_usage) do
-           if result.consumed == true then
-            consumed_item = true
-           end
-           table.insert(player_results,result)
-       end
-       
-       if consumed_item == true then
-         break
-       end
-   
-   end
-    
-    if action["target_idx_change"] then
-        if love.timer.getTime()> target_timer+0.1 then
-            local change = action["target_idx_change"]
-            targeting_tile.x = targeting_tile.x +change[1]
-            targeting_tile.y = targeting_tile.y +change[2]
-            target_timer =love.timer.getTime()
-        end
-    end
-    
-
-    
     
     
     if action["exit"]  then
@@ -189,26 +163,8 @@ function game.play(dt)
         
     end
     
-    
 
-    
 
-    
-    
-
-    
-    
-    --magic actions
-    if action["enter_command"] then
-        print("send command...")
-        save_text = false
-        game_state = GameStates.PLAYERS_TURN
-    end
-    
-    if action["remove_last"]then
-       text_content= string.sub(text_content,1,-2)
-       print(text_content)
-    end
     
     if action["enable_magic"] then
        print("now magic is happening :3")

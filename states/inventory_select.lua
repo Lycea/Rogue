@@ -5,7 +5,7 @@ local tmp_function={}
 function tmp_function.init(base_state)
 
     local inventory_state = base_state:extend()
-
+    
 
 
     function inventory_state:new()
@@ -13,6 +13,8 @@ function tmp_function.init(base_state)
     end
 
     function inventory_state:handle_action(action)
+      local player_results ={}
+      
       if action["use_item"] then
           
          debuger.on()
@@ -30,7 +32,7 @@ function tmp_function.init(base_state)
          
          debuger.off()
          if consumed_item == true then
-           return false
+           return {false,player_results}
          end
       end
       
@@ -38,7 +40,7 @@ function tmp_function.init(base_state)
       if action["drop_item"]then
           local results_drop =player.inventory:drop_item(player.inventory.item_stacks[player.inventory.active_item+1],player.inventory.active_item+1,{})
          table.insert(player_results,results_drop)
-         return false
+         return {false,player_results}
       end
       
       
@@ -51,7 +53,7 @@ function tmp_function.init(base_state)
           end
       end
       
-      return true
+      return {true,player_results}
     end
     
     

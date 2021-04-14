@@ -13,6 +13,7 @@ function tmp_function.init(base_state)
     end
 
     function player_turn:handle_action(action)
+      local player_results ={}
       
       --moving keys where pressed ..
       if action["move"] and game_state==GameStates.PLAYERS_TURN then
@@ -37,9 +38,10 @@ function tmp_function.init(base_state)
               fov_recompute=true
              
             end
+            
             key_timer=love.timer.getTime()
             game_state = GameStates.ENEMY_TURN
-            return false
+            return {false,player_results}
           end
         end
       end
@@ -89,7 +91,7 @@ function tmp_function.init(base_state)
       
       
       
-      return true
+      return {true,player_results}
     --function end ...
     end
     
