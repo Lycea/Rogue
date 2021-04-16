@@ -4,6 +4,7 @@ require ("loader_functions.initialize_new_game")
 require("helper.msg_renderer")
 json =require("helper.json")
 
+require("states.game_states")
 require("entity")
 require("key_handle")
 require("renderer")
@@ -12,7 +13,7 @@ require("helper.random_utils")
 
 require("map_objects.game_map")
 require("fov_functions")
-require("states.game_states")
+
 
 require("components.fighter")
 require("components.ai")

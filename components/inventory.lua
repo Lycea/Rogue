@@ -241,7 +241,9 @@ function Inventory:use(item_entity,idx,args)
         if item.targeting == true and not args["target_x"] then
             
             target_range = item.function_args["radius"] or item.function_args["max_range"]
-            table.insert(results,{targeting= self.item_stacks[self.active_item+1]})
+            
+            table.insert(results,{message=Message("trying to target a item...",constants.colors.orange)})
+            table.insert(results,{targeting= self.item_stacks[self.active_item+1].item_type})
             
         else
             args = merge_lists(args,item.function_args)

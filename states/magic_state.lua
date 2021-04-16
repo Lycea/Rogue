@@ -19,10 +19,42 @@ end
 
 
 
+local function run_set(word_list)
+  
+end
+
+local function run_get(word_list)
+  
+end
+
+local function run_call(word_list)
+  
+end
+
+local function run_command(word_list)
+  
+end
 
 
+local function parse_command(command)
+ local words = string.split(command," ")
+ if #words <2 then
+    print("we cannot parse this, awaiting more then 1 word!")
+    print(command)
+    return false
+ end
+ 
+ return words
+ 
+end
 
-
+local run_lookup_table={
+  ["set"]= run_set,
+  ["get"]= run_get,
+  ["call"]= run_get,
+  ["command"]=run_command,
+  
+  }
 
 
 function tmp_function.init(base_state)
@@ -43,22 +75,32 @@ function tmp_function.init(base_state)
             
             
             print("my command:",text_content)
+            local response =parse_command(text_content)
             
+            if response == false then
+              return
+            else
+              local tokens_ =string.split(text_content,"%.")
             
+              print(_G)
+              
+              base_ = _G
+              for _,tok in pairs(tokens_) do
+                 if type(base_) ~= type({}) then
+                   print("max level reached, there is nothing lower here....")
+                   print(tokens_[_-1])
+                   break
+                 end
+                 base_=base_[tok] 
+              end
+              
+              print(base_)
+            end
             --tokening thing ....
             
-            local tokens_ =string.split(text_content,"%.")
             
-            print(_G)
-            
-            base_ = _G
-            for _,tok in pairs(tokens_) do
-               base_=base_[tok] 
-            end
-            
-            print(base_)
             debuger.off()
-               print("magic ends here :(")
+            print("magic ends here :(")
             
             save_text = false
             text_content=""
