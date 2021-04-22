@@ -1,0 +1,714 @@
+{"file_version":[1,1,0,0], 
+ "entities":[
+    {
+      "x":48,
+      "y":35,
+      "color":"dark_red",
+      "name":"remains of Goblin",
+      "blocks": false,
+      "render_order":1
+    },
+    {
+      "x":75,
+      "y":19,
+      "color":"dark_red",
+      "name":"remains of Goblin",
+      "blocks": false,
+      "render_order":1
+    },
+    {
+      "x":75,
+      "y":17,
+      "color":"dark_red",
+      "name":"remains of Goblin",
+      "blocks": false,
+      "render_order":1
+    },
+    {
+      "x":74,
+      "y":16,
+      "color":"dark_red",
+      "name":"remains of Goblin",
+      "blocks": false,
+      "render_order":1
+    },
+    {
+      "x":29,
+      "y":44,
+      "color":"orange",
+      "name":"Small health potion",
+      "blocks": false,
+      "item":{
+        "use_function":"heal",
+        "function_args":{
+          "amount":4
+        },
+        "targeting":false,
+        "targeting_message":{
+        }      }
+,      "render_order":2
+    },
+    {
+      "x":30,
+      "y":38,
+      "color":"orange",
+      "name":"Small health potion",
+      "blocks": false,
+      "item":{
+        "use_function":"heal",
+        "function_args":{
+          "amount":4
+        },
+        "targeting":false,
+        "targeting_message":{
+        }      }
+,      "render_order":2
+    },
+    {
+      "x":27,
+      "y":42,
+      "color":"orange",
+      "name":"Small health potion",
+      "blocks": false,
+      "item":{
+        "use_function":"heal",
+        "function_args":{
+          "amount":4
+        },
+        "targeting":false,
+        "targeting_message":{
+        }      }
+,      "render_order":2
+    },
+    {
+      "x":71,
+      "y":36,
+      "color":"orange",
+      "name":"Small health potion",
+      "blocks": false,
+      "item":{
+        "use_function":"heal",
+        "function_args":{
+          "amount":4
+        },
+        "targeting":false,
+        "targeting_message":{
+        }      }
+,      "render_order":2
+    },
+    {
+      "x":17,
+      "y":38,
+      "color":"orange",
+      "name":"Small health potion",
+      "blocks": false,
+      "item":{
+        "use_function":"heal",
+        "function_args":{
+          "amount":4
+        },
+        "targeting":false,
+        "targeting_message":{
+        }      }
+,      "render_order":2
+    },
+    {
+      "x":62,
+      "y":9,
+      "color":"orange",
+      "name":"Small health potion",
+      "blocks": false,
+      "item":{
+        "use_function":"heal",
+        "function_args":{
+          "amount":4
+        },
+        "targeting":false,
+        "targeting_message":{
+        }      }
+,      "render_order":2
+    },
+    {
+      "x":53,
+      "y":14,
+      "color":"orange",
+      "name":"Small health potion",
+      "blocks": false,
+      "item":{
+        "use_function":"heal",
+        "function_args":{
+          "amount":4
+        },
+        "targeting":false,
+        "targeting_message":{
+        }      }
+,      "render_order":2
+    },
+    {
+      "x":66,
+      "y":2,
+      "color":"blue",
+      "name":"confusion scroll",
+      "blocks": false,
+      "item":{
+        "use_function":"cast_confuse",
+        "function_args":{
+
+        },
+        "targeting":true,
+        "targeting_message":{
+        }      }
+,      "render_order":2
+    },
+    {
+      "x":27,
+      "y":18,
+      "color":"red",
+      "name":"fireball scroll",
+      "blocks": false,
+      "item":{
+        "use_function":"cast_fireball",
+        "function_args":{
+          "radius":5,
+          "damage":10
+        },
+        "targeting":true,
+        "targeting_message":{
+        }      }
+,      "render_order":2
+    },
+    {
+      "x":44,
+      "y":39,
+      "color":"yellow",
+      "name":"lightning scroll",
+      "blocks": false,
+      "item":{
+        "use_function":"cast_lightning",
+        "function_args":{
+          "damage":20,
+          "max_range":5
+        },
+        "targeting":false,
+        "targeting_message":{
+        }      }
+,      "render_order":2
+    },
+    {
+      "x":30,
+      "y":34,
+      "color":"yellow",
+      "name":"lightning scroll",
+      "blocks": false,
+      "item":{
+        "use_function":"cast_lightning",
+        "function_args":{
+          "damage":20,
+          "max_range":5
+        },
+        "targeting":false,
+        "targeting_message":{
+        }      }
+,      "render_order":2
+    },
+    {
+      "x":10,
+      "y":15,
+      "color":"yellow",
+      "name":"lightning scroll",
+      "blocks": false,
+      "item":{
+        "use_function":"cast_lightning",
+        "function_args":{
+          "damage":20,
+          "max_range":5
+        },
+        "targeting":false,
+        "targeting_message":{
+        }      }
+,      "render_order":2
+    },
+    {
+      "x":30,
+      "y":15,
+      "color":"yellow",
+      "name":"lightning scroll",
+      "blocks": false,
+      "item":{
+        "use_function":"cast_lightning",
+        "function_args":{
+          "damage":20,
+          "max_range":5
+        },
+        "targeting":false,
+        "targeting_message":{
+        }      }
+,      "render_order":2
+    },
+    {
+      "x":16,
+      "y":35,
+      "color":"yellow",
+      "name":"lightning scroll",
+      "blocks": false,
+      "item":{
+        "use_function":"cast_lightning",
+        "function_args":{
+          "damage":20,
+          "max_range":5
+        },
+        "targeting":false,
+        "targeting_message":{
+        }      }
+,      "render_order":2
+    },
+    {
+      "x":9,
+      "y":24,
+      "color":"yellow",
+      "name":"lightning scroll",
+      "blocks": false,
+      "item":{
+        "use_function":"cast_lightning",
+        "function_args":{
+          "damage":20,
+          "max_range":5
+        },
+        "targeting":false,
+        "targeting_message":{
+        }      }
+,      "render_order":2
+    },
+    {
+      "x":43,
+      "y":32,
+      "color":"green",
+      "name":"shield",
+      "blocks": false,
+      "item":{
+        "use_function":"no_function",
+        "function_args":{
+
+        },
+        "targeting":false,
+        "targeting_message":{
+        }      }
+,
+      "equippable":{
+        "power":0,
+        "health":3,
+        "def":5,
+        "slot":2,
+      }
+,      "render_order":2
+    },
+    {
+      "x":18,
+      "y":37,
+      "color":"black",
+      "name":"stairs",
+      "blocks": false,
+      "stairs":{
+        "floor": 2
+      }
+,      "render_order":2
+    },
+    {
+      "x":31,
+      "y":44,
+      "color":"darker_green",
+      "name":"Goblin",
+      "blocks": true,
+      "fighter":{
+        "power":3,
+        "xp":10,
+        "hp":19,
+        "max_hp":19,
+        "defense":0,
+      }
+,
+      "ai":{
+        "ai":"BasicMonster"
+      }
+,      "render_order":3
+    },
+    {
+      "x":48,
+      "y":15,
+      "color":"darker_green",
+      "name":"Goblin",
+      "blocks": true,
+      "fighter":{
+        "power":3,
+        "xp":10,
+        "hp":19,
+        "max_hp":19,
+        "defense":0,
+      }
+,
+      "ai":{
+        "ai":"BasicMonster"
+      }
+,      "render_order":3
+    },
+    {
+      "x":14,
+      "y":11,
+      "color":"darker_green",
+      "name":"Goblin",
+      "blocks": true,
+      "fighter":{
+        "power":3,
+        "xp":10,
+        "hp":19,
+        "max_hp":19,
+        "defense":0,
+      }
+,
+      "ai":{
+        "ai":"BasicMonster"
+      }
+,      "render_order":3
+    },
+    {
+      "x":70,
+      "y":35,
+      "color":"darker_green",
+      "name":"Goblin",
+      "blocks": true,
+      "fighter":{
+        "power":3,
+        "xp":10,
+        "hp":19,
+        "max_hp":19,
+        "defense":0,
+      }
+,
+      "ai":{
+        "ai":"BasicMonster"
+      }
+,      "render_order":3
+    },
+    {
+      "x":49,
+      "y":15,
+      "color":"darker_green",
+      "name":"Goblin",
+      "blocks": true,
+      "fighter":{
+        "power":3,
+        "xp":10,
+        "hp":19,
+        "max_hp":19,
+        "defense":0,
+      }
+,
+      "ai":{
+        "ai":"BasicMonster"
+      }
+,      "render_order":3
+    },
+    {
+      "x":11,
+      "y":10,
+      "color":"darker_green",
+      "name":"Goblin",
+      "blocks": true,
+      "fighter":{
+        "power":3,
+        "xp":10,
+        "hp":19,
+        "max_hp":19,
+        "defense":0,
+      }
+,
+      "ai":{
+        "ai":"BasicMonster"
+      }
+,      "render_order":3
+    },
+    {
+      "x":70,
+      "y":38,
+      "color":"darker_green",
+      "name":"Goblin",
+      "blocks": true,
+      "fighter":{
+        "power":3,
+        "xp":10,
+        "hp":19,
+        "max_hp":19,
+        "defense":0,
+      }
+,
+      "ai":{
+        "ai":"BasicMonster"
+      }
+,      "render_order":3
+    },
+    {
+      "x":27,
+      "y":41,
+      "color":"darker_green",
+      "name":"Goblin",
+      "blocks": true,
+      "fighter":{
+        "power":3,
+        "xp":10,
+        "hp":19,
+        "max_hp":19,
+        "defense":0,
+      }
+,
+      "ai":{
+        "ai":"BasicMonster"
+      }
+,      "render_order":3
+    },
+    {
+      "x":5,
+      "y":28,
+      "color":"darker_green",
+      "name":"Goblin",
+      "blocks": true,
+      "fighter":{
+        "power":3,
+        "xp":10,
+        "hp":19,
+        "max_hp":19,
+        "defense":0,
+      }
+,
+      "ai":{
+        "ai":"BasicMonster"
+      }
+,      "render_order":3
+    },
+    {
+      "x":31,
+      "y":34,
+      "color":"darker_green",
+      "name":"Goblin",
+      "blocks": true,
+      "fighter":{
+        "power":3,
+        "xp":10,
+        "hp":19,
+        "max_hp":19,
+        "defense":0,
+      }
+,
+      "ai":{
+        "ai":"BasicMonster"
+      }
+,      "render_order":3
+    },
+    {
+      "x":28,
+      "y":15,
+      "color":"darker_green",
+      "name":"Goblin",
+      "blocks": true,
+      "fighter":{
+        "power":3,
+        "xp":10,
+        "hp":19,
+        "max_hp":19,
+        "defense":0,
+      }
+,
+      "ai":{
+        "ai":"BasicMonster"
+      }
+,      "render_order":3
+    },
+    {
+      "x":67,
+      "y":5,
+      "color":"darker_green",
+      "name":"Goblin",
+      "blocks": true,
+      "fighter":{
+        "power":3,
+        "xp":10,
+        "hp":19,
+        "max_hp":19,
+        "defense":0,
+      }
+,
+      "ai":{
+        "ai":"BasicMonster"
+      }
+,      "render_order":3
+    },
+    {
+      "x":34,
+      "y":36,
+      "color":"darker_green",
+      "name":"Goblin",
+      "blocks": true,
+      "fighter":{
+        "power":3,
+        "xp":10,
+        "hp":19,
+        "max_hp":19,
+        "defense":0,
+      }
+,
+      "ai":{
+        "ai":"BasicMonster"
+      }
+,      "render_order":3
+    },
+    {
+      "x":28,
+      "y":18,
+      "color":"darker_green",
+      "name":"Goblin",
+      "blocks": true,
+      "fighter":{
+        "power":3,
+        "xp":10,
+        "hp":19,
+        "max_hp":19,
+        "defense":0,
+      }
+,
+      "ai":{
+        "ai":"BasicMonster"
+      }
+,      "render_order":3
+    },
+    {
+      "x":19,
+      "y":35,
+      "color":"darker_green",
+      "name":"Goblin",
+      "blocks": true,
+      "fighter":{
+        "power":3,
+        "xp":10,
+        "hp":19,
+        "max_hp":19,
+        "defense":0,
+      }
+,
+      "ai":{
+        "ai":"BasicMonster"
+      }
+,      "render_order":3
+    },
+    {
+      "x":5,
+      "y":27,
+      "color":"desaturated_green",
+      "name":"Orc",
+      "blocks": true,
+      "fighter":{
+        "power":3,
+        "xp":15,
+        "hp":16,
+        "max_hp":16,
+        "defense":0,
+      }
+,
+      "ai":{
+        "ai":"BasicMonster"
+      }
+,      "render_order":3
+    },
+    {
+      "x":16,
+      "y":33,
+      "color":"desaturated_green",
+      "name":"Orc",
+      "blocks": true,
+      "fighter":{
+        "power":3,
+        "xp":15,
+        "hp":16,
+        "max_hp":16,
+        "defense":0,
+      }
+,
+      "ai":{
+        "ai":"BasicMonster"
+      }
+,      "render_order":3
+    },
+    {
+      "x":66,
+      "y":5,
+      "color":"desaturated_green",
+      "name":"Orc",
+      "blocks": true,
+      "fighter":{
+        "power":3,
+        "xp":15,
+        "hp":16,
+        "max_hp":16,
+        "defense":0,
+      }
+,
+      "ai":{
+        "ai":"BasicMonster"
+      }
+,      "render_order":3
+    },
+    {
+      "x":72,
+      "y":16,
+      "color":"default",
+      "name":"Player",
+      "blocks": true,
+      "fighter":{
+        "power":5,
+        "xp":0,
+        "hp":6,
+        "max_hp":30,
+        "defense":3,
+      }
+,
+      "inventory":{
+        "capacity":26,
+        "num_items":1,
+        "active_item":0,
+        "items":[
+{
+          "x":72,
+          "y":16,
+          "color":"yellow",
+          "name":"lightning scroll",
+          "blocks": false,
+          "item":{
+            "use_function":"cast_lightning",
+            "function_args":{
+              "damage":20,
+              "max_range":5
+            },
+            "targeting":false,
+            "targeting_message":{
+            }          }
+,          "render_order":2
+
+}]      }
+,
+      "level":{
+        "current_level":2,
+        "current_xp":0,
+        "level_base":20,
+        "level_up_factor":20
+      }
+,
+      "equippment":{
+      }
+,      "render_order":3
+    },
+],"map":{"width":80,
+"height":50,
+"dungeon_level":1,
+    "tiles":    [
+
+    ]  
+
+}}

@@ -5,7 +5,7 @@ local orc ={
     
     hp = 16,
     exp = 15,
-    power = 3,
+    power = 5,
     def = 0,
     
     ai = "BasicMonster",

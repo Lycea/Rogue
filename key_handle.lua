@@ -15,6 +15,9 @@
    u ="use",
    ["return"] = "select",
    d ="drop",
+   m ="magic",
+   
+   ["backspace"] = "back",
    mt={
      __index=function(table,key) 
       return  "default"
@@ -25,6 +28,22 @@
  
  setmetatable(key_mapper,key_mapper.mt)
  
+ 
+ 
+ key_list_magic={
+     
+   ["select"]={enter_command=true},
+   ["back"]  ={remove_last=true},
+   
+   mt={
+     __index=function(table,key) 
+      return  {}
+     end
+     
+    }
+}
+
+setmetatable(key_list_magic,key_list_magic.mt)
 
 
 key_list_game={
@@ -37,6 +56,8 @@ key_list_game={
   use={use_stairs = true},
   exit = {exit = true},
   default={},
+  magic  ={enable_magic=true},
+  
   mt={
      __index=function(table,key) 
       return  {}
@@ -151,6 +172,7 @@ function handle_keys(key)
       [GameStates.SHOW_INVENTORY] = key_list_invi,
       [GameStates.TARGETING] = key_list_targeting,
       [GameStates.LEVEL_UP] = key_list_level_up,
+      [GameStates.MAGIC] = key_list_magic,
     }
 
      return state_caller_list[game_state][key_mapper[key]]

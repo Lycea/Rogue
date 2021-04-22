@@ -27,7 +27,7 @@ local shield={
     slot =EquipmentSlots.OFF_HAND ,
     health = 3,
     power = 0,
-    def = 5
+    def = 2
 }
 
 return shield

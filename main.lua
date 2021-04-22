@@ -68,3 +68,7 @@ end
 function love.mousemoved(x,y,dx,dy)
     game.MouseMoved(x,y)
 end
+
+function love.textinput(txt)
+    game.TextInput(txt)
+end

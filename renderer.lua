@@ -13,14 +13,37 @@ local function draw_entity(entity)
 end
 
 
+local function get_tile_under_mouse(x,y)
+    
+    debuger.on()
+    local map_tile = map.tiles[y][x] 
+    local fov_tile = fov_map[y][x]
+    
+    local tile_info=""
+    for _,val in pairs (map_tile) do
+        tile_info=tile_info.._.."  ".. (type( val) ==type(true) and( val==true and "true" or "false"   )or val ).."\n"
+    end
+    
+    
+    debuger.off()
+    
+    return tile_info
+end
+
 function get_name_under_mouse()
     local names ={}
+    local mouse_x ,mouse_y = floor(mouse_coords[1]/constants.tile_size),floor(mouse_coords[2]/constants.tile_size)
     for i,entity in ipairs(entities) do
         --print(entity.x,entity.y,floor(mouse_coords[1]/tile_size),floor(mouse_coords[2]/tile_size))
-       if entity.x == floor(mouse_coords[1]/constants.tile_size) and entity.y == floor(mouse_coords[2]/constants.tile_size) then
+       if entity.x == mouse_x and entity.y == mouse_y then
           table.insert(names,entity.name:upper()) 
        end
     end
+    
+    --debug tile info
+    --if mouse_x >0 and  mouse_x<constants.map_width and mouse_y>0 and mouse_y < constants.map_height then
+    --   table.insert(names, get_tile_under_mouse(mouse_x,mouse_y))
+    --end
     --print("------------------")
     return table.concat(names,", ")
 end
@@ -45,21 +68,8 @@ function render_bar(name,x,y,width,value,max,bar_col,back_col,string_col,show_nu
 end
 
 
-
-function render_all(entities,game_map,screen_width,screen_height)--could be adjusted to work without params,but lets see
-    --console.clear()
-    
-    
-    if show_main_menue ==true then
-      main_menue()
-      return
-    end
-    
-    game_map:draw()
-    
-    
-    
-    --sort with a halfway stable sort
+function draw_entities()
+  --sort with a halfway stable sort
     table.sort(entities,
         function (a,b) 
             r =false
@@ -78,8 +88,11 @@ function render_all(entities,game_map,screen_width,screen_height)--could be adju
     for key,entity in pairs(entities) do
       draw_entity(entity)
     end
-    
-    love.graphics.rectangle("line",0,0,(constants.map_width+1)*10,(constants.map_height+1)*10)
+end
+
+
+function draw_turn_infos(dungeon_level)
+  love.graphics.rectangle("line",0,0,(constants.map_width+1)*10,(constants.map_height+1)*10)
     
     love.graphics.print(get_name_under_mouse(),0,0)
     
@@ -98,39 +111,80 @@ function render_all(entities,game_map,screen_width,screen_height)--could be adju
     
     message_log:draw()
     
-    love.graphics.print("Depth: "..game_map.dungeon_level,constants.tile_size*3,(constants.map_height+7)*constants.tile_size)
+    love.graphics.print("Depth: "..dungeon_level,constants.tile_size*3,(constants.map_height+7)*constants.tile_size)
     --menue("This is a test header,it tests heading",{"blah","test","noch was","meh"},0,0,scr_width)
+end
+
+
+function draw_inventory()
+  invi_menue("Press key next to item to use or ESC to exit",player.inventory,constants.tile_size*1,constants.tile_size*1,constants.tile_size*30,constants.scr_height -constants.tile_size*2)
+  
+  menue("Stats",{"Defense: "..player.fighter:get_def(),"Attack: "..player.fighter:get_power()},constants.tile_size*35,constants.tile_size*1,constants.tile_size*20,constants.tile_size*10)
+  
+  --equippment information
+  
+  slot_main = "Main hand"
+  if player.equippment.main_hand ~= nil then
+      off_info =player.equippment.main_hand.equippable
+      
+      slot_main=slot_main.."\n  Name: "..player.equippment.main_hand.name
+      slot_main=slot_main.."\n  Power: "..off_info.power or 0
+      slot_main=slot_main.."\n  Def: "..off_info.def or 0
+      slot_main=slot_main.."\n  Hp: "..off_info.health or 0
+      
+  end
+  
+  slot_off = "\nOff hand:"
+  if player.equippment.off_hand ~= nil then
+      off_info =player.equippment.off_hand.equippable
+      
+      slot_off=slot_off.."\n  Name: "..player.equippment.off_hand.name
+      slot_off=slot_off.."\n  Power: "..off_info.power or 0
+      slot_off=slot_off.."\n  Def: "..off_info.def or 0
+      slot_off=slot_off.."\n  Hp: "..off_info.health or 0
+  end
+  
+  menue("Equipment",{slot_main.."\n"..slot_off} ,constants.tile_size*35,constants.tile_size*12,constants.tile_size*20,constants.tile_size*39)
+
+end
+
+function dummy_draw() end
+
+
+--special state draws lu
+local draw_state_specials ={
+  [GameStates.SHOW_INVENTORY] = draw_inventory,
+  
+    mt={
+     __index=function(table,key) 
+      return  dummy_draw
+     end
+     
+     }
+  }
+setmetatable(draw_state_specials,draw_state_specials.mt)
+
+
+
+function render_all(entities,game_map,screen_width,screen_height)--could be adjusted to work without params,but lets see
+    --console.clear()
     
-    if game_state == GameStates.SHOW_INVENTORY then
-        invi_menue("Press key next to item to use or ESC to exit",player.inventory,constants.tile_size*1,constants.tile_size*1,constants.tile_size*30,constants.scr_height -constants.tile_size*2)
-        menue("Stats",{"Defense: "..player.fighter:get_def(),"Attack: "..player.fighter:get_power()},constants.tile_size*35,constants.tile_size*1,constants.tile_size*20,constants.tile_size*10)
-        
-        --equippment information
-        
-        slot_main = "Main hand"
-        if player.equippment.main_hand ~= nil then
-            off_info =player.equippment.main_hand.equippable
-            
-            slot_main=slot_main.."\n  Name: "..player.equippment.main_hand.name
-            slot_main=slot_main.."\n  Power: "..off_info.power or 0
-            slot_main=slot_main.."\n  Def: "..off_info.def or 0
-            slot_main=slot_main.."\n  Hp: "..off_info.health or 0
-            
-        end
-        
-        slot_off = "\nOff hand:"
-        if player.equippment.off_hand ~= nil then
-            off_info =player.equippment.off_hand.equippable
-            
-            slot_off=slot_off.."\n  Name: "..player.equippment.off_hand.name
-            slot_off=slot_off.."\n  Power: "..off_info.power or 0
-            slot_off=slot_off.."\n  Def: "..off_info.def or 0
-            slot_off=slot_off.."\n  Hp: "..off_info.health or 0
-        end
-        
-        menue("Equipment",{slot_main.."\n"..slot_off} ,constants.tile_size*35,constants.tile_size*12,constants.tile_size*20,constants.tile_size*39)
-   
+    
+    if show_main_menue ==true then
+      main_menue()
+      return
     end
+    
+    game_map:draw()
+    
+    draw_entities()
+    
+    --the bottom layer with hp,ep,level,log etc, also mouse under info
+    draw_turn_infos(game_map.dungeon_level)
+    
+    
+    
+    draw_state_specials[game_state]()
     
     if game_state == GameStates.LEVEL_UP then
         local x_off = constants.scr_width/2 -constants.tile_size*10

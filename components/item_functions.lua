@@ -30,7 +30,7 @@ function item_function.cast_lightning(args,kwargs)
   local max_range = kwargs["max_range"]
   
   local target = nil
-  local closest_distan777zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzce = max_range +1
+  local closest_distance = max_range +1
   
   for idx,entity in ipairs(entities) do
     if entity.fighter ~= nil and entity ~= caster and fov_map[entity.y][entity.x] == true then
