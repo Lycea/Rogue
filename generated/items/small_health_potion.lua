@@ -21,7 +21,7 @@ local small_health_potion={
         text= "",
         color= constants.color.green
     },]]
-    arguments = {amount=4},
+    arguments = {amount=10},
     
     --equipment info
     slot = nil,
