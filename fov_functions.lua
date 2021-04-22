@@ -29,8 +29,9 @@ local function trace_line(ex,ey)
     if y== 0 or y==constants.map_width or x==0 or x==constants.map_width then
       break
     end
-      
+    
     if act_map.tiles[y][x].block_sight == true then
+        act_map.tiles[y][x].empty=false
       break
     end
     --love.graphics.rectangle("fill",x*tile_size,y*tile_size,tile_size,tile_size)

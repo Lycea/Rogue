@@ -174,6 +174,7 @@ local function load_map(map_)
                 
                 map.tiles[idx_y][idx_x].explored = tile.explored
                 map.tiles[idx_y][idx_x].block_sight = tile.block_sight
+                map.tiles[idx_y][idx_x].empty = false
             end
         end
     else
@@ -184,6 +185,7 @@ local function load_map(map_)
             
             map.tiles[tile.y][tile.x].explored = tile.explored
             map.tiles[tile.y][tile.x].block_sight = tile.block_sight
+            map.tiles[tile.y][tile.x].empty = false
         
         end
     end

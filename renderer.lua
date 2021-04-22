@@ -13,14 +13,37 @@ local function draw_entity(entity)
 end
 
 
+local function get_tile_under_mouse(x,y)
+    
+    debuger.on()
+    local map_tile = map.tiles[y][x] 
+    local fov_tile = fov_map[y][x]
+    
+    local tile_info=""
+    for _,val in pairs (map_tile) do
+        tile_info=tile_info.._.."  ".. (type( val) ==type(true) and( val==true and "true" or "false"   )or val ).."\n"
+    end
+    
+    
+    debuger.off()
+    
+    return tile_info
+end
+
 function get_name_under_mouse()
     local names ={}
+    local mouse_x ,mouse_y = floor(mouse_coords[1]/constants.tile_size),floor(mouse_coords[2]/constants.tile_size)
     for i,entity in ipairs(entities) do
         --print(entity.x,entity.y,floor(mouse_coords[1]/tile_size),floor(mouse_coords[2]/tile_size))
-       if entity.x == floor(mouse_coords[1]/constants.tile_size) and entity.y == floor(mouse_coords[2]/constants.tile_size) then
+       if entity.x == mouse_x and entity.y == mouse_y then
           table.insert(names,entity.name:upper()) 
        end
     end
+    
+    --debug tile info
+    --if mouse_x >0 and  mouse_x<constants.map_width and mouse_y>0 and mouse_y < constants.map_height then
+    --   table.insert(names, get_tile_under_mouse(mouse_x,mouse_y))
+    --end
     --print("------------------")
     return table.concat(names,", ")
 end
