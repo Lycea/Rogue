@@ -5,7 +5,7 @@ local template_mob ={
     
     hp = 19,
     exp = 10,
-    power = 3,
+    power = 4,
     def = 0,
     
     ai = "BasicMonster",

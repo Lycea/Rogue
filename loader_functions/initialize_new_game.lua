@@ -13,7 +13,7 @@ function get_game_variables()
     
     
   --fight stuff /stat stuff that makes a player a player
-  local stats_ = Fighter(30,2,5,0)
+  local stats_ = Fighter(45,2,5,0)
   local invi_ = Inventory(26)
   
   local equipment_component = Equipment()

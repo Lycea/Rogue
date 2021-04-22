@@ -166,7 +166,7 @@ function game.play(dt)
     
 
 
-    
+    --[[
     if action["enable_magic"] then
        print("now magic is happening :3")
        game_state = GameStates.MAGIC
@@ -174,6 +174,7 @@ function game.play(dt)
        
        
     end
+    ]]
 
   end
   
