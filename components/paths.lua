@@ -1,6 +1,6 @@
 
 
-paths ={}
+local paths ={}
 local queue={}
 local pri_queue={}
 
@@ -307,6 +307,8 @@ end
 
 
 
+
+return paths
 
   
   

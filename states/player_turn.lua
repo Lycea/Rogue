@@ -16,31 +16,31 @@ function tmp_function.init(base_state)
       local player_results ={}
       
       --moving keys where pressed ..
-      if action["move"] and game_state==GameStates.PLAYERS_TURN then
-        if love.timer.getTime()> key_timer+0.1 then
+      if action["move"] and gvar.game_state==glib.GameStates.PLAYERS_TURN then
+        if love.timer.getTime()> gvar.key_timer+0.1 then
           local dirs=action["move"]
-          local dest_x = player.x+dirs[1]
-          local dest_y = player.y+dirs[2]
+          local dest_x = gvar.player.x+dirs[1]
+          local dest_y = gvar.player.y+dirs[2]
           
-          if not map:is_blocked(dest_x,dest_y)then
-            local target = get_blocking_entitis_at_location(dest_x,dest_y)
+          if not gvar.map:is_blocked(dest_x,dest_y)then
+            local target = glib.Entity.get_blocking_entitis_at_location(dest_x,dest_y)
             if target ~=nil then
-              player_results = player.fighter:attack(target)
+              player_results = gvar.player.fighter:attack(target)
               
               -- we dont need to remember a dead target, but a living one to draw hp bar
               if target.fighter.hp > 0 then
-                player.last_target = target
+                gvar.player.last_target = target
               else
-                player.last_target = 0
+                gvar.player.last_target = 0
               end
             else
-              player:move(dirs[1],dirs[2])
-              fov_recompute=true
+              gvar.player:move(dirs[1],dirs[2])
+              gvar.fov_recompute=true
              
             end
             
-            key_timer=love.timer.getTime()
-            game_state = GameStates.ENEMY_TURN
+            gvar.key_timer=love.timer.getTime()
+            gvar.game_state = glib.GameStates.ENEMY_TURN
             return {false,player_results}
           end
         end
@@ -50,11 +50,11 @@ function tmp_function.init(base_state)
     
     
       --going to pick up an item
-      if action["pickup"] and game_state ==GameStates.PLAYERS_TURN then
+      if action["pickup"] and gvar.game_state ==glib.GameStates.PLAYERS_TURN then
           debuger.on()
-          for _,entity in pairs(entities) do
-             if entity.x == player.x and entity.y == player.y and entity.item then
-                local result =player.inventory:add_item(entity,_)
+          for _,entity in pairs(gvar.entities) do
+             if entity.x == gvar.player.x and entity.y == gvar.player.y and entity.item then
+                local result =gvar.player.inventory:add_item(entity,_)
                  
                 table.insert(player_results,result)
                 
@@ -67,13 +67,13 @@ function tmp_function.init(base_state)
     --check for stairs
       if action["use_stairs"] then
          
-           for _,entity in pairs(entities) do
+           for _,entity in pairs(gvar.entities) do
                
                
-             if entity.x == player.x and entity.y == player.y and entity.name == "stairs" then
-                local result = Message("going down ...",constants.colors.yellow)
-                map,fov_map =init_map()
-                message_log:add_message(result)
+             if entity.x == gvar.player.x and entity.y == gvar.player.y and entity.name == "stairs" then
+                local result = glib.msg_renderer.Message("going down ...",gvar.constants.colors.yellow)
+                gvar.map,gvar.fov_map =glib.init_functions.init_map()
+                gvar.message_log:add_message(result)
              end
           end
       end
@@ -81,10 +81,10 @@ function tmp_function.init(base_state)
       
       --use the inventory
       if action["show_inventory"] then
-          if game_state ~= GameStates.SHOW_INVENTORY then
-              previous_game_state = game_state
-              game_state = GameStates.SHOW_INVENTORY
-              player.inventory.active_item =1
+          if gvar.game_state ~= glib.GameStates.SHOW_INVENTORY then
+              gvar.previous_game_state = gvar.game_state
+              gvar.game_state = glib.GameStates.SHOW_INVENTORY
+              gvar.player.inventory.active_item =1
           end
       end
       

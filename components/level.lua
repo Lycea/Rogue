@@ -1,4 +1,4 @@
-Level = class_base:extend()
+local Level = class_base:extend()
 
 function Level:new(current_level,current_xp,level_base,level_up_factor)
   self.current_level = current_level or 1
@@ -9,12 +9,14 @@ end
 
 function Level:save()
    local txt =""
-   offset_push()
-   txt = txt..add_offset()..'"current_level":'..self.current_level..",\n"
-   txt = txt..add_offset()..'"current_xp":'..self.current_xp..",\n"
-   txt = txt..add_offset()..'"level_base":'..self.level_base..",\n"
-   txt = txt..add_offset()..'"level_up_factor":'..self.level_up_factor.."\n"
-   offset_pop()
+   local dl = glib.data_loader
+   
+   dl.offset_push()
+   txt = txt..dl.add_offset()..'"current_level":'..self.current_level..",\n"
+   txt = txt..dl.add_offset()..'"current_xp":'..self.current_xp..",\n"
+   txt = txt..dl.add_offset()..'"level_base":'..self.level_base..",\n"
+   txt = txt..dl.add_offset()..'"level_up_factor":'..self.level_up_factor.."\n"
+   dl.offset_pop()
    
    return txt
 end
@@ -25,12 +27,12 @@ function Level:expToNextLevel()
 end
 
 
-function getSelectableStates()
+function Level.getSelectableStates()
     return {"max hp","defense","power"}
 end
 
 
-function getSelectedStateName(idx)
+function Level.getSelectedStateName(idx)
     local lookup_stats = {
         [1] = "max_hp",
         [2] = "defense",
@@ -57,3 +59,4 @@ function Level:addExp(xp)
   end
 end
 
+return Level

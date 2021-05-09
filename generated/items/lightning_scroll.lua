@@ -11,7 +11,7 @@ local lightning_scroll={
     
     color ="yellow",
     blocking = false,
-    render = RenderOrder.ITEM,
+    render = "ITEM",
     tile= 0,
     
     

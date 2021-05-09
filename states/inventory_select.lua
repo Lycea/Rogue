@@ -19,7 +19,7 @@ function tmp_function.init(base_state)
           
          debuger.on()
          --table.insert(player_results,{message=Message("trying to use item... no result",colors.orange)})
-         local results_usage =player.inventory:use(player.inventory.item_stacks[player.inventory.active_item+1],player.inventory.active_item+1,{colors=constants.colors,entities =entities})
+         local results_usage =gvar.player.inventory:use(gvar.player.inventory.item_stacks[gvar.player.inventory.active_item+1],gvar.player.inventory.active_item+1,{colors=gvar.constants.colors,entities =gvar.entities})
          
          local consumed_item = false
          for i,result in pairs(results_usage) do
@@ -38,17 +38,17 @@ function tmp_function.init(base_state)
       
       
       if action["drop_item"]then
-          local results_drop =player.inventory:drop_item(player.inventory.item_stacks[player.inventory.active_item+1],player.inventory.active_item+1,{})
+          local results_drop =gvar.player.inventory:drop_item(gvar.player.inventory.item_stacks[gvar.player.inventory.active_item+1],gvar.player.inventory.active_item+1,{})
          table.insert(player_results,results_drop)
          return {false,player_results}
       end
       
       
       if action["inventory_idx_change"] then
-          if selector_timer+0.3 < love.timer.getTime() then
-              selector_timer =love.timer.getTime()
-              local old_idx = player.inventory.active_item
-              player.inventory.active_item = (player.inventory.active_item+ action["inventory_idx_change"][2])%player.inventory.num_stacks
+          if gvar.selector_timer+0.3 < love.timer.getTime() then
+              gvar.selector_timer =love.timer.getTime()
+              local old_idx = gvar.player.inventory.active_item
+              gvar.player.inventory.active_item = (gvar.player.inventory.active_item+ action["inventory_idx_change"][2])%gvar.player.inventory.num_stacks
               --table.insert(player_results,{message=Message("Item index from "..old_idx.." to "..player.inventory.active_item,constants.colors.orange)})
           end
       end

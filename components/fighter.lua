@@ -1,4 +1,6 @@
-Fighter = class_base:extend()
+local Fighter = class_base:extend()
+
+
 
 function Fighter:new(hp,defense,power,xp_)
     self.max_hp = hp
@@ -8,15 +10,20 @@ function Fighter:new(hp,defense,power,xp_)
     self.xp = xp_ or 0
 end
 
+
+
 function Fighter:save()
     local txt = ""
-    offset_push()
+    
+    local dl = glib.data_loader
+    
+    dl.offset_push()
     for idx,value in pairs(self) do
         if type(value) ~= type(function () end) and type(value) ~= type({}) then
-           txt = txt..add_offset()..'"'..idx..'"'..":"..value..",\n" 
+           txt = txt..dl.add_offset()..'"'..idx..'"'..":"..value..",\n" 
         end
     end
-    offset_pop()
+    dl.offset_pop()
     
     return txt
 end
@@ -64,10 +71,11 @@ end
 
 function Fighter:attack(target)
     local results ={}
+    print(target)
     local damage = self:get_power() - target.fighter:get_def()
     
     if damage> 0 then
-      msg =Message(self.owner.name.." attacks "..target.name.." for "..damage.." hitpoints.")
+      local msg =glib.msg_renderer.Message(self.owner.name.." attacks "..target.name.." for "..damage.." hitpoints.")
       table.insert(results,{message =msg})
       
       local dmg_result =target.fighter:take_damage(damage)
@@ -79,7 +87,7 @@ function Fighter:attack(target)
       
       
     else
-      msg =Message(self.owner.name.." tries to attack "..target.name.." but misses!")
+      local msg =glib.msg_renderer.Message(self.owner.name.." tries to attack "..target.name.." but misses!")
       table.insert(results,{message =msg})
     end
     return results
@@ -99,4 +107,6 @@ function Fighter:heal(amount)
         self.hp  = self:get_hp()
     end
 end
+
+return Fighter
 

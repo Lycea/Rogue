@@ -1,24 +1,24 @@
 
+local init_functions ={}
 
 
-
-function get_game_variables()
+function init_functions.get_game_variables()
   local entities ={}
   
-  constants.message_width = constants.scr_width-constants.message_x
-  constants.message_height = 6
+  gvar.constants.message_width = gvar.constants.scr_width-gvar.constants.message_x
+  gvar.constants.message_height = 6
 
-  local message_log = MessageLog(constants.message_x,constants.message_width,constants.message_height)
+  local message_log = glib.msg_renderer.MessageLog(gvar.constants.message_x,gvar.constants.message_width,gvar.constants.message_height)
   --math.randomseed(love.math.getRandomSeed())
     
     
   --fight stuff /stat stuff that makes a player a player
-  local stats_ = Fighter(45,2,5,0)
-  local invi_ = Inventory(26)
+  local stats_ = glib.Fighter(45,2,5,0)
+  local invi_ = glib.inventory.Inventory(26)
   
-  local equipment_component = Equipment()
+  local equipment_component =glib.equimpemt()
   --final init
-  local player = Entity( math.floor(20),math.floor(20),0,"default","Player",true,stats_,nil,RenderOrder.ACTOR,nil,invi_,nil,Level(nil,0,20),equipment_component)
+  local player = glib.Entity( math.floor(20),math.floor(20),0,"default","Player",true,stats_,nil,glib.renderer.RenderOrder.ACTOR,nil,invi_,nil,glib.Level(nil,0,20),equipment_component)
   player.last_target = 0
   table.insert(entities,player)
   
@@ -27,23 +27,23 @@ function get_game_variables()
   return player,entities,message_log
 end
 
-function init_map()
+function init_functions.init_map()
  --init map
-  entities ={}
+  gvar.entities ={}
   
-  table.insert(entities,player)
+  table.insert(gvar.entities,gvar.player)
   local level = 0
-  if map.dungeon_level then
-      level = map.dungeon_level
+  if gvar.map.dungeon_level then
+      level = gvar.map.dungeon_level
   end
   
 
   
   
-  local map = GameMap(constants.map_width,constants.map_height,false,level+1)
-  local fov_map=compute_fov(map)
-  print("Player_x:"..player.x)
-  print("Player_y:"..player.y)
+  local map = glib.map_generator(gvar.constants.map_width,gvar.constants.map_height,false,level+1)
+  local fov_map=glib.fov_functions.compute_fov(map)
+  print("Player_x:"..gvar.player.x)
+  print("Player_y:"..gvar.player.y)
   
   
   
@@ -51,7 +51,7 @@ function init_map()
 end
 
 
-function get_constants()
+function init_functions.get_constants()
     local window_title = "DungeonGame"
     
     local scr_width ,scr_height= love.graphics.getDimensions()
@@ -112,3 +112,6 @@ function get_constants()
     
     return constants
 end
+
+
+return init_functions

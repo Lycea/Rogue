@@ -20,7 +20,7 @@ local orc ={
     
     color ="desaturated_green",
     blocking = true,
-    render = RenderOrder.ACTOR
+    render = "ACTOR"
     
 }
 

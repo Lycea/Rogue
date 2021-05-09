@@ -1,6 +1,6 @@
 
 
-BasicMonster = class_base:extend()
+local BasicMonster = class_base:extend()
 
 
 
@@ -14,7 +14,7 @@ function BasicMonster:take_turn(target)
     --print(self.owner)
     
     --is visible to player
-    if fov_map[mob.y][mob.x] == true then
+    if gvar.fov_map[mob.y][mob.x] == true then
       --is far enough away to move
       if mob:distance_to(target)>1 then
         --mob:move_towards4(target.x,target.y)
@@ -29,16 +29,18 @@ function BasicMonster:take_turn(target)
 end
 
 function BasicMonster:save()
-    offset_push()
-    local ai=add_offset()..'"ai":"BasicMonster"'
-    offset_pop()
+    local dl = glib.data_loader
+    
+    dl.offset_push()
+    local ai=dl.add_offset()..'"ai":"BasicMonster"'
+    dl.offset_pop()
     
     return  ai
 end
 
 
 
-ConfusedMonster = class_base:extend()
+local ConfusedMonster = class_base:extend()
 
 function ConfusedMonster:new(previous_ai,turns)
     self.previous_ai = previous_ai or BasicMonster()
@@ -68,7 +70,7 @@ function ConfusedMonster:take_turn(target)
         self.previous_ai.owner = self.owner
         self.owner.ai = self.previous_ai
         
-        table.insert(results,{message=Message("The "..self.owner.name.." is no longer confused!")})
+        table.insert(results,{message=glib.msg_renderer.Message("The "..self.owner.name.." is no longer confused!")})
     end
     
     return results
@@ -81,7 +83,9 @@ function ConfusedMonster:save()
 end
 
 
-ai_list ={
+local ai_list ={
 BasicMonster = BasicMonster,
 ConfusedMonster = ConfusedMonster
 }
+
+return ai_list

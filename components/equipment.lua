@@ -1,4 +1,4 @@
-Equipment = class_base:extend()
+local Equipment = class_base:extend()
 
 
 
@@ -9,9 +9,11 @@ end
 
 function Equipment:save()
     local txt = ""
-    offset_push()
+    local dl = glib.data_loader
     
-local function find_invi_idx(item_hash)
+    dl.offset_push()
+    
+    local function find_invi_idx(item_hash)
         --iterate all item in parent inventory to find 
         --responsible item in slot ...  hacky?
         
@@ -48,7 +50,7 @@ local function find_invi_idx(item_hash)
     txt = table.concat(equipp_string_list,",\n")
     
     
-    offset_pop()
+    dl.offset_pop()
     
     return txt
 end
@@ -103,7 +105,7 @@ function Equipment:toggle_equip(equippable)
     local results ={}
     
     print("checking equipped ..")
-    if equippable.equippable.slot == EquipmentSlots.HAND_LEFT then
+    if equippable.equippable.slot == glib.equipment_slots.HAND_LEFT then
         
         print("is left hand")
         if equippable == self.main_hand then
@@ -118,7 +120,7 @@ function Equipment:toggle_equip(equippable)
             
             table.insert(results,{equipped=equippable})
         end
-    elseif equippable.equippable.slot == EquipmentSlots.OFF_HAND then
+    elseif equippable.equippable.slot == glib.equipment_slots.OFF_HAND then
         if equippable == self.off_hand then
             self.off_hand = nil
             
@@ -138,4 +140,4 @@ end
 
 
 
-
+return Equipment

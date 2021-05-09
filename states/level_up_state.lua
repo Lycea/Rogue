@@ -14,26 +14,26 @@ function tmp_function.init(base_state)
 
     function level_up_state:handle_action(action)
       if action["state_selection_change"] then
-          if selector_timer+0.3 < love.timer.getTime() then
-              selector_timer =love.timer.getTime()
+          if gvar.selector_timer+0.3 < love.timer.getTime() then
+              gvar.selector_timer =love.timer.getTime()
           
-              selected_state_idx = selected_state_idx + action["state_selection_change"][2]
-              if selected_state_idx == 0 then
-                  selected_state_idx =3
-              elseif selected_state_idx == 4 then
-                  selected_state_idx=1
+              gvar.selected_state_idx = gvar.selected_state_idx + action["state_selection_change"][2]
+              if gvar.selected_state_idx == 0 then
+                  gvar.selected_state_idx =3
+              elseif gvar.selected_state_idx == 4 then
+                  gvar.selected_state_idx=1
               end
               
           end
       end
       
       if action["selected_state"] then
-          player.fighter:increase_state(getSelectedStateName(selected_state_idx))
+          gvar.player.fighter:increase_state(glib.Level.getSelectedStateName(gvar.selected_state_idx))
           
-          print(getSelectedStateName(selected_state_idx).." was increased")
+          print(glib.Level.getSelectedStateName(gvar.selected_state_idx).." was increased")
        
-          selected_state_idx = 1
-          game_state = GameStates.PLAYERS_TURN 
+          gvar.selected_state_idx = 1
+          gvar.game_state = glib.GameStates.PLAYERS_TURN 
       end
       
       return {true,{}}

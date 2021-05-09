@@ -1,9 +1,12 @@
-require("menue")
+local menues = require("menue")
 
-RenderOrder = class_base:extend()
-RenderOrder.CORPSE = 1
-RenderOrder.ITEM = 2
-RenderOrder.ACTOR = 3
+local renderer ={}
+renderer.RenderOrder = class_base:extend()
+
+renderer.RenderOrder.CORPSE = 1
+renderer.RenderOrder.ITEM = 2
+renderer.RenderOrder.ACTOR = 3
+renderer.RenderOrder.DEFAULT = renderer.RenderOrder.CORPSE
 
 
 
@@ -16,8 +19,8 @@ end
 local function get_tile_under_mouse(x,y)
     
     debuger.on()
-    local map_tile = map.tiles[y][x] 
-    local fov_tile = fov_map[y][x]
+    local map_tile = gvar.map.tiles[y][x] 
+    local fov_tile = gvar.fov_map[y][x]
     
     local tile_info=""
     for _,val in pairs (map_tile) do
@@ -30,10 +33,10 @@ local function get_tile_under_mouse(x,y)
     return tile_info
 end
 
-function get_name_under_mouse()
+function renderer.get_name_under_mouse()
     local names ={}
-    local mouse_x ,mouse_y = floor(mouse_coords[1]/constants.tile_size),floor(mouse_coords[2]/constants.tile_size)
-    for i,entity in ipairs(entities) do
+    local mouse_x ,mouse_y = floor(gvar.mouse_coords[1]/gvar.constants.tile_size),floor(gvar.mouse_coords[2]/gvar.constants.tile_size)
+    for i,entity in ipairs(gvar.entities) do
         --print(entity.x,entity.y,floor(mouse_coords[1]/tile_size),floor(mouse_coords[2]/tile_size))
        if entity.x == mouse_x and entity.y == mouse_y then
           table.insert(names,entity.name:upper()) 
@@ -49,30 +52,30 @@ function get_name_under_mouse()
 end
 
 
-function render_bar(name,x,y,width,value,max,bar_col,back_col,string_col,show_num)
+function renderer.render_bar(name,x,y,width,value,max,bar_col,back_col,string_col,show_num)
   local bar_width = math.floor(value/max*width)
   local bar_start = x+love.graphics.getFont():getWidth(name) +10
   
   --love.graphics.setColor(string_col or colors.default)
   --love.graphics.print(name,x,y)
   
-  print_colored(name,x,y,string_col)
+  glib.msg_renderer.MessageLog.print_colored(name,x,y,string_col)
   
   love.graphics.setColor(back_col)
-  love.graphics.rectangle("fill",bar_start,y,width,constants.tile_size)
+  love.graphics.rectangle("fill",bar_start,y,width,gvar.constants.tile_size)
   love.graphics.setColor(bar_col)
-  love.graphics.rectangle("fill",bar_start,y,bar_width,constants.tile_size)
-  love.graphics.setColor(constants.colors.default)
-  love.graphics.rectangle("line",bar_start,y,width,constants.tile_size)
+  love.graphics.rectangle("fill",bar_start,y,bar_width,gvar.constants.tile_size)
+  love.graphics.setColor(gvar.constants.colors.default)
+  love.graphics.rectangle("line",bar_start,y,width,gvar.constants.tile_size)
   
 end
 
 
-function draw_entities()
+function renderer.draw_entities()
   --sort with a halfway stable sort
-    table.sort(entities,
+    table.sort(gvar.entities,
         function (a,b) 
-            r =false
+            local r =false
             if a.render_order < b.render_order then
                 r = true
             elseif a.render_order == b.render_order then
@@ -85,141 +88,147 @@ function draw_entities()
             return r
         end)
     
-    for key,entity in pairs(entities) do
+    for key,entity in pairs(gvar.entities) do
       draw_entity(entity)
     end
 end
 
 
-function draw_turn_infos(dungeon_level)
-  love.graphics.rectangle("line",0,0,(constants.map_width+1)*10,(constants.map_height+1)*10)
+function renderer.draw_turn_infos(dungeon_level)
+  love.graphics.rectangle("line",0,0,(gvar.constants.map_width+1)*10,(gvar.constants.map_height+1)*10)
     
-    love.graphics.print(get_name_under_mouse(),0,0)
+    love.graphics.print(renderer.get_name_under_mouse(),0,0)
     
     --render_bar("hp: ",tile_size*3,(map_height+3)*tile_size,10*tile_size,player.fighter.hp,player.fighter.max_hp,colors.red,colors.dark_red)
-    render_bar("hp: ",constants.tile_size*3,(constants.map_height+3)*constants.tile_size,
-        10*constants.tile_size,player.fighter.hp,player.fighter:get_hp(),
-        constants.colors.light_red,constants.colors.dark_red)
+    renderer.render_bar("hp: ",gvar.constants.tile_size*3,(gvar.constants.map_height+3)*gvar.constants.tile_size,
+        10*gvar.constants.tile_size,gvar.player.fighter.hp,gvar.player.fighter:get_hp(),
+        gvar.constants.colors.light_red,gvar.constants.colors.dark_red)
     
     
     --exp bar (?)
-    render_bar("exp: ",
-        constants.tile_size*3,
-        (constants.map_height+5)*constants.tile_size,
-        10*constants.tile_size,player.level.current_xp,player.level:expToNextLevel(),
-        constants.colors.light_blue,constants.colors.blue)
+    renderer.render_bar("exp: ",
+        gvar.constants.tile_size*3,
+        (gvar.constants.map_height+5)*gvar.constants.tile_size,
+        10*gvar.constants.tile_size,gvar.player.level.current_xp,gvar.player.level:expToNextLevel(),
+        gvar.constants.colors.light_blue,gvar.constants.colors.blue)
     
-    message_log:draw()
+    gvar.message_log:draw()
     
-    love.graphics.print("Depth: "..dungeon_level,constants.tile_size*3,(constants.map_height+7)*constants.tile_size)
+    love.graphics.print("Depth: "..dungeon_level,gvar.constants.tile_size*3,(gvar.constants.map_height+7)*gvar.constants.tile_size)
     --menue("This is a test header,it tests heading",{"blah","test","noch was","meh"},0,0,scr_width)
 end
 
 
-function draw_inventory()
-  invi_menue("Press key next to item to use or ESC to exit",player.inventory,constants.tile_size*1,constants.tile_size*1,constants.tile_size*30,constants.scr_height -constants.tile_size*2)
+function renderer.draw_inventory()
+  menues.invi_menue("Press key next to item to use or ESC to exit",gvar.player.inventory,gvar.constants.tile_size*1,gvar.constants.tile_size*1,gvar.constants.tile_size*30,gvar.constants.scr_height -gvar.constants.tile_size*2)
   
-  menue("Stats",{"Defense: "..player.fighter:get_def(),"Attack: "..player.fighter:get_power()},constants.tile_size*35,constants.tile_size*1,constants.tile_size*20,constants.tile_size*10)
+  menues.menue("Stats",{"Defense: "..gvar.player.fighter:get_def(),"Attack: "..gvar.player.fighter:get_power()},gvar.constants.tile_size*35,gvar.constants.tile_size*1,gvar.constants.tile_size*20,gvar.constants.tile_size*10)
   
   --equippment information
   
-  slot_main = "Main hand"
-  if player.equippment.main_hand ~= nil then
-      off_info =player.equippment.main_hand.equippable
+  local slot_main = "Main hand"
+  if gvar.player.equippment.main_hand ~= nil then
+      local off_info =gvar.player.equippment.main_hand.equippable
       
-      slot_main=slot_main.."\n  Name: "..player.equippment.main_hand.name
+      slot_main=slot_main.."\n  Name: "..gvar.player.equippment.main_hand.name
       slot_main=slot_main.."\n  Power: "..off_info.power or 0
       slot_main=slot_main.."\n  Def: "..off_info.def or 0
       slot_main=slot_main.."\n  Hp: "..off_info.health or 0
       
   end
   
-  slot_off = "\nOff hand:"
-  if player.equippment.off_hand ~= nil then
-      off_info =player.equippment.off_hand.equippable
+  local slot_off = "\nOff hand:"
+  if gvar.player.equippment.off_hand ~= nil then
+      local off_info =gvar.player.equippment.off_hand.equippable
       
-      slot_off=slot_off.."\n  Name: "..player.equippment.off_hand.name
+      slot_off=slot_off.."\n  Name: "..gvar.player.equippment.off_hand.name
       slot_off=slot_off.."\n  Power: "..off_info.power or 0
       slot_off=slot_off.."\n  Def: "..off_info.def or 0
       slot_off=slot_off.."\n  Hp: "..off_info.health or 0
   end
   
-  menue("Equipment",{slot_main.."\n"..slot_off} ,constants.tile_size*35,constants.tile_size*12,constants.tile_size*20,constants.tile_size*39)
+  menues.menue("Equipment",{slot_main.."\n"..slot_off} ,gvar.constants.tile_size*35,gvar.constants.tile_size*12,gvar.constants.tile_size*20,gvar.constants.tile_size*39)
 
 end
 
-function dummy_draw() end
+function renderer.dummy_draw() end
 
 
 --special state draws lu
 local draw_state_specials ={
-  [GameStates.SHOW_INVENTORY] = draw_inventory,
-  
-    mt={
-     __index=function(table,key) 
-      return  dummy_draw
-     end
-     
-     }
+
   }
-setmetatable(draw_state_specials,draw_state_specials.mt)
 
 
 
-function render_all(entities,game_map,screen_width,screen_height)--could be adjusted to work without params,but lets see
+function renderer.init()
+    draw_state_specials={[glib.GameStates.SHOW_INVENTORY] = renderer.draw_inventory,
+  
+            mt={
+             __index=function(table,key) 
+              return  renderer.dummy_draw
+             end
+             
+                }
+    }  
+ 
+ setmetatable(draw_state_specials,draw_state_specials.mt)
+end
+
+function renderer.render_all(entities,game_map,screen_width,screen_height)--could be adjusted to work without params,but lets see
     --console.clear()
     
     
-    if show_main_menue ==true then
-      main_menue()
+    if gvar.show_main_menue ==true then
+      menues.main_menue()
       return
     end
     
     game_map:draw()
     
-    draw_entities()
+    renderer.draw_entities()
     
     --the bottom layer with hp,ep,level,log etc, also mouse under info
-    draw_turn_infos(game_map.dungeon_level)
+    renderer.draw_turn_infos(game_map.dungeon_level)
     
     
     
-    draw_state_specials[game_state]()
+    draw_state_specials[gvar.game_state]()
     
-    if game_state == GameStates.LEVEL_UP then
-        local x_off = constants.scr_width/2 -constants.tile_size*10
-        local y_off = constants.scr_height/2 -constants.tile_size*6.5
-        level_up_menue("Select a state to increase:",x_off,y_off,constants.tile_size*20,constants.tile_size*13)
+    if gvar.game_state == glib.GameStates.LEVEL_UP then
+        local x_off = gvar.constants.scr_width/2 -gvar.constants.tile_size*10
+        local y_off = gvar.constants.scr_height/2 -gvar.constants.tile_size*6.5
+        menues.level_up_menue("Select a state to increase:",x_off,y_off,gvar.constants.tile_size*20,gvar.constants.tile_size*13)
     end
     
     
-    if game_state == GameStates.TARGETING then
+    if gvar.game_state == glib.GameStates.TARGETING then
       
       love.graphics.setColor(255,0,0)
       --love.graphics.rectangle("line",targeting_tile.x*tile_size,targeting_tile.y*tile_size,tile_size,tile_size)
-      love.graphics.circle("line",targeting_tile.x*constants.tile_size +constants.tile_size/2,
-          targeting_tile.y*constants.tile_size +constants.tile_size/2,
-          (target_range or 1)*(constants.tile_size/2+1))
+      love.graphics.circle("line",gvar.targeting_tile.x*gvar.constants.tile_size +gvar.constants.tile_size/2,
+          gvar.targeting_tile.y*gvar.constants.tile_size +gvar.constants.tile_size/2,
+          (gvar.target_range or 1)*(gvar.constants.tile_size/2+1))
       love.graphics.setColor(255,0,0,75)
-      love.graphics.circle("fill",targeting_tile.x*constants.tile_size +constants.tile_size/2,
-          targeting_tile.y*constants.tile_size +constants.tile_size/2,
-          (target_range or 1)*(constants.tile_size/2+1))
+      love.graphics.circle("fill",gvar.targeting_tile.x*gvar.constants.tile_size +gvar.constants.tile_size/2,
+          gvar.targeting_tile.y*gvar.constants.tile_size +gvar.constants.tile_size/2,
+          (gvar.target_range or 1)*(gvar.constants.tile_size/2+1))
 
       
-      love.graphics.setColor(constants.colors.default)
+      love.graphics.setColor(gvar.constants.colors.default)
       
     end
     
     -- Draw a health bar for this entity, if it was attacked before
-    if player.last_target ~= 0 then
-        render_bar("enemy's hp:",
-            (constants.scr_width)-20*constants.tile_size,
-            (constants.map_height+3)*constants.tile_size,
-            10*constants.tile_size,
-            player.last_target.fighter.hp,
-            player.last_target.fighter:get_hp(),
-            constants.colors.desaturated_green,
-            constants.colors.green
+    if gvar.player.last_target ~= 0 then
+        renderer.render_bar("enemy's hp:",
+            (gvar.constants.scr_width)-20*gvar.constants.tile_size,
+            (gvar.constants.map_height+3)*gvar.constants.tile_size,
+            10*gvar.constants.tile_size,
+            gvar.player.last_target.fighter.hp,
+            gvar.player.last_target.fighter:get_hp(),
+            gvar.constants.colors.desaturated_green,
+            gvar.constants.colors.green
         )
             
     end
@@ -227,3 +236,4 @@ function render_all(entities,game_map,screen_width,screen_height)--could be adju
 
 end
 
+return renderer

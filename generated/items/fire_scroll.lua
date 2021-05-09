@@ -11,7 +11,7 @@ local fire_scroll={
     
     color ="red",
     blocking = false,
-    render = RenderOrder.ITEM,
+    render = "ITEM",
     tile= 0,
     
     

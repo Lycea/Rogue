@@ -9,7 +9,7 @@ local small_health_potion={
     
     color ="orange",
     blocking = false,
-    render = RenderOrder.ITEM,
+    render = "ITEM",
     tile= 0,
     
     

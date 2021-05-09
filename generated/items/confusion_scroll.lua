@@ -10,7 +10,7 @@ local confusion_scroll={
     
     color ="blue",
     blocking = false,
-    render = RenderOrder.ITEM,
+    render = "ITEM",
     tile= 0,
     
     
