@@ -16,6 +16,45 @@ local function draw_entity(entity)
 end
 
 
+local function recursive_print(table,level,par)
+  local offset = level or 0
+  
+  for key,val in pairs(table) do
+    if type(val) == type({}) then
+      print(string.rep(" ",offset)..key..":")
+      
+      if val == par then
+        --print(string.rep(" ",offset).."circlic dep... ignoring")
+        
+      else
+        recursive_print(val,offset+1,table)
+      end
+      
+    else
+      print(string.rep(" ",offset)..key..":   "..(type( val) ==type(true) and( val==true and "true" or "false"   )or val ))
+      --tile_info=tile_info.._.."  ".. (type( val) ==type(true) and( val==true and "true" or "false"   )or val ).."\n"
+    end
+    
+  end
+end
+
+
+local function get_mob_under_mouse(x,y)
+    local entity_to_get = nil
+   
+    for idx,entity in pairs(gvar.entities) do
+      if entity.x == x and entity.y == y then
+        entity_to_get = entity
+      end
+    end
+    debuger.on()
+    if entity_to_get ~= nil then
+      recursive_print(entity_to_get,4)
+      print("------")
+    end
+    debuger.off()
+end
+
 local function get_tile_under_mouse(x,y)
     
     debuger.on()
@@ -43,10 +82,16 @@ function renderer.get_name_under_mouse()
        end
     end
     
+    
     --debug tile info
-    --if mouse_x >0 and  mouse_x<constants.map_width and mouse_y>0 and mouse_y < constants.map_height then
-    --   table.insert(names, get_tile_under_mouse(mouse_x,mouse_y))
-    --end
+    if mouse_x >0 and  mouse_x<gvar.constants.map_width and mouse_y>0 and mouse_y < gvar.constants.map_height then
+       --table.insert(names, get_tile_under_mouse(mouse_x,mouse_y))
+       
+       if gvar.clicked == true then
+          get_mob_under_mouse(mouse_x,mouse_y)
+          gvar.clicked = false
+       end
+    end
     --print("------------------")
     return table.concat(names,", ")
 end

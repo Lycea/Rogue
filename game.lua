@@ -278,7 +278,8 @@ end
  
  
 function game.MouseHandle(x,y,btn) 
-   
+   gvar.clicked = true
+   gvar.click_pos = {x,y}
 end 
  
 function game.MouseMoved(mx,my) 

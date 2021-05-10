@@ -1,9 +1,10 @@
 local entity_loader ={}
 
 local dir_stack={}
-local require_paths = {}
+
 
 local function recursiveEnumerate(folder,fileTree)
+    local require_paths = {}
     local lfs = love.filesystem
     local filesTable = lfs.getDirectoryItems(folder)
     for i,v in ipairs(filesTable) do
@@ -38,12 +39,13 @@ function entity_loader.load_enemies()
     gvar.enemie_spawn_lookup={}
     local require_paths = {}
     
-    print("loading mobs")
+    print("\nloading mobs")
     
     table.insert(dir_stack,"generated")
     table.insert(dir_stack,"enemies")
     
     --get all lua files in subdirectories
+    debuger.on()
     local paths =recursiveEnumerate("generated/enemies","")
     
     for idx,result_ in pairs(paths) do
@@ -55,8 +57,9 @@ function entity_loader.load_enemies()
         gvar.enemie_lookup[mob_info.name] =mob_info
         gvar.enemie_spawn_lookup[mob_info.name]=mob_info.chances
         
-        print(mob_info.name)
+        print("   "..mob_info.name)
     end
+    debuger.off()
     
 end
 
@@ -66,7 +69,7 @@ function entity_loader.load_items()
     gvar.item_spawn_lookup={}
     local require_paths = {}
     
-    print("\n\nloading items")
+    print("\nloading items")
     
     
     debuger.on()
@@ -84,7 +87,7 @@ function entity_loader.load_items()
         gvar.item_lookup[item_info.name] =item_info
         gvar.item_spawn_lookup[item_info.name]=item_info.chances
         
-        print(item_info.name)
+        print("   "..item_info.name)
     end
     
     debuger.off()
