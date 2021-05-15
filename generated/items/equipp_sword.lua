@@ -11,7 +11,7 @@ local sword={
     
     color ="light_blue",
     blocking = false,
-    render = RenderOrder.ITEM,
+    render = "ITEM",
     tile= 0,
     
     
@@ -23,7 +23,7 @@ local sword={
     
     
     --equipment info
-    slot =EquipmentSlots.HAND_LEFT ,
+    slot ="HAND_LEFT",
     health = 0,
     power = 5,
     def = 0

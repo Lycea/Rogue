@@ -1,5 +1,8 @@
-offset_level   = 0
-offset_p_level = 2
+
+local data_loader ={}
+
+local offset_level   = 0
+local offset_p_level = 2
 
 
 local file_version = {1,1,0,0}
@@ -13,40 +16,42 @@ local version_string =""
 
 
 -----Increases offset level
-function offset_push()
+function data_loader.offset_push()
     offset_level= offset_level+1
 end
 
 -----Decreased offset level
-function offset_pop()
+function data_loader.offset_pop()
   offset_level = offset_level-1
 end
 
 -----Insert offset
-function add_offset()
+function data_loader.add_offset()
     return string.rep(" ",offset_p_level*offset_level)
 end
 
 
-function save_game()
+function data_loader.save_game()
    --load_game()
     
    offset_level = 0
-   file =io.open("save.json","w")
+   local file =io.open("save.json","w")
    
-   entities_='{'..'"file_version":['..table.concat(file_version,",")..'], \n "entities":['
-   offset_push()
-   for idx,entity in pairs(entities) do
-       offset_push()
-       entities_= entities_.."\n"..add_offset().."{\n"..entity:save()..add_offset().."},"
-       offset_pop()
+   local entities_='{'..'"file_version":['..table.concat(file_version,",")..'], \n "entities":['
+   data_loader.offset_push()
+   
+   for idx,entity in pairs(gvar.entities) do
+       data_loader.offset_push()
+       entities_= entities_.."\n"..data_loader.add_offset().."{\n"..entity:save()..data_loader.add_offset().."},"
+       data_loader.offset_pop()
    end
+   
    entities_ = string.sub(entities_,0,-1)
    entities_ = entities_.."\n],"
 
-   map_ = '"map":{'..map:save().."\n}}"
-    file:write(entities_..map_)
-    file:close()    
+   local map_ = '"map":{'..gvar.map:save().."\n}}"
+   file:write(entities_..map_)
+   file:close()    
 end
 
 -----------------------------
@@ -65,21 +70,23 @@ local function load_single_entity(entity)
   
   if entity.ai then
       if entity.ai.ai== "BasicMonster"then
-         tmp_ai =BasicMonster() 
+         tmp_ai =glib.ai.BasicMonster() 
       else
-         local prev_ai = BasicMonster()
-         tmp_ai = ConfusedMonster(prev_ai,entity.ai.number_of_turns)
+         local prev_ai = glib.ai.BasicMonster()
+         tmp_ai = glib.ai.ConfusedMonster(prev_ai,entity.ai.number_of_turns)
       end
   end
   if entity.fighter then
-      tmp_fighter = Fighter(entity.fighter.max_hp,entity.fighter.defense,entity.fighter.power,entity.fighter.xp)
+      tmp_fighter = glib.Fighter(entity.fighter.max_hp,entity.fighter.defense,entity.fighter.power,entity.fighter.xp)
       tmp_fighter.hp = entity.fighter.hp
   end
+  debuger.on()
   if entity.item then
-      tmp_item = Item(item_function[entity.item.use_function],entity.item.targeting,"test_msg",entity.item.function_args)
+      tmp_item = glib.inventory.Item(glib.item_functions[entity.item.use_function],entity.item.targeting,"test_msg",entity.item.function_args)
   end
+  debuger.off()
   if entity.inventory then
-      tmp_inventory = Inventory(entity.inventory.capacity)
+      tmp_inventory = glib.inventory.Inventory(entity.inventory.capacity)
       
       for idx,item in ipairs(entity.inventory.items) do
         tmp_inventory:add_item( load_single_entity(item))
@@ -94,12 +101,12 @@ local function load_single_entity(entity)
   end
   
   if entity.stairs then
-    tmp_stairs = stairs(entity.stairs.floor)
+    tmp_stairs = glib.Stairs(entity.stairs.floor)
   end
   
   
   if entity.level then
-    tmp_level = Level(entity.level.current_level,entity.level.current_xp,entity.level.level_base,entity.level.level_up_factor)
+    tmp_level = glib.Level(entity.level.current_level,entity.level.current_xp,entity.level.level_base,entity.level.level_up_factor)
   end
 
   
@@ -108,7 +115,7 @@ local function load_single_entity(entity)
     local main_equip = nil
     local off_equip = nil
     
-    tmp_equippment = Equipment()
+    tmp_equippment = glib.equipment()
     debuger.on()
     if entity.equippment.main_hand then
         main_equip =tmp_inventory.item_stacks[entity.equippment.main_hand.invi_idx].item_type
@@ -127,13 +134,13 @@ local function load_single_entity(entity)
   
   
   if entity.equippable then
-    tmp_equippable = Equipable(entity.equippable.slot,entity.equippable.health,entity.equippable.def,entity.equippable.power)
+    tmp_equippable = glib.Equipable(entity.equippable.slot,entity.equippable.health,entity.equippable.def,entity.equippable.power)
   end
   
   
   
   
-  local tmp_entity=Entity(entity.x,entity.y,nil,entity.color,entity.name,entity.blocks,tmp_fighter,tmp_ai,entity.render_order,tmp_item,tmp_inventory,tmp_stairs,tmp_level,tmp_equippment,tmp_equippable)
+  local tmp_entity=glib.Entity(entity.x,entity.y,nil,entity.color,entity.name,entity.blocks,tmp_fighter,tmp_ai,entity.render_order,tmp_item,tmp_inventory,tmp_stairs,tmp_level,tmp_equippment,tmp_equippable)
   return tmp_entity
     
     --tmp_entity =Entity(x,y,tile,color,name,blocks,fighter,ai,render_order,item,inventory)
@@ -143,14 +150,14 @@ local function load_entitys(entity_list)
     print("\n\n----")
     print("loading entities")
     
-    entities ={}
+    gvar.entities ={}
 
     for idx,entity in ipairs(entity_list) do
        local tmp_entity= load_single_entity(entity)
-       table.insert(entities,tmp_entity)
+       table.insert(gvar.entities,tmp_entity)
         if entity.name == "Player"then
-            player = tmp_entity
-            player.last_target = 0
+            gvar.player = tmp_entity
+            gvar.player.last_target = 0
         end
     end
     
@@ -163,29 +170,29 @@ local function load_map(map_)
     print(map_.width,map_.height)
     print(#map_.tiles)
     debuger:on()
-    map = GameMap(map_.width,map_.height,true,map_.dungeon_level)
+    gvar.map = glib.map_generator(map_.width,map_.height,true,map_.dungeon_level)
     
     --check which version is used since we changed something in there then
     if loading_version == "1.0.0.0" then
         --load up the old way, every , single,tile
         for idx_y,row in ipairs(map_.tiles) do
             for idx_x,tile in ipairs(row) do
-                map.tiles[idx_y][idx_x].blocked = tile.blocked
+                gvar.map.tiles[idx_y][idx_x].blocked = tile.blocked
                 
-                map.tiles[idx_y][idx_x].explored = tile.explored
-                map.tiles[idx_y][idx_x].block_sight = tile.block_sight
-                map.tiles[idx_y][idx_x].empty = false
+                gvar.map.tiles[idx_y][idx_x].explored = tile.explored
+                gvar.map.tiles[idx_y][idx_x].block_sight = tile.block_sight
+                gvar.map.tiles[idx_y][idx_x].empty = false
             end
         end
     else
         --load up the new way, all tiles by tile x and y
         for idx_y,tile in ipairs(map_.tiles) do
             local xpos,ypos = tile.x,tile.y
-            map.tiles[tile.y][tile.x].blocked = tile.blocked
+            gvar.map.tiles[tile.y][tile.x].blocked = tile.blocked
             
-            map.tiles[tile.y][tile.x].explored = tile.explored
-            map.tiles[tile.y][tile.x].block_sight = tile.block_sight
-            map.tiles[tile.y][tile.x].empty = false
+            gvar.map.tiles[tile.y][tile.x].explored = tile.explored
+            gvar.map.tiles[tile.y][tile.x].block_sight = tile.block_sight
+            gvar.map.tiles[tile.y][tile.x].empty = false
         
         end
     end
@@ -193,10 +200,10 @@ local function load_map(map_)
     print("----")
 end
 
-function load_game()
+function data_loader.load_game()
   
    local file = io.open("save.json","r")
-   local error_ ,save_= pcall(json.decode,file:read("*all"))
+   local error_ ,save_= pcall(glib.json.decode,file:read("*all"))
    file:close()
    
    print(error_,save_)
@@ -218,4 +225,4 @@ function load_game()
 end
 
 
-
+return data_loader

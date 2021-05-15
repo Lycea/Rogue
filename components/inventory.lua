@@ -1,6 +1,6 @@
-Item = class_base:extend()
-Inventory = class_base:extend()
-ItemStack = class_base:extend()
+local Item = class_base:extend()
+local Inventory = class_base:extend()
+local ItemStack = class_base:extend()
 
 function Item:new(use_function,targeting,targeting_message,args)
     self.use_function  = use_function or nil
@@ -11,12 +11,15 @@ function Item:new(use_function,targeting,targeting_message,args)
 end
 
 function Item:save()
+    local dl = glib.data_loader
     
     debuger.on()
-    offset_push()
-    local function_ = add_offset()..'"use_function":'
+    
+    dl.offset_push()
+    local function_ = dl.add_offset()..'"use_function":'
     local found = false
-    for name,hash in pairs(item_function) do
+    
+    for name,hash in pairs(glib.item_functions) do
         if hash == self.use_function then
            function_ = function_..'"'..name..'"' 
            found = true
@@ -29,8 +32,8 @@ function Item:save()
     
     
     
-    local args = add_offset()..'"function_args":{\n'
-    offset_push()
+    local args = dl.add_offset()..'"function_args":{\n'
+    dl.offset_push()
     
     local arg_list ={}
     
@@ -38,29 +41,29 @@ function Item:save()
         for idx_args,data in pairs(self.function_args)do
             if type(data)~= type({}) then
                 --args = args..add_offset()..idx_args..":"..data.."\n"
-                table.insert(arg_list,add_offset()..'"'..idx_args..'"'..":"..data)
+                table.insert(arg_list,dl.add_offset()..'"'..idx_args..'"'..":"..data)
             else
             
             end
         end
     end
-    offset_pop()
+    dl.offset_pop()
     args= args ..table.concat(arg_list,",\n").."\n"
     
-    args=args..add_offset().."}"
+    args=args..dl.add_offset().."}"
     
 
-    local targeting =  add_offset()..'"targeting":'
+    local targeting =  dl.add_offset()..'"targeting":'
     targeting = targeting..(self.targeting == true and "true" or "false")
     
     local target_msg =""
     if self.targeting_message ~= nil then
-       target_msg = add_offset()..'"targeting_message":{'
-       target_msg =target_msg.."".."\n".. add_offset().."}"
+       target_msg = dl.add_offset()..'"targeting_message":{'
+       target_msg =target_msg.."".."\n".. dl.add_offset().."}"
     end
     
     
-    offset_pop()
+    dl.offset_pop()
     
     
     debuger.off()
@@ -110,14 +113,15 @@ end
 
 function Inventory:save()
     local content =""
+    local dl = glib.data_loader
     
     debuger.on()
-    offset_push()
-    local capacity = add_offset()..'"capacity":'..self.capacity..",\n"
-    local num_items = add_offset()..'"num_items":'..self.num_items..",\n"
-    local active_item = add_offset()..'"active_item":'.."0"..",\n"
+    dl.offset_push()
+    local capacity = dl.add_offset()..'"capacity":'..self.capacity..",\n"
+    local num_items = dl.add_offset()..'"num_items":'..self.num_items..",\n"
+    local active_item = dl.add_offset()..'"active_item":'.."0"..",\n"
     
-    local items=add_offset()..'"items":[\n'
+    local items=dl.add_offset()..'"items":[\n'
     local tmp_item_list ={}
     
     for idx,stack in pairs(self.item_stacks) do
@@ -130,7 +134,7 @@ function Inventory:save()
     items = items..table.concat(tmp_item_list,",\n")
     items=items.."]"
     
-    offset_pop()
+    dl.offset_pop()
     debuger.off()
     return content..capacity..num_items..active_item..items
 end
@@ -178,7 +182,7 @@ end
 
 function Inventory:drop_item(item_entity,idx)
     if self.num_stacks == 0 then
-      results={message=Message("No item there to be droppd",constants.colors.orange)}
+      local results={message=glib.msg_renderer.Message("No item there to be droppd",gvar.constants.colors.orange)}
       print("nothing used...")
       return results
     end
@@ -202,7 +206,7 @@ function Inventory:drop_item(item_entity,idx)
     self:decrease_stack(item)
     
     debuger.off()
-    return {item_dropped=item.owner ,message =Message("Dropping "..item.owner.name,constants.colors.red)}
+    return {item_dropped=item.owner ,message =glib.msg_renderer.Message("Dropping "..item.owner.name,gvar.constants.colors.red)}
 end
 
 
@@ -215,7 +219,7 @@ function Inventory:use(item_entity,idx,args)
     
     --check if there are items in the inventory
     if self.num_items == 0 then
-      table.insert(results,{message=Message("No item there to be used",constants.colors.orange)})
+      table.insert(results,{message=glib.msg_renderer.Message("No item there to be used. I love you my darling :)",gvar.constants.colors.orange)})
       print("nothing used...")
       return results
     end
@@ -228,21 +232,25 @@ function Inventory:use(item_entity,idx,args)
     --get the item~
     local item = self.item_stacks[self.active_item+1].item_type.item
     debuger.on() 
+    
+    
+
+    
     --check if the item is usable
     if item.use_function == nil then
         if item.owner.equippable then
             results={{equip=item.owner}}
         else
-            results={{message=Message("The "..item.name.." can not be used",constants.colors.orange)}}
+            results={{message=glib.msg_renderer.Message("The "..item.name.." can not be used",gvar.constants.colors.orange)}}
         end
         
     else
         --check if the item can select a target, and if it is selected
         if item.targeting == true and not args["target_x"] then
             
-            target_range = item.function_args["radius"] or item.function_args["max_range"]
+            gvar.target_range = item.function_args["radius"] or item.function_args["max_range"]
             
-            table.insert(results,{message=Message("trying to target a item...",constants.colors.orange)})
+            table.insert(results,{message=glib.msg_renderer.Message("trying to target a item...",gvar.constants.colors.orange)})
             table.insert(results,{targeting= self.item_stacks[self.active_item+1].item_type})
             
         else
@@ -252,26 +260,6 @@ function Inventory:use(item_entity,idx,args)
             for k,result in pairs(use_results) do
                if result["consumed"] then
                    self:decrease_stack(item)
-                 --print("removing item...")
-                  --[[if self.item_stacks[self.active_item+1].stack_size == 1 then
-                      for idx,stack in pairs(self.stack_lookup[item.owner.name]) do
-                        if stack == self.item_stacks[self.active_item+1] then
-                            table.remove(self.stack_lookup[item.owner.name],idx)
-                        end
-                      end
-                      
-                          
-                      table.remove(self.item_stacks,self.active_item+1)
-                      self.num_stacks=self.num_stacks -1
-                  else
-                    self.item_stacks[self.active_item+1].stack_size=self.item_stacks[self.active_item+1].stack_size-1
-                  end
-                  
-                  
-                 
-                  --table.remove(self.items,self.active_item+1) 
-                  self.num_items = self.num_items-1
-                  ]]
                 end
             end
             
@@ -291,9 +279,9 @@ function Inventory:add_item(item,id)
     local results={}
     
     if self.num_items >= self.capacity then
-        results ={message = Message("No space left,cannot pick up item!!",constants.colors.orange)}
+        results ={message = glib.msg_renderer.Message("No space left,cannot pick up item!!",gvar.constants.colors.orange)}
     else
-        results ={message = Message("Picked up "..item.name:upper(),constants.colors.white),item_added = id}
+        results ={message = glib.msg_renderer.Message("Picked up "..item.name:upper(),gvar.constants.colors.white),item_added = id}
        
        if self.stack_lookup[item.name] then
         local added = false
@@ -339,3 +327,4 @@ function Inventory:add_item(item,id)
     return results
 end
 
+return {Item = Item, Inventory = Inventory,ItemStack=ItemStack}

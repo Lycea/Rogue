@@ -8,7 +8,7 @@ require(BASE.."rectangle")
 
 
 
-GameMap = class_base:extend()
+local GameMap = class_base:extend()
 
 
 local max_monster_per_room = 3
@@ -30,8 +30,9 @@ function GameMap:new(width,height,bare,level)
 end
 
 function GameMap:save()
+    local dl = glib.data_loader
     local save_txt =""
-    offset_push()
+    dl.offset_push()
     
     save_txt =save_txt..'"width":'..self.width..",\n"
     save_txt =save_txt..'"height":'..self.height..",\n"
@@ -40,24 +41,24 @@ function GameMap:save()
     local tiles_tmp ={}
     local rows_tmp={}
     debuger:on()
-    save_txt = save_txt..add_offset()..'"tiles":'
+    save_txt = save_txt..dl.add_offset()..'"tiles":'
     for idx_y,row in ipairs(self.tiles) do
-        offset_push()
+        dl.offset_push()
         for idx_x,tile in ipairs(row)do
             if tile.empty == false then
-                table.insert(tiles_tmp,add_offset().."{"..tile:save({x=idx_x,y=idx_y}).."}\n")
+                table.insert(tiles_tmp,dl.add_offset().."{"..tile:save({x=idx_x,y=idx_y}).."}\n")
             end
         end
-        offset_pop()
+        dl.offset_pop()
 
     end
     
-    table.insert(rows_tmp,add_offset().."[\n"..table.concat(tiles_tmp,",\n").."\n"..add_offset().."]")
+    table.insert(rows_tmp,dl.add_offset().."[\n"..table.concat(tiles_tmp,",\n").."\n"..dl.add_offset().."]")
     debuger:off()
-    offset_pop()
+    dl.offset_pop()
     
     
-    save_txt = save_txt..rows_tmp[1]..add_offset()
+    save_txt = save_txt..rows_tmp[1]..dl.add_offset()
     save_txt = save_txt.."\n"
     return save_txt
 end
@@ -131,14 +132,14 @@ function GameMap:make_map()
   local num_rooms =0
   
   local last_center = 0
-  for room=1 ,constants.max_rooms do
+  for room=1 ,gvar.constants.max_rooms do
     --random size
-    local w = math.random(constants.room_min_size,constants.room_max_size)
-    local h = math.random(constants.room_min_size,constants.room_max_size)
+    local w = math.random(gvar.constants.room_min_size,gvar.constants.room_max_size)
+    local h = math.random(gvar.constants.room_min_size,gvar.constants.room_max_size)
     
     --random position
-    local x = math.random(1,constants.map_width-w-1) 
-    local y = math.random(1,constants.map_height-h-1) 
+    local x = math.random(1,gvar.constants.map_width-w-1) 
+    local y = math.random(1,gvar.constants.map_height-h-1) 
     
     local new_room = Rect(x,y,w,h)
     
@@ -156,8 +157,8 @@ function GameMap:make_map()
       local center = new_room:center()
       
       if num_rooms == 0 then
-          player.x = center[1]
-          player.y = center[2]
+          gvar.player.x = center[1]
+          gvar.player.y = center[2]
       else
           
         last_center = center
@@ -175,7 +176,7 @@ function GameMap:make_map()
         
       end
       
-      self:place_entities(new_room,entities,max_monster_per_room)
+      self:place_entities(new_room,gvar.entities,max_monster_per_room)
       
       table.insert(rooms,new_room)
       num_rooms = num_rooms+1
@@ -185,10 +186,10 @@ function GameMap:make_map()
     
     
   end
-  local tmp_stairs    = stairs(self.dungeon_level+1)
-  local stairs_entity = Entity(last_center[1],last_center[2],0,"black","stairs",false,nil,nil,RenderOrder.ITEM,nil,nil,tmp_stairs)
+  local tmp_stairs    = glib.Stairs(self.dungeon_level+1)
+  local stairs_entity = glib.Entity(last_center[1],last_center[2],0,"black","stairs",false,nil,nil,glib.renderer.RenderOrder.ITEM,nil,nil,tmp_stairs)
 
-  table.insert(entities,stairs_entity)
+  table.insert(gvar.entities,stairs_entity)
     
 end
 
@@ -212,29 +213,29 @@ function GameMap:draw()
     for y=1,self.height,1 do
       for x=1,self.width,1 do
         local wall =self.tiles[y][x].block_sight
-        if fov_map[y][x] == true then
+        if gvar.fov_map[y][x] == true then
           if wall == true then
-            love.graphics.setColor(constants.colors.light_wall)
+            love.graphics.setColor(gvar.constants.colors.light_wall)
           else
-            love.graphics.setColor(constants.colors.light_ground)
+            love.graphics.setColor(gvar.constants.colors.light_ground)
           end
           self.tiles[y][x].explored = true
-          love.graphics.rectangle("fill",x*constants.tile_size,
-              y*constants.tile_size,constants.tile_size,constants.tile_size)
+          love.graphics.rectangle("fill",x*gvar.constants.tile_size,
+              y*gvar.constants.tile_size,gvar.constants.tile_size,gvar.constants.tile_size)
         elseif self.tiles[y][x].explored then
           if wall == true then
-            love.graphics.setColor(constants.colors.dark_wall)
+            love.graphics.setColor(gvar.constants.colors.dark_wall)
           else
-            love.graphics.setColor(constants.colors.dark_ground)
+            love.graphics.setColor(gvar.constants.colors.dark_ground)
           end
-          love.graphics.rectangle("fill",x*constants.tile_size,
-              y*constants.tile_size,constants.tile_size,constants.tile_size)
+          love.graphics.rectangle("fill",x*gvar.constants.tile_size,
+              y*gvar.constants.tile_size,gvar.constants.tile_size,gvar.constants.tile_size)
         end
         --love.graphics.setColor(colors.default)
         --love.graphics.rectangle("line",x*tile_size-tile_size,y*tile_size-tile_size,tile_size,tile_size)
       end
     end
-    love.graphics.setColor(constants.colors.default)
+    love.graphics.setColor(gvar.constants.colors.default)
 end
 
 
@@ -255,23 +256,23 @@ function GameMap:place_entities(room,entities,max_monster_per_room)
         {7,11}
   }
     
-  local number_of_monsters = get_value_from_table(monster_number_level_idx,self.dungeon_level) --math.random(0,max_monster_per_room)
-  local number_of_items = get_value_from_table(item_number_level_idx,self.dungeon_level)--floor(math.random(0,max_items_per_room))
+  local number_of_monsters = glib.random_utils.get_value_from_table(monster_number_level_idx,self.dungeon_level) --math.random(0,max_monster_per_room)
+  local number_of_items = glib.random_utils.get_value_from_table(item_number_level_idx,self.dungeon_level)--floor(math.random(0,max_items_per_room))
   
   local item_changes ={}
   
   -- generate monster chance list
   local monster_chances ={}
-  for idx,monster_stats in pairs(enemie_lookup)do
-      monster_chances[idx] = get_value_from_table(monster_stats.chances,self.dungeon_level)
+  for idx,monster_stats in pairs(gvar.enemie_lookup)do
+      monster_chances[idx] = glib.random_utils.get_value_from_table(monster_stats.chances,self.dungeon_level)
   end
   
   -- TODO fix naming ...
   -- generate item chance list
   
   
-  for idx,item_stats in pairs(item_lookup) do
-    item_changes[idx] = get_value_from_table(item_stats.chances,self.dungeon_level)
+  for idx,item_stats in pairs(gvar.item_lookup) do
+    item_changes[idx] = glib.random_utils.get_value_from_table(item_stats.chances,self.dungeon_level)
   end
   
   
@@ -291,14 +292,14 @@ function GameMap:place_entities(room,entities,max_monster_per_room)
     --no mob on that grid field right now
     if free_space == true then
       local monster
-      local monster_choice = random_choice_from_dict(monster_chances)--enemie_lookup
+      local monster_choice = glib.random_utils.random_choice_from_dict(monster_chances)--enemie_lookup
      -- print(monster_choice)
       
-      local mob = enemie_lookup[monster_choice]
-      local stats_= Fighter(mob.hp,mob.def,mob.power,mob.exp)
-      local behaviour_ =ai_list[mob.ai]()
+      local mob = gvar.enemie_lookup[monster_choice]
+      local stats_= glib.Fighter(mob.hp,mob.def,mob.power,mob.exp)
+      local behaviour_ =glib.ai[mob.ai]()
       
-      monster = Entity(x,y,0,mob.color,mob.name,mob.blocking,stats_,behaviour_,mob.render)
+      monster = glib.Entity(x,y,0,mob.color,mob.name,mob.blocking,stats_,behaviour_,mob.render)
       
       table.insert(entities,monster)
     end
@@ -320,28 +321,31 @@ function GameMap:place_entities(room,entities,max_monster_per_room)
     --no mob on that grid field right now
     if free_space == true then
         local item = nil
-        local item_choice = random_choice_from_dict(item_changes)
+        local item_choice = glib.random_utils.random_choice_from_dict(item_changes)
         
         local num = math.random(0,100)
         print(item_choice)
-        local item_tmp = item_lookup[item_choice]
+        local item_tmp = gvar.item_lookup[item_choice]
         local item_comp = nil
         local equippment_component = nil
         local message_component = nil
         
         if item_tmp.type == "item" then
             if item_tmp.message then
-               message_component =Message(item_tmp.message.text,constants.colors[item_tmp.message.color]) 
+               message_component =glib.msg_renderer.Message(item_tmp.message.text,gvar.constants.colors[item_tmp.message.color]) 
             end
-            item_comp = Item(item_function[item_tmp["function"]],item_tmp.is_ranged,message_component,item_tmp.arguments)
+            
+            item_comp = glib.inventory.Item(glib.item_functions[item_tmp["function"]],item_tmp.is_ranged,message_component,item_tmp.arguments)
         else
-            equippment_component =Equipable(item_tmp.slot,item_tmp.health,item_tmp.def,item_tmp.power)
+            equippment_component =glib.Equipable(item_tmp.slot,item_tmp.health,item_tmp.def,item_tmp.power)
         end
         
         
-        local collectable = Entity(x,y,0,item_tmp.color,item_tmp.name,item_tmp.blocking,nil,nil,item_tmp.render,item_comp,nil,nil,nil,nil,equippment_component)
+        local collectable = glib.Entity(x,y,0,item_tmp.color,item_tmp.name,item_tmp.blocking,nil,nil,item_tmp.render,item_comp,nil,nil,nil,nil,equippment_component)
           
         table.insert(entities,collectable)
     end
   end
 end
+
+return GameMap

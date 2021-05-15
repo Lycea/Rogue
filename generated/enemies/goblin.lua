@@ -22,7 +22,7 @@ local template_mob ={
     
     color ="darker_green",
     blocking = true,
-    render = RenderOrder.ACTOR
+    render = "ACTOR"
     
 }
 

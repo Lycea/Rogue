@@ -1,4 +1,4 @@
-
+local menues ={}
 local function wrap_text(str,num)
   local ret = {}
   for i = 1, string.len(str), num do
@@ -7,7 +7,7 @@ local function wrap_text(str,num)
   return ret
 end
 
-function menue(header,options,x,y,width,height,marker_id,border)
+function menues.menue(header,options,x,y,width,height,marker_id,border)
     if border == nil then
         border = true
     end
@@ -50,13 +50,13 @@ function menue(header,options,x,y,width,height,marker_id,border)
 end
 
 
-function main_menue()
+function menues.main_menue()
   
-  menue("NotTheRogue",{"Start new","Load old","Options","Exit"},0,0,400,400,main_menue_item,false)
+  menues.menue("NotTheRogue",{"Start new","Load old","Options","Exit"},0,0,400,400,gvar.main_menue_item,false)
 end
 
 
-function invi_menue(header,inventory,x,y,width,height)
+function menues.invi_menue(header,inventory,x,y,width,height)
  local options ={}
  debuger.on()
  if inventory.num_stacks == 0 then
@@ -66,13 +66,15 @@ function invi_menue(header,inventory,x,y,width,height)
             table.insert(options,stack.stack_size.." x "..stack.item_type.name)
          end
      end
-     menue(header,options,x,y,width,height,inventory.active_item+1)
+     menues.menue(header,options,x,y,width,height,inventory.active_item+1)
   debuger.off()
 end
 
 
-function level_up_menue(header,x,y,width,height)
-    local options =getSelectableStates()
-    menue(header,options,x,y,width,height,selected_state_idx)
+function menues.level_up_menue(header,x,y,width,height)
+    local options =glib.Level.getSelectableStates()
+    menues.menue(header,options,x,y,width,height,gvar.selected_state_idx)
 
 end
+
+return menues

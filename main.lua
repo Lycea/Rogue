@@ -4,10 +4,22 @@ console =require("helper.console")
 game =require("game")
 
 debuger = {
-  on = function() if debuger.no_print then return end print("Not able to turn debuger on , start in debug mode")end,
-  off = function() if debuger.no_print then return end print("Not able to turn debuger off , start in debug mode")end,
-  start = function() if debuger.no_print then return end print("Not able to start debuging , start in debug mode")end,
-  no_print = true
+  on = function()
+        if debuger.no_print then 
+          return 
+        else 
+          --print("Not able to turn debuger on , start in debug mode")
+        end 
+      end,
+  off = function() 
+        if debuger.no_print then 
+            return 
+        else 
+           -- print("Not able to turn debuger off , start in debug mode")
+        end
+        end,
+  start = function() if debuger.no_print then return else print("Not able to start debuging , start in debug mode")end end,
+  no_print = nil
           }
 
 

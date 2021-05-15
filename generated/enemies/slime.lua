@@ -18,7 +18,7 @@ local template_mob ={
     
     color ="light_green",
     blocking = true,
-    render = RenderOrder.ACTOR
+    render = "ACTOR"
     
 }
 

@@ -1,12 +1,15 @@
+local entity_loader ={}
+
 local dir_stack={}
-local require_paths = {}
+
 
 local function recursiveEnumerate(folder,fileTree)
+    local require_paths = {}
     local lfs = love.filesystem
     local filesTable = lfs.getDirectoryItems(folder)
     for i,v in ipairs(filesTable) do
         local file = folder.."/"..v
-        info=lfs.getInfo(file)
+        local info=lfs.getInfo(file)
         for idx,value in pairs(info) do
             --print(idx,value)
         end
@@ -14,10 +17,10 @@ local function recursiveEnumerate(folder,fileTree)
         if lfs.getInfo(file).type == "file" then
             
             fileTree = fileTree.."\n"..file
-            ending =string.sub(file,#file-3,#file)
+            local ending =string.sub(file,#file-3,#file)
             
             if ending == ".lua" then
-                require_string = string.sub(file,1,#file-4):gsub("/",".")
+                local require_string = string.sub(file,1,#file-4):gsub("/",".")
                 table.insert(require_paths,require_string)
             end
             
@@ -31,37 +34,42 @@ local function recursiveEnumerate(folder,fileTree)
     return require_paths
 end
 
-function load_enemies()
-    enemie_lookup={}
-    enemie_spawn_lookup={}
-    require_paths = {}
+function entity_loader.load_enemies()
+    gvar.enemie_lookup={}
+    gvar.enemie_spawn_lookup={}
+    local require_paths = {}
     
-    print("loading mobs")
+    print("\nloading mobs")
     
     table.insert(dir_stack,"generated")
     table.insert(dir_stack,"enemies")
     
     --get all lua files in subdirectories
+    debuger.on()
     local paths =recursiveEnumerate("generated/enemies","")
     
     for idx,result_ in pairs(paths) do
-        mob_info =require(result_)
+        local mob_info =require(result_)
         
-        enemie_lookup[mob_info.name] =mob_info
-        enemie_spawn_lookup[mob_info.name]=mob_info.chances
+        mob_info.render = glib.renderer.RenderOrder[mob_info.render] or glib.renderer.RenderOrder.DEFAULT
+       
         
-        print(mob_info.name)
+        gvar.enemie_lookup[mob_info.name] =mob_info
+        gvar.enemie_spawn_lookup[mob_info.name]=mob_info.chances
+        
+        print("   "..mob_info.name)
     end
+    debuger.off()
     
 end
 
 
-function load_items()
-    item_lookup={}
-    item_spawn_lookup={}
-    require_paths = {}
+function entity_loader.load_items()
+    gvar.item_lookup={}
+    gvar.item_spawn_lookup={}
+    local require_paths = {}
     
-    print("\n\nloading items")
+    print("\nloading items")
     
     
     debuger.on()
@@ -69,14 +77,22 @@ function load_items()
     local paths =recursiveEnumerate("generated/items","")
     
     for idx,result_ in pairs(paths) do
-        item_info =require(result_)
+        local item_info =require(result_)
         
-        item_lookup[item_info.name] =item_info
-        item_spawn_lookup[item_info.name]=item_info.chances
+        item_info.render = glib.renderer.RenderOrder[item_info.render] or glib.renderer.RenderOrder.DEFAULT
         
-        print(item_info.name)
+        item_info.slot =  item_info.slot == nil and nil or ( glib.equipment_slots[item_info.slot] or glib.equipment_slots.DEFAULT )
+        
+        
+        gvar.item_lookup[item_info.name] =item_info
+        gvar.item_spawn_lookup[item_info.name]=item_info.chances
+        
+        print("   "..item_info.name)
     end
     
     debuger.off()
     
 end
+
+
+return  entity_loader

@@ -1,4 +1,4 @@
-
+local random_utils = {}
 local function summ_list(list)
     local sum =0
     
@@ -42,7 +42,7 @@ local function reverse_array(array)
 end
 
 
-function get_value_from_table(values,depth_level)
+function random_utils.get_value_from_table(values,depth_level)
     debuger.on()
     for idx,value in ipairs(reverse_array(values)) do
         if depth_level >=value[2] then
@@ -55,7 +55,7 @@ function get_value_from_table(values,depth_level)
 end
 
 
-function random_choice_from_dict(choice_dict)
+function random_utils.random_choice_from_dict(choice_dict)
     local choices ={}
     local chances ={}
     
@@ -66,3 +66,5 @@ function random_choice_from_dict(choice_dict)
 
     return choices[random_chance_idx(chances)]
 end
+
+return random_utils

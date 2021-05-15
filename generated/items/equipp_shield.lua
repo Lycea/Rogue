@@ -11,7 +11,7 @@ local shield={
     
     color ="green",
     blocking = false,
-    render = RenderOrder.ITEM,
+    render = "ITEM",
     tile= 0,
     
     
@@ -24,7 +24,7 @@ local shield={
     
     
     --equipment info
-    slot =EquipmentSlots.OFF_HAND ,
+    slot ="OFF_HAND" ,
     health = 3,
     power = 0,
     def = 2
