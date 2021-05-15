@@ -16,7 +16,7 @@ local function draw_entity(entity)
 end
 
 
-local function recursive_print(table,level,par)
+function recursive_print(table,level,par)
   local offset = level or 0
   
   for key,val in pairs(table) do

@@ -34,7 +34,7 @@ globals.libs.data_loader     = require("loader_functions.data_loader")
 globals.libs.Level           = require("components.level")
 
 globals.libs.Equipable       = require("components.equipable")
-globals.libs.equimpemt       = require("components.equipment")
+globals.libs.equipment       = require("components.equipment")
 globals.libs.equipment_slots = require("equipment_slots")
 
 
@@ -71,8 +71,6 @@ globals.vars.fov_map={}
 --fov state
 globals.vars.fov_recompute = false
 
-
-globals.vars.item_function ={}
 
 globals.vars.message_log ={}
 

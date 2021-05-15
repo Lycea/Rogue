@@ -334,7 +334,8 @@ function GameMap:place_entities(room,entities,max_monster_per_room)
             if item_tmp.message then
                message_component =glib.msg_renderer.Message(item_tmp.message.text,gvar.constants.colors[item_tmp.message.color]) 
             end
-            item_comp = glib.inventory.Item(gvar.item_function[item_tmp["function"]],item_tmp.is_ranged,message_component,item_tmp.arguments)
+            
+            item_comp = glib.inventory.Item(glib.item_functions[item_tmp["function"]],item_tmp.is_ranged,message_component,item_tmp.arguments)
         else
             equippment_component =glib.Equipable(item_tmp.slot,item_tmp.health,item_tmp.def,item_tmp.power)
         end

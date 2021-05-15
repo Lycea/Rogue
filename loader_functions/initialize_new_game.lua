@@ -16,7 +16,7 @@ function init_functions.get_game_variables()
   local stats_ = glib.Fighter(45,2,5,0)
   local invi_ = glib.inventory.Inventory(26)
   
-  local equipment_component =glib.equimpemt()
+  local equipment_component =glib.equipment()
   --final init
   local player = glib.Entity( math.floor(20),math.floor(20),0,"default","Player",true,stats_,nil,glib.renderer.RenderOrder.ACTOR,nil,invi_,nil,glib.Level(nil,0,20),equipment_component)
   player.last_target = 0

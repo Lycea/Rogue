@@ -124,9 +124,9 @@ function game.play(dt)
         local results_ = gvar.player.equippment:toggle_equip(result["equip"])
         for idx ,result in pairs(results_) do
           if result.equipped then
-              gvar.message_log:add_message(glib.msg_generator.Message('Equipped item',gvar.constants.colors.yellow))
+              gvar.message_log:add_message(glib.msg_renderer.Message('Equipped item',gvar.constants.colors.yellow))
           elseif result.unequipped then
-              gvar.message_log:add_message(glib.msg_generator.Message('Unequipped item',gvar.constants.colors.yellow))
+              gvar.message_log:add_message(glib.msg_renderer.Message('Unequipped item',gvar.constants.colors.yellow))
           end
         end
         
@@ -229,7 +229,7 @@ function game.update(dt)
             if glib.data_loader.load_game() == false then
               gvar.show_main_menue = true
             else
-              gvar.fov_map=glib.fov_functions.compute_fov(map)
+              gvar.fov_map=glib.fov_functions.compute_fov(gvar.map)
             end
             
             

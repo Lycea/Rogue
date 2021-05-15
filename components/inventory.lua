@@ -19,7 +19,7 @@ function Item:save()
     local function_ = dl.add_offset()..'"use_function":'
     local found = false
     
-    for name,hash in pairs(gvar.item_function) do
+    for name,hash in pairs(glib.item_functions) do
         if hash == self.use_function then
            function_ = function_..'"'..name..'"' 
            found = true
@@ -41,7 +41,7 @@ function Item:save()
         for idx_args,data in pairs(self.function_args)do
             if type(data)~= type({}) then
                 --args = args..add_offset()..idx_args..":"..data.."\n"
-                table.insert(arg_list,add_offset()..'"'..idx_args..'"'..":"..data)
+                table.insert(arg_list,dl.add_offset()..'"'..idx_args..'"'..":"..data)
             else
             
             end
@@ -66,7 +66,7 @@ function Item:save()
     dl.offset_pop()
     
     
-    dl.debuger.off()
+    debuger.off()
     return function_..",\n"..args..",\n"..targeting..",\n"..target_msg
     
 end
@@ -219,7 +219,7 @@ function Inventory:use(item_entity,idx,args)
     
     --check if there are items in the inventory
     if self.num_items == 0 then
-      table.insert(results,{message=glib.msg_renderer.Message("No item there to be used",gvar.constants.colors.orange)})
+      table.insert(results,{message=glib.msg_renderer.Message("No item there to be used. I love you my darling :)",gvar.constants.colors.orange)})
       print("nothing used...")
       return results
     end
@@ -232,6 +232,10 @@ function Inventory:use(item_entity,idx,args)
     --get the item~
     local item = self.item_stacks[self.active_item+1].item_type.item
     debuger.on() 
+    
+    
+
+    
     --check if the item is usable
     if item.use_function == nil then
         if item.owner.equippable then
@@ -246,7 +250,7 @@ function Inventory:use(item_entity,idx,args)
             
             gvar.target_range = item.function_args["radius"] or item.function_args["max_range"]
             
-            table.insert(results,{message=glib.msg_renderer.Message("trying to target a item...",constants.colors.orange)})
+            table.insert(results,{message=glib.msg_renderer.Message("trying to target a item...",gvar.constants.colors.orange)})
             table.insert(results,{targeting= self.item_stacks[self.active_item+1].item_type})
             
         else

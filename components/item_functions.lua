@@ -1,6 +1,6 @@
 
 
-item_function={}
+local item_function={}
 
 function item_function.heal(args,kwargs)
     local entity = args
@@ -9,10 +9,10 @@ function item_function.heal(args,kwargs)
     
     local results ={}
     if entity.fighter.hp == entity.fighter.max_hp then
-        table.insert(results,{consumed =false,message =Message("HP max no need to heal")})
+        table.insert(results,{consumed =false,message =glib.msg_renderer.Message("HP max no need to heal")})
     else
         entity.fighter:heal(amount)
-        table.insert(results,{consumed = true,message=Message(entity.name.." healed by "..amount,constants.colors.green)})
+        table.insert(results,{consumed = true,message=glib.msg_renderer.Message(entity.name.." healed by "..amount,gvar.constants.colors.green)})
     end
     
     return results
@@ -33,7 +33,7 @@ function item_function.cast_lightning(args,kwargs)
   local closest_distance = max_range +1
   
   for idx,entity in ipairs(entities) do
-    if entity.fighter ~= nil and entity ~= caster and fov_map[entity.y][entity.x] == true then
+    if entity.fighter ~= nil and entity ~= caster and gvar.fov_map[entity.y][entity.x] == true then
       local distance = caster:distance_to(entity)
       if distance < closest_distance then
         target = entity
@@ -43,11 +43,11 @@ function item_function.cast_lightning(args,kwargs)
   end
   
   if target ~= nil then
-    table.insert(results,{consumed = true,message = Message("The "..target.name.." was hit with lightning")})
+    table.insert(results,{consumed = true,message =glib.msg_renderer.Message("The "..target.name.." was hit with lightning")})
     table.insert(results,target.fighter:take_damage(dmg)[1])
   end
   
-  target_radius = 1
+  gvar.target_radius = 1
   return results
   
   
@@ -67,20 +67,20 @@ function item_function.cast_fireball(args,kwargs)
     
    
     
-    if fov_map[target_y][target_x] == false then
-        results ={message=Message("You cannot target a tile out of range!",constants.colors.red)}
+    if gvar.fov_map[target_y][target_x] == false then
+        results ={message=glib.msg_renderer.Message("You cannot target a tile out of range!",gvar.constants.colors.red)}
         return results
     end
     
-    table.insert(results,{consumed = true,message =Message("The fireball explodes and burns everything in "..radius.." tiles!!",constants.colors.orange)})
+    table.insert(results,{consumed = true,message =glib.msg_renderer.Message("The fireball explodes and burns everything in "..radius.." tiles!!",gvar.constants.colors.orange)})
     
     for idx,entity in ipairs(entities) do
         if entity:distance(target_x,target_y) <= radius and entity.fighter then
-            table.insert(results,{message = Message("The "..entity.name.." gets burned")})
+            table.insert(results,{message = glib.msg_renderer.Message("The "..entity.name.." gets burned")})
             table.insert(results,entity.fighter:take_damage(dmg))
         end
     end
-    target_radius = 1
+    gvar.target_radius = 1
     return results
 end
 
@@ -92,20 +92,20 @@ function item_function.cast_confuse(args,kwargs)
     local target_x = kwargs["target_x"]
     local target_y = kwargs["target_y"]
     
-    if fov_map[target_y][target_x] == false then
-        results ={message=Message("You cannot target a tile out of range!",constants.colors.red)}
+    if gvar.fov_map[target_y][target_x] == false then
+        results ={message=glib.msg_renderer.Message("You cannot target a tile out of range!",gvar.constants.colors.red)}
         return results
     end
     
     
     for idx,entity in  ipairs(entities) do
         if entity.x == target_x and entity.y == target_y then
-           confused_ai = ConfusedMonster(entity.ai,math.random(0,20))
+           local confused_ai = glib.ai.ConfusedMonster(entity.ai,math.random(0,20))
            
            confused_ai.owner =entity
            entity.ai = confused_ai
            
-           table.insert(results,{consumed = true, message=Message("The "..entity.name.." looks confused!",constants.colors.green)})
+           table.insert(results,{consumed = true, message=glib.msg_renderer.Message("The "..entity.name.." looks confused!",gvar.constants.colors.green)})
            return results
         end
     end
@@ -114,4 +114,6 @@ function item_function.cast_confuse(args,kwargs)
     return {}
     
 end
+
+return item_function
 

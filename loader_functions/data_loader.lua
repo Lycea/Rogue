@@ -77,12 +77,14 @@ local function load_single_entity(entity)
       end
   end
   if entity.fighter then
-      tmp_fighter = glib.fighter.Fighter(entity.fighter.max_hp,entity.fighter.defense,entity.fighter.power,entity.fighter.xp)
+      tmp_fighter = glib.Fighter(entity.fighter.max_hp,entity.fighter.defense,entity.fighter.power,entity.fighter.xp)
       tmp_fighter.hp = entity.fighter.hp
   end
+  debuger.on()
   if entity.item then
-      tmp_item = glib.inventory.Item(gvar.item_function[entity.item.use_function],entity.item.targeting,"test_msg",entity.item.function_args)
+      tmp_item = glib.inventory.Item(glib.item_functions[entity.item.use_function],entity.item.targeting,"test_msg",entity.item.function_args)
   end
+  debuger.off()
   if entity.inventory then
       tmp_inventory = glib.inventory.Inventory(entity.inventory.capacity)
       
@@ -99,12 +101,12 @@ local function load_single_entity(entity)
   end
   
   if entity.stairs then
-    tmp_stairs = glib.stairs.stairs(entity.stairs.floor)
+    tmp_stairs = glib.Stairs(entity.stairs.floor)
   end
   
   
   if entity.level then
-    tmp_level = glib.level.Level(entity.level.current_level,entity.level.current_xp,entity.level.level_base,entity.level.level_up_factor)
+    tmp_level = glib.Level(entity.level.current_level,entity.level.current_xp,entity.level.level_base,entity.level.level_up_factor)
   end
 
   
@@ -113,7 +115,7 @@ local function load_single_entity(entity)
     local main_equip = nil
     local off_equip = nil
     
-    tmp_equippment = glib.equipment.Equipment()
+    tmp_equippment = glib.equipment()
     debuger.on()
     if entity.equippment.main_hand then
         main_equip =tmp_inventory.item_stacks[entity.equippment.main_hand.invi_idx].item_type
@@ -132,13 +134,13 @@ local function load_single_entity(entity)
   
   
   if entity.equippable then
-    tmp_equippable = glib.quipable.Equipable(entity.equippable.slot,entity.equippable.health,entity.equippable.def,entity.equippable.power)
+    tmp_equippable = glib.Equipable(entity.equippable.slot,entity.equippable.health,entity.equippable.def,entity.equippable.power)
   end
   
   
   
   
-  local tmp_entity=glib.entity.Entity(entity.x,entity.y,nil,entity.color,entity.name,entity.blocks,tmp_fighter,tmp_ai,entity.render_order,tmp_item,tmp_inventory,tmp_stairs,tmp_level,tmp_equippment,tmp_equippable)
+  local tmp_entity=glib.Entity(entity.x,entity.y,nil,entity.color,entity.name,entity.blocks,tmp_fighter,tmp_ai,entity.render_order,tmp_item,tmp_inventory,tmp_stairs,tmp_level,tmp_equippment,tmp_equippable)
   return tmp_entity
     
     --tmp_entity =Entity(x,y,tile,color,name,blocks,fighter,ai,render_order,item,inventory)
@@ -168,7 +170,7 @@ local function load_map(map_)
     print(map_.width,map_.height)
     print(#map_.tiles)
     debuger:on()
-    gvar.map = glib.map_generator.GameMap(map_.width,map_.height,true,map_.dungeon_level)
+    gvar.map = glib.map_generator(map_.width,map_.height,true,map_.dungeon_level)
     
     --check which version is used since we changed something in there then
     if loading_version == "1.0.0.0" then

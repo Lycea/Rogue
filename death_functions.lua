@@ -1,7 +1,7 @@
 local death_functions ={}
 
 function death_functions.kill_player()
-  player.color ="dark_red"
+  gvar.player.color ="dark_red"
   return glib.msg_renderer.Message("You died!",gvar.constants.colors.red) ,glib.GameStates.PLAYER_DEAD
 end
 

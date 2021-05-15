@@ -18,6 +18,7 @@ end
 
 
 local function trace_line(ex,ey)
+ debuger.on()
   for i=0,gvar.constants.fov_radius do
     local perc =i/gvar.constants.fov_radius
     local x,y=lerp_point(gvar.player.x,gvar.player.y,ex,ey,perc)
@@ -26,7 +27,7 @@ local function trace_line(ex,ey)
     
     fov_map[y][x]=true
     --print(y,x)
-    if y== 0 or y==gvar.constants.map_width or x==0 or x==gvar.constants.map_width then
+    if y== 0 or y==gvar.constants.map_height or x==0 or x==gvar.constants.map_width then
       break
     end
     
@@ -36,6 +37,7 @@ local function trace_line(ex,ey)
     end
     --love.graphics.rectangle("fill",x*tile_size,y*tile_size,tile_size,tile_size)
   end
+  debuger.off()
 end
 
 local function gen_lines()
