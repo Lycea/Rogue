@@ -1,5 +1,8 @@
 
+
+
 local game =require("globals")
+camera =require("camera")
 
 --game =
 glib = game.libs
@@ -18,12 +21,18 @@ function game.load()
    glib.entity_loader.load_items()
    
    gvar.player,gvar.entities,gvar.message_log = glib.init_functions.get_game_variables()
+   
+   --TODO:fix getting these vars
+   camera:setPosition(player.x*tile_size -scr_width/2 +tile_size,player.y*tile_size -scr_height/2+tile_size) 
 end 
  
  
  
 function game.new()
    gvar.map,gvar.fov_map = glib.init_functions.init_map()
+   
+   --TODO:fix getting these vars
+   camera:setPosition(player.x*tile_size -scr_width/2 +tile_size,player.y*tile_size -scr_height/2+tile_size) 
 end
 
  
@@ -35,6 +44,9 @@ function game.play(dt)
   --check all the keys ...
   for key,v in pairs(gvar.key_list) do
     local action=glib.key_handler.handle_keys(key)--get key callbacks
+    
+    --TODO: add the following line in the player state when player moves:
+    --camera:move(dirs[1]*tile_size,dirs[2]*tile_size)
     
     local action_results = glib.GameStates.states[gvar.game_state]:handle_action(action)
     debuger.on()
@@ -87,7 +99,9 @@ function game.play(dt)
 
   end
   
+
   --evaluate results from the player
+
   
   for k,result in pairs(player_results) do
     
@@ -127,6 +141,7 @@ function game.play(dt)
               gvar.message_log:add_message(glib.msg_renderer.Message('Equipped item',gvar.constants.colors.yellow))
           elseif result.unequipped then
               gvar.message_log:add_message(glib.msg_renderer.Message('Unequipped item',gvar.constants.colors.yellow))
+
           end
         end
         

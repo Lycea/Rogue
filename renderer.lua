@@ -222,6 +222,7 @@ end
 
 function renderer.render_all(entities,game_map,screen_width,screen_height)--could be adjusted to work without params,but lets see
     --console.clear()
+
     
     
     if gvar.show_main_menue ==true then
@@ -229,9 +230,27 @@ function renderer.render_all(entities,game_map,screen_width,screen_height)--coul
       return
     end
     
+    camera:set()
     game_map:draw()
     
     renderer.draw_entities()
+    --add here for the player the differentiation to draw in the middle
+    --can make it simpler than that, simply save middle of the screen,bzw pos would be way better
+    --    camera:unset()
+    --    local tmp_x,tmp_y = player.x,player.y
+    --    player.x = math.floor((screen_width/2-tile_size)/tile_size)
+    --    player.y = math.floor((screen_height/2-tile_size)/tile_size)
+    --    
+    --    entity:draw()
+    --    
+    --    love.graphics.rectangle("fill",player.x*tile_size,player.y*tile_size,tile_size,tile_size)
+    --    
+    --    player.x = tmp_x
+    --    player.y = tmp_y
+    --    camera:set()
+
+    
+    camera:unset()
     
     --the bottom layer with hp,ep,level,log etc, also mouse under info
     renderer.draw_turn_infos(game_map.dungeon_level)
@@ -278,6 +297,7 @@ function renderer.render_all(entities,game_map,screen_width,screen_height)--coul
             
     end
     
+
 
 end
 
