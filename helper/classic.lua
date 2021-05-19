@@ -52,10 +52,19 @@ function Object:is(T)
   return false
 end
 
-
-function Object:__tostring()
-  return "Object"
+function Object:load()
+  
 end
+
+function Object:save()
+  
+end
+
+
+
+--function Object:__tostring()
+--  return "Object"
+--end
 
 
 function Object:__call(...)

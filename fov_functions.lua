@@ -1,4 +1,4 @@
-
+local fov_functions ={}
 
 local lines_= 8*10
 local angle = 360/lines_
@@ -18,23 +18,26 @@ end
 
 
 local function trace_line(ex,ey)
-  for i=0,fov_radius do
-    local perc =i/fov_radius
-    local x,y=lerp_point(player.x,player.y,ex,ey,perc)
+ debuger.on()
+  for i=0,gvar.constants.fov_radius do
+    local perc =i/gvar.constants.fov_radius
+    local x,y=lerp_point(gvar.player.x,gvar.player.y,ex,ey,perc)
     x=math.floor(x+0.5)
     y=math.floor(y+0.5)
     
     fov_map[y][x]=true
     --print(y,x)
-    if y== 0 or y==map_width or x==0 or x==map_width then
+    if y== 0 or y==gvar.constants.map_height or x==0 or x==gvar.constants.map_width then
       break
     end
-      
+    
     if act_map.tiles[y][x].block_sight == true then
+        act_map.tiles[y][x].empty=false
       break
     end
     --love.graphics.rectangle("fill",x*tile_size,y*tile_size,tile_size,tile_size)
   end
+  debuger.off()
 end
 
 local function gen_lines()
@@ -43,8 +46,8 @@ local function gen_lines()
     --calculate end point
     local line_ang = x*angle
     
-    local end_x = fov_radius *math.sin(math.rad(line_ang))+player.x
-    local end_y = fov_radius *math.cos(math.rad(line_ang))+player.y
+    local end_x = gvar.constants.fov_radius *math.sin(math.rad(line_ang))+gvar.player.x
+    local end_y = gvar.constants.fov_radius *math.cos(math.rad(line_ang))+gvar.player.y
     --love.graphics.line(player.x*tile_size,player.y*tile_size,end_x*tile_size,end_y*tile_size)
     trace_line(end_x,end_y)
   end
@@ -52,17 +55,17 @@ end
 
 
 local function init_fov_map()
-  for y=1,map_height do
+  for y=1,gvar.constants.map_height do
     fov_map[y]={}
-    for x=1,map_width do
+    for x=1,gvar.constants.map_width do
       fov_map[y][x]=false
     end
   end
 end
 
-function compute_fov(map)
+function fov_functions.compute_fov(map)
   act_map = map
-  lines_= 8*fov_radius
+  lines_= 8*gvar.constants.fov_radius
   angle = 360/lines_
   
   
@@ -70,3 +73,6 @@ function compute_fov(map)
   gen_lines()
   return fov_map
 end
+
+
+return fov_functions

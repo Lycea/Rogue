@@ -1,6 +1,26 @@
+require("helper.aliases")
 class_base= require("helper.classic")
 console =require("helper.console")
 game =require("game")
+
+debuger = {
+  on = function()
+        if debuger.no_print then 
+          return 
+        else 
+          --print("Not able to turn debuger on , start in debug mode")
+        end 
+      end,
+  off = function() 
+        if debuger.no_print then 
+            return 
+        else 
+           -- print("Not able to turn debuger off , start in debug mode")
+        end
+        end,
+  start = function() if debuger.no_print then return else print("Not able to start debuging , start in debug mode")end end,
+  no_print = nil
+          }
 
 
 local maj,min,rev=love.getVersion()
@@ -14,10 +34,19 @@ end
 
 
 function love.load(args)
-  --require("mobdebug").start()
   
+  for idx, arg in pairs(args) do
+      if arg == "-debug" then
+        debuger = require("mobdebug")
+        debuger.start()
+        debuger.off()
+        break
+      end
+  end
+  --love.window.setMode(80*tile_size,50*tile_size)
   game.load()
   
+  --love.keyboard.setKeyRepeat(true)
 end
 
 
@@ -29,13 +58,6 @@ end
 
 function love.draw()
   game.draw()
-  
-
-
-  
-  --print("test")
-  console.draw()
-  
 end
 
 
@@ -57,4 +79,8 @@ end
 
 function love.mousemoved(x,y,dx,dy)
     game.MouseMoved(x,y)
+end
+
+function love.textinput(txt)
+    game.TextInput(txt)
 end
