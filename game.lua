@@ -23,7 +23,7 @@ function game.load()
    gvar.player,gvar.entities,gvar.message_log = glib.init_functions.get_game_variables()
    
    --TODO:fix getting these vars
-   camera:setPosition(player.x*tile_size -scr_width/2 +tile_size,player.y*tile_size -scr_height/2+tile_size) 
+      camera:setPosition(gvar.player.x*gvar.constants.tile_size -gvar.constants.scr_width/2 +gvar.constants.tile_size,gvar.player.y*gvar.constants.tile_size -gvar.constants.scr_height/2+gvar.constants.tile_size) 
 end 
  
  
@@ -32,7 +32,8 @@ function game.new()
    gvar.map,gvar.fov_map = glib.init_functions.init_map()
    
    --TODO:fix getting these vars
-   camera:setPosition(player.x*tile_size -scr_width/2 +tile_size,player.y*tile_size -scr_height/2+tile_size) 
+   camera:setPosition(gvar.player.x*gvar.constants.tile_size -gvar.constants.scr_width/2 +gvar.constants.tile_size,gvar.player.y*gvar.constants.tile_size -gvar.constants.scr_height/2+gvar.constants.tile_size) 
+
 end
 
  
@@ -301,6 +302,8 @@ function game.MouseMoved(mx,my)
   gvar.mouse_coords={mx,my}
 end 
  
+ 
+ 
 function game.TextInput(text)
      if gvar.save_text == true then
          gvar.text_content=gvar.text_content..text
@@ -309,6 +312,13 @@ function game.TextInput(text)
         print(text)
      end
      
+end
+
+
+
+function love.resize(w,h)
+   gvar.constants.scr_width=w
+   gvar.constants.scr_height=h
 end
 
 return game

@@ -35,6 +35,7 @@ function tmp_function.init(base_state)
               end
             else
               gvar.player:move(dirs[1],dirs[2])
+              camera:move(dirs[1]*gvar.constants.tile_size,dirs[2]*gvar.constants.tile_size)
               gvar.fov_recompute=true
              
             end
@@ -73,6 +74,7 @@ function tmp_function.init(base_state)
              if entity.x == gvar.player.x and entity.y == gvar.player.y and entity.name == "stairs" then
                 local result = glib.msg_renderer.Message("going down ...",gvar.constants.colors.yellow)
                 gvar.map,gvar.fov_map =glib.init_functions.init_map()
+                camera:setPosition(gvar.player.x*gvar.constants.tile_size -gvar.constants.scr_width/2 +gvar.constants.tile_size,gvar.player.y*gvar.constants.tile_size -gvar.constants.scr_height/2+gvar.constants.tile_size) 
                 gvar.message_log:add_message(result)
              end
           end

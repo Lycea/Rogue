@@ -87,7 +87,9 @@ function init_functions.get_constants()
     local constants ={
         scr_width=scr_width,
         scr_height = scr_height,
-        tile_size = 10,
+        tile_size = 20,
+        
+        ui_tile_size=10,
         
         colors = colors,
         --map settings
