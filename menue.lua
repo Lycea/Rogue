@@ -56,23 +56,4 @@ function main_menue()
 end
 
 
-function invi_menue(header,inventory,x,y,width,height)
- local options ={}
- debuger.on()
- if inventory.num_stacks == 0 then
-     options={"No item in the inventory"}
-     else
-         for _,stack in pairs(inventory.item_stacks)do
-            table.insert(options,stack.stack_size.." x "..stack.item_type.name)
-         end
-     end
-     menue(header,options,x,y,width,height,inventory.active_item+1)
-  debuger.off()
-end
 
-
-function level_up_menue(header,x,y,width,height)
-    local options =getSelectableStates()
-    menue(header,options,x,y,width,height,selected_state_idx)
-
-end

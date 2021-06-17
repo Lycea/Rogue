@@ -1,4 +1,5 @@
-require("helper.aliases")
+gr = love.graphics
+
 class_base= require("helper.classic")
 console =require("helper.console")
 game =require("game")
