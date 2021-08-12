@@ -200,9 +200,12 @@ local function load_map(map_)
     print("----")
 end
 
-function data_loader.load_game()
-  
-   local file = io.open("save.json","r")
+function data_loader.load_game(file_name)
+   file_name = file_name or "save.json"
+   
+   local file = io.open(file_name,"r")
+   
+   if file == nil then return {false,"error while opening the file"} end
    local error_ ,save_= pcall(glib.json.decode,file:read("*all"))
    file:close()
    
@@ -218,7 +221,7 @@ function data_loader.load_game()
  
      load_map(save_.map)
      load_entitys(save_.entities)
-     return true
+     return {true,"Loaded file successfully"}
    end
    
   

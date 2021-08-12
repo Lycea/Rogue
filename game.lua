@@ -11,8 +11,9 @@ gvar = game.vars
 
 
 function game.load() 
-   glib.renderer.init()
+   
    gvar.constants = glib.init_functions.get_constants()
+   glib.renderer.init()
    
    glib.entity_loader.load_enemies()
    glib.entity_loader.load_items()
@@ -189,9 +190,27 @@ function game.play(dt)
 end 
  
  
+ function game.load_from_save(save_file)
+     
+    save_file = save_file or "save.json"
+    gvar.map={}
+    gvar.entities={}
+    
+    if glib.data_loader.load_game(save_file) == false then
+      gvar.show_main_menue = true
+    else
+      gvar.fov_map=glib.fov_functions.compute_fov(gvar.map)
+    end
+ end
+ 
+ 
+ 
+ 
 --main loop
 function game.update(dt) 
-  
+    
+    
+  --gvar.constants.scr_width,gvar.constants.scr_height = love.graphics.getDimensions()
   if gvar.show_main_menue == false then
     game.play(dt)
     return
