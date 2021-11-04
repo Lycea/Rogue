@@ -1,8 +1,32 @@
 
+local DummyMonster = class_base:extend()
+
+function DummyMonster:new()
+	self.owner = ""
+end
+
+
+function DummyMonster:take_turn(target)
+	local results={}
+    local mob = self.owner
+	
+	return results
+end
+
+
+function DummyMonster:save()
+	local dl = glib.data_loader
+    
+    dl.offset_push()
+    local ai=dl.add_offset()..'"ai":"DummyMonster"'
+    dl.offset_pop()
+    
+    return  ai
+end
+
+
 
 local BasicMonster = class_base:extend()
-
-
 
 function BasicMonster:new()
   self.owner = ""
@@ -85,7 +109,8 @@ end
 
 local ai_list ={
 BasicMonster = BasicMonster,
-ConfusedMonster = ConfusedMonster
+ConfusedMonster = ConfusedMonster,
+DummyMonster = DummyMonster
 }
 
 return ai_list
