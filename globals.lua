@@ -43,6 +43,22 @@ globals.libs.equipment_slots = require("equipment_slots")
 -- LOADING UP ALL GLOBAL VALUES DEFAULTS INFO HERE
 -------------------------------------------------------------------
 
+
+------------------------------------------------
+-- Helper functions
+---------------------------
+
+function sort_dict(dict)
+    keys_ = {}
+  
+    for idx, _ in pairs(dict) do
+      table.insert(keys_,idx)
+    end
+  
+    table.sort( keys_, function(a,b)  return a>b  end)
+    return keys_
+end
+
 ---------------------
 --Base data fields 
 --------------------- 

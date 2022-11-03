@@ -10,7 +10,6 @@ renderer.RenderOrder.DEFAULT = renderer.RenderOrder.CORPSE
 
 
 
-
 local function draw_entity(entity)
     entity:draw()
 end
@@ -29,6 +28,7 @@ function recursive_print(table,level,par)
       else
         recursive_print(val,offset+1,table)
       end
+    elseif type(val) == type(function()end) then
       
     else
       print(string.rep(" ",offset)..key..":   "..(type( val) ==type(true) and( val==true and "true" or "false"   )or val ))
@@ -145,13 +145,13 @@ function renderer.draw_turn_infos(dungeon_level)
     love.graphics.print(renderer.get_name_under_mouse(),0,0)
     
     --render_bar("hp: ",tile_size*3,(map_height+3)*tile_size,10*tile_size,player.fighter.hp,player.fighter.max_hp,colors.red,colors.dark_red)
-    renderer.render_bar("hp: ",gvar.constants.tile_size*3,(gvar.constants.map_height+3)*gvar.constants.tile_size,
+    renderer.render_bar("HP:   ",gvar.constants.tile_size*3,(gvar.constants.map_height+3)*gvar.constants.tile_size,
         10*gvar.constants.tile_size,gvar.player.fighter.hp,gvar.player.fighter:get_hp(),
         gvar.constants.colors.light_red,gvar.constants.colors.dark_red)
     
     
     --exp bar (?)
-    renderer.render_bar("exp: ",
+    renderer.render_bar("EXP: ",
         gvar.constants.tile_size*3,
         (gvar.constants.map_height+5)*gvar.constants.tile_size,
         10*gvar.constants.tile_size,gvar.player.level.current_xp,gvar.player.level:expToNextLevel(),
