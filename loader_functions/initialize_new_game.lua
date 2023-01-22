@@ -52,7 +52,7 @@ end
 
 
 function init_functions.get_constants()
-    local window_title = "DungeonGame"
+    local window_title = "NotTheRogue"
     
     local scr_width ,scr_height= love.graphics.getDimensions()
     
@@ -100,7 +100,7 @@ function init_functions.get_constants()
         
         --fov settings
         fov_light_walls = true,
-        fov_radius = 10,
+        fov_radius = 8.5,
         
         --log info
         message_x = 35,
