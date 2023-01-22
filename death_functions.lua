@@ -7,7 +7,7 @@ end
 
 
 function death_functions.kill_monster(entity)
-  local death_msg =  glib.msg_renderer.Message(entity.name:upper().." is dead!",gvar.constants.colors.orange)
+  local death_msg =  glib.msg_renderer.Message(entity.name.." is dead!",gvar.constants.colors.orange)
   entity.color ="dark_red"
   entity.blocks = false
   entity.ai = nil

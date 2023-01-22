@@ -59,9 +59,15 @@ function random_utils.random_choice_from_dict(choice_dict)
     local choices ={}
     local chances ={}
     
-    for key,value in pairs(choice_dict) do
-        table.insert(choices,key) 
-        table.insert(chances,value) 
+    print("\nchoice list")
+
+    sorted_choice_dict_keys = sort_dict(choice_dict)
+
+
+    for key,value in pairs(sorted_choice_dict_keys) do
+        print(value)
+        table.insert(choices,value) 
+        table.insert(chances,choice_dict[value]) 
     end
 
     return choices[random_chance_idx(chances)]

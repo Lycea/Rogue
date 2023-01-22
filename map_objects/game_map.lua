@@ -240,6 +240,8 @@ end
 
 
 
+
+
 function GameMap:place_entities(room,entities,max_monster_per_room)
     
   local monster_number_level_idx = {
@@ -263,17 +265,24 @@ function GameMap:place_entities(room,entities,max_monster_per_room)
   
   -- generate monster chance list
   local monster_chances ={}
-  for idx,monster_stats in pairs(gvar.enemie_lookup)do
-      monster_chances[idx] = glib.random_utils.get_value_from_table(monster_stats.chances,self.dungeon_level)
+  
+  local monsters = sort_dict(gvar.enemie_lookup)
+  for idx,name in ipairs(monsters) do
+      monster_chances[name] = glib.random_utils.get_value_from_table( gvar.enemie_lookup[name].chances,self.dungeon_level)
   end
   
   -- TODO fix naming ...
   -- generate item chance list
   
-  
-  for idx,item_stats in pairs(gvar.item_lookup) do
-    item_changes[idx] = glib.random_utils.get_value_from_table(item_stats.chances,self.dungeon_level)
+  local items = sort_dict(gvar.item_lookup)
+
+  print("-----\nitem list---")
+
+  for idx,item_name in ipairs(items) do
+    item_changes[item_name] = glib.random_utils.get_value_from_table(gvar.item_lookup[item_name].chances,self.dungeon_level)
+    print(idx,item_name,item_changes[item_name])
   end
+  print("-------------")
   
   
   
